@@ -2,26 +2,171 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --foreground-rgb: 0, 0, 0;
-  --background-start-rgb: 214, 219, 220;
-  --background-end-rgb: 255, 255, 255;
+.flex_center {
+	@apply flex justify-center items-center;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --foreground-rgb: 255, 255, 255;
-    --background-start-rgb: 0, 0, 0;
-    --background-end-rgb: 0, 0, 0;
-  }
+.input {
+	@apply block bg-neutral-600 p-3 rounded-lg w-full;
 }
 
-body {
-  color: rgb(var(--foreground-rgb));
-  background: linear-gradient(
-      to bottom,
-      transparent,
-      rgb(var(--background-end-rgb))
-    )
-    rgb(var(--background-start-rgb));
+.input_label {
+	@apply capitalize w-fit;
 }
+
+.input_wrapper {
+	@apply grid gap-3 mt-5;
+}
+
+.input--error {
+	@apply border border-semantic-danger;
+}
+
+.server-error-message {
+	@apply bg-neutral-600 text-semantic-danger shadow-neutral-800 shadow-2xl capitalize p-4 rounded-xl absolute top-8 left-1/2 -translate-x-1/2;
+}
+
+.btn {
+	@apply flex_center gap-4 font-semibold py-[1em] px-[2em] border-2 border-solid rounded-lg transition-colors duration-200 ease-in-out;
+}
+
+.sidebar-link {
+	@apply flex gap-4 text-lg p-4 rounded-lg font-normal;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+	display: none;
+}
+/* Hide scrollbar for IE, Edge and Firefox */
+.no-scrollbar {
+	-ms-overflow-style: none; /* IE and Edge */
+	scrollbar-width: none; /* Firefox */
+}
+
+.or-line {
+	@apply relative my-6 w-full h-[1px] bg-neutral-300;
+}
+
+.or-line::before {
+	@apply content-['or'] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-neutral-900 text-neutral-300 px-4 z-10;
+}
+
+/* .a {
+	@apply;
+} */
+
+/* 
+
+	&[data-variant='contained'] {
+		&[data-color='primary'] {
+			background-color: fn.clr(primary, 500);
+			color: fn.clr(light, 100);
+			@include mix.hover {
+				background-color: fn.clr(primary, 400);
+			}
+		}
+
+		&[data-color='secondary'] {
+			background-color: fn.clr(secondary, 500);
+			color: fn.clr(dark, 400);
+			@include mix.hover {
+				background-color: fn.clr(secondary, 400);
+			}
+		}
+
+		&[data-color='light'] {
+			background-color: fn.clr(light, 200);
+			color: fn.clr(dark, 400);
+			@include mix.hover {
+				background-color: fn.clr(light, 100);
+			}
+		}
+	}
+
+	&[data-variant='text'] {
+		background: transparent;
+		border-color: transparent;
+		padding: 0;
+		width: fit-content;
+
+		&[data-color='primary'] {
+			color: fn.clr(primary, 500);
+			@include mix.hover {
+				color: fn.clr(primary, 400);
+			}
+		}
+
+		&[data-color='secondary'] {
+			color: fn.clr(secondary, 500);
+			@include mix.hover {
+				color: fn.clr(secondary, 400);
+			}
+		}
+
+		&[data-color='light'] {
+			color: fn.clr(light, 200);
+			@include mix.hover {
+				color: fn.clr(light, 100);
+			}
+		}
+	}
+
+	&[data-variant='outlined'] {
+		background: transparent;
+
+		&[data-color='primary'] {
+			color: fn.clr(primary, 500);
+			border-color: fn.clr(primary, 500);
+			@include mix.hover {
+				color: fn.clr(primary, 400);
+				border-color: fn.clr(primary, 400);
+			}
+		}
+
+		&[data-color='secondary'] {
+			color: fn.clr(secondary, 500);
+			border-color: fn.clr(secondary, 500);
+			@include mix.hover {
+				color: fn.clr(secondary, 400);
+				border-color: fn.clr(secondary, 400);
+			}
+		}
+
+		&[data-color='light'] {
+			color: fn.clr(light, 200);
+			border-color: fn.clr(light, 200);
+			@include mix.hover {
+				color: fn.clr(light, 100);
+				border-color: fn.clr(light, 100);
+			}
+		}
+	}
+} */
+
+/* .btn {
+	@include mix.flex(center, center);
+	gap: 1rem;
+	font-weight: fn.weight(semibold);
+	padding: 1em 2em;
+	border: none;
+	border-radius: 0.5rem;
+	border: 0.125rem solid transparent;
+	transition: background-color, color, border-color, 250ms ease; */
+
+/* &[data-size='large'] {
+	font-size: 1rem;
+	padding-block: 0.813rem;
+}
+&[data-size='regular'] {
+	font-size: 0.813rem;
+	padding: 0.625rem 1.25rem;
+}
+&[data-size='small'] {
+	font-size: 0.75rem;
+	padding: 0.375rem 1.125rem;
+} */
+
+/* &.stretch {
+	flex: 1;
+	width: 100%;
+} */
