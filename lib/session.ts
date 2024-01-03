@@ -3,7 +3,8 @@ import GoogleProvider from 'next-auth/providers/google'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import User from '@/lib/models/user.model'
 import connectMongoDB from './mongoose'
-import { SessionType } from './types'
+import { SessionType, UserProfile } from './types'
+import { getSession, signOut, useSession } from 'next-auth/react'
 const bcrypt = require('bcrypt')
 
 const authOptions: NextAuthOptions = {
@@ -41,7 +42,7 @@ const authOptions: NextAuthOptions = {
 		signIn: '/login'
 	},
 	callbacks: {
-		async signIn({ user, account, profile }) {
+		async signIn({ user, account }) {
 			if (account?.provider === 'google') {
 				const { name, email, image } = user
 
@@ -51,7 +52,8 @@ const authOptions: NextAuthOptions = {
 						return true
 					}
 
-					const username = email?.slice(0, email.indexOf('@'))
+					// const username = email?.slice(0, email.indexOf('@'))
+					const username = 'user_' + user.id
 					const updatedUser = await User.findOneAndUpdate(
 						{ email },
 						{ email, name, username, image },

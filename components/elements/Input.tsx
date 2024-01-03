@@ -1,42 +1,35 @@
 'use client'
 
 import Image from 'next/image'
+import { FormField } from '@/lib/types'
+import { LabelHTMLAttributes } from 'react'
+import { cn } from '@/lib/utils'
 
-type InputProps = {
-	type?: React.HTMLInputTypeAttribute
-	label?: string
-	name?: string
+type InputProps = FormField & {
 	textarea?: boolean
-	required?: boolean
-	autoFocus?: boolean
-	placeholder?: string
-	defaultValue?: string
 	errors?: string[]
+	labelProps?: LabelHTMLAttributes<HTMLLabelElement>
 }
 
 export default function Input({
-	type = 'text',
 	label,
 	name,
-	textarea = false,
-	required = false,
-	autoFocus = false,
-	placeholder = '',
-	defaultValue = '',
-	errors = []
+	textarea,
+	errors = [],
+	labelProps,
+	className,
+	...rest
 }: InputProps) {
 	const InputElement = () => (
 		<div className='relative'>
 			<input
-				defaultValue={defaultValue}
-				type={type}
-				className={`input${errors.length ? ' input--error' : ''}`}
-				required={required}
+				className={cn('input', {
+					'input--error': errors.length
+				})}
+				// className={`input${errors.length ? ' input--error' : ''}`}
 				id={label}
 				name={name || label}
-				autoComplete='off'
-				autoFocus={autoFocus}
-				placeholder={placeholder}
+				{...rest}
 			/>
 			{Boolean(errors.length) && (
 				<Image
@@ -73,6 +66,7 @@ export default function Input({
 				<label
 					htmlFor={label}
 					className='input_label'
+					{...labelProps}
 				>
 					{label}
 				</label>

@@ -7,9 +7,9 @@ export default function AuthLayout({
 }) {
 	return (
 		<div className='flex h-screen overflow-hidden'>
-			<main className='flex-1 flex flex-col justify-center items-center'>
+			<div className='flex-1 flex flex-col justify-center items-center'>
 				{children}
-			</main>
+			</div>
 			<div className='flex-1 w-full h-full hidden lg:block'>
 				<Image
 					src='/assets/login-banner.png'

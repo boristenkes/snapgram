@@ -1,10 +1,11 @@
 import { Button } from '@/components/elements'
 import { RegisterForm } from '@/components/forms'
 import Image from 'next/image'
+import Link from 'next/link'
 
 export default function RegisterPage() {
 	return (
-		<main className='w-[25rem]'>
+		<main className='w-[min(100%-1rem,25rem)]'>
 			<Image
 				src='/assets/logo-text.svg'
 				alt='Logo'
@@ -22,12 +23,12 @@ export default function RegisterPage() {
 			<RegisterForm />
 			<p className='mt-8 text-center'>
 				Already have an account?{' '}
-				<Button
+				<Link
 					href='/login'
-					variant='text'
+					className='text-primary-500 font-medium hover:text-primary-400'
 				>
 					Log in
-				</Button>
+				</Link>
 			</p>
 		</main>
 	)

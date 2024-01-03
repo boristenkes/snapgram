@@ -1,20 +1,20 @@
 import Image from 'next/image'
 
-type AvatarProps = {
-	url: string | null | undefined
+type ProfilePictureProps = {
+	url: string | undefined | null
 	alt?: string
 	width: number
 	height?: number
 	className?: string
 }
 
-export default function Avatar({
+export default function ProfilePicture({
 	url,
 	alt = 'Profile picture',
 	width,
 	height,
 	className = ''
-}: AvatarProps) {
+}: ProfilePictureProps) {
 	return (
 		<Image
 			src={url || '/assets/default.jpg'}

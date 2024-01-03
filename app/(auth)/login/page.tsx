@@ -1,10 +1,10 @@
-import { Button } from '@/components/elements'
 import { LoginForm } from '@/components/forms'
 import Image from 'next/image'
+import Link from 'next/link'
 
 export default function LoginPage() {
 	return (
-		<main className='w-[25rem]'>
+		<main className='w-[min(100%-1rem,25rem)]'>
 			<Image
 				src='/assets/logo-text.svg'
 				alt='Logo'
@@ -22,12 +22,12 @@ export default function LoginPage() {
 			<LoginForm />
 			<p className='mt-8 text-center'>
 				Don't have an account?{' '}
-				<Button
+				<Link
 					href='/register'
-					variant='text'
+					className='text-primary-500 font-semibold hover:text-primary-400'
 				>
 					Sign up
-				</Button>
+				</Link>
 			</p>
 		</main>
 	)

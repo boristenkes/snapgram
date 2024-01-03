@@ -27,11 +27,11 @@ export async function registerUser(userData: unknown) {
 		const { username, email, password } = validationResult.data
 
 		// making sure user doesn't already exist
-		const userAlreadyExists = await User.exists({
+		const existingUser = await User.exists({
 			$or: [{ email }, { username }]
 		})
 
-		if (userAlreadyExists) {
+		if (existingUser) {
 			console.error('User already exists')
 			return {
 				error: 'User with this email or username already exists.'
@@ -41,11 +41,15 @@ export async function registerUser(userData: unknown) {
 		// registering new user
 		const hashedPassword = await bcrypt.hash(password, 10)
 
-		await User.create({
+		const newUser = await User.create({
 			email,
 			username,
 			password: hashedPassword
 		})
+
+		const { newUserEmail, newUserPassword } = newUser._doc
+
+		return { email: newUserEmail, password: newUserPassword }
 	} catch (error: any) {
 		console.error('Error registering user', error)
 		return { error: error.message }

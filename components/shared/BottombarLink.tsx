@@ -2,20 +2,20 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { sidebarLinks } from '@/constants'
+import { bottombarLinks } from '@/constants'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
 
-type SidebarLinkProps = (typeof sidebarLinks)[0] & {
+type BottombarLinkProps = (typeof bottombarLinks)[0] & {
 	className?: string
 }
 
-export default function SidebarLink({
+export default function BottombarLink({
 	path,
 	icon,
 	title,
 	className
-}: SidebarLinkProps) {
+}: BottombarLinkProps) {
 	const pathname = usePathname()
 	const isActive =
 		(pathname.includes(path) && path.length > 1) || pathname === path
@@ -24,11 +24,10 @@ export default function SidebarLink({
 		<li>
 			<Link
 				href={path}
-				// className={`sidebar-link${isActive ? ' active' : ''}`}
 				className={cn(
-					'flex gap-4 text-lg p-4 rounded-lg font-normal hover:bg-primary-500 hover:bg-opacity-10 transition-colors duration-200',
+					'flex flex-col items-center py-2 px-2 rounded-lg text-xs gap-1',
 					{
-						'bg-primary-500 hover:bg-opacity-100 font-bold': isActive
+						'bg-primary-500 font-bold': isActive
 					},
 					className
 				)}

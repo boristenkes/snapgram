@@ -1,3 +1,6 @@
+'use client'
+
+import { FormField } from '@/lib/types'
 import Image from 'next/image'
 import React from 'react'
 import toast from 'react-hot-toast'
@@ -7,26 +10,18 @@ type FormProps = {
 	action: () => { error: string }
 	validation: ZodObject<{}>
 	fieldNames: string[]
+	setFormFields: React.Dispatch<React.SetStateAction<FormField[]>>
 	onSuccess: () => void
 	children: React.ReactNode
 }
 
-type ValidationObject = {
-	[key: string]: FormDataEntryValue | null
-}
-
-/*
-@param action = server action that should be executed when client-side validation is passed
-@param validation = zod object validation for formData
-@param fieldNames = names of every input field in form
-@param onSuccess = function executed when both client and server-side validation are passed
-@param children = children of form element (should contain inputs, submit buttons etc...)
-*/
+type ValidationObject = Record<string, FormDataEntryValue | null>
 
 export default function Form({
 	action,
 	validation,
 	fieldNames,
+	setFormFields,
 	onSuccess,
 	children
 }: FormProps) {
@@ -37,13 +32,28 @@ export default function Form({
 		})
 		const validationResult = validation.safeParse(validationObject)
 
+		// clear previous errors
+		setFormFields(prevFields =>
+			prevFields.map(field => ({ ...field, errors: [] }))
+		)
+
+		// display new errors, if there are any
 		if (!validationResult.success) {
-			return validationResult.error.format()
+			const formattedErrors = validationResult.error.format()
+
+			setFormFields(prevFields =>
+				prevFields.map(field => ({
+					...field,
+					// @ts-ignore
+					errors: formattedErrors[field.name]?._errors || []
+				}))
+			)
+			return
 		}
 
 		const response = action()
 		if (response?.error) {
-			toast('Server Error: ' + response.error, {
+			toast(response.error, {
 				icon: (
 					<Image
 						src='/assets/icons/error.webp'
@@ -73,3 +83,35 @@ export default function Form({
 		</form>
 	)
 }
+
+// function validateForm(
+// 	setFormFields: Dispatch<SetStateAction<FormField[]>>,
+// 	formData: FormData
+// ) {
+// 	// client-side validation
+// 	const validationResult = RegisterValidation.safeParse({
+// 		username: formData.get('username'),
+// 		email: formData.get('email'),
+// 		password: formData.get('password')
+// 	})
+
+// 	// clear previous errors
+// 	setFormFields(prevFields =>
+// 		prevFields.map(field => ({ ...field, errors: [] }))
+// 	)
+
+// 	// display new errors, if there are any
+// 	if (!validationResult.success) {
+// 		const formattedErrors = validationResult.error.format()
+
+// 		setFormFields(prevFields =>
+// 			prevFields.map(field => ({
+// 				...field,
+// 				// @ts-ignore
+// 				errors: formattedErrors[field.name]?._errors || []
+// 			}))
+// 		)
+// 		return
+// 	}
+// 	return validationResult
+// }

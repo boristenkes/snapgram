@@ -8,9 +8,10 @@ export default function RootLayout({
 	return (
 		<>
 			<Topbar />
-			<div className='flex pl-64'>
+			<div className='flex lg:pl-64'>
 				<Sidebar />
-				<main className='flex-1'>{children}</main>
+				{/* TODO: remove this min-h-... */}
+				<main className='flex-1 min-h-[calc(100vh-60px-84px)]'>{children}</main>
 			</div>
 			<Bottombar />
 		</>

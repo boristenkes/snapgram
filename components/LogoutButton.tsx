@@ -1,28 +1,17 @@
 'use client'
 
 import { signOut } from 'next-auth/react'
-import { Button } from './elements'
-import { Variant, Color, Size } from './elements/Button'
+import { Button, ButtonProps } from './elements/Button'
 
-type LogoutButtonProps = {
-	variant?: Variant
-	color?: Color
-	size?: Size
+type LogoutButtonProps = ButtonProps & {
 	children: React.ReactNode
 }
 
-export async function LogoutButton({
-	variant,
-	color,
-	size,
-	children
-}: LogoutButtonProps) {
+export function LogoutButton({ children, ...rest }: LogoutButtonProps) {
 	return (
 		<Button
-			variant={variant}
-			color={color}
-			size={size}
 			onClick={() => signOut({ callbackUrl: '/login' })}
+			{...rest}
 		>
 			{children}
 		</Button>
