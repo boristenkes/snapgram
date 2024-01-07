@@ -1,10 +1,10 @@
 import Image from 'next/image'
-import ProfilePicture from '../ProfilePicture'
+import ProfilePicture from '@/components/profile-picture'
+import SidebarLink from '@/components/shared/sidebar-link'
+import LogoutButton from '@/components/logout-button'
 import Link from 'next/link'
 import { sidebarLinks } from '@/constants'
-import SidebarLink from './SidebarLink'
 import { getCurrentUser } from '@/lib/session'
-import { LogoutButton } from '../LogoutButton'
 
 export default async function Sidebar() {
 	const { user } = await getCurrentUser()

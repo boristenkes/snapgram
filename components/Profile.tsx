@@ -1,6 +1,6 @@
 import { UserProfile } from '@/lib/types'
 import Image from 'next/image'
-import ProfilePicture from './ProfilePicture'
+import ProfilePicture from './profile-picture'
 import { Button } from './elements'
 
 type ProfileProps = {
@@ -13,7 +13,7 @@ export default async function Profile({ user, currentUser }: ProfileProps) {
 
 	const isInFollowing =
 		!isMyProfile &&
-		!currentUser?.following.some(user => user._id === currentUser?._id)
+		currentUser?.following.some(user => user._id === currentUser?._id)
 
 	return (
 		<main className='my-20 mx-16'>

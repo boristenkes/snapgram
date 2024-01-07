@@ -76,6 +76,18 @@ export async function getUser({ username }: { username: string }) {
 	}
 }
 
+type GetAllUsersProps = {
+	select?: string | string[]
+}
+
+export async function getAllUsers({ select = '' }: GetAllUsersProps = {}) {
+	await connectMongoDB()
+
+	const users = await User.find().select(select)
+
+	return users
+}
+
 type FormObj = Record<string, FormDataEntryValue | string>
 
 type UpdateUserProps = {

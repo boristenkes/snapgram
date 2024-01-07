@@ -1,5 +1,5 @@
 import { getCurrentUser } from '@/lib/session'
-import Story from './Story'
+import Story from './story'
 import { getMyStories } from '@/lib/actions/story.actions'
 
 // const stories = [

@@ -1,5 +1,4 @@
-import { Button } from '@/components/elements'
-import { RegisterForm } from '@/components/forms'
+import RegisterForm from './register-form'
 import Image from 'next/image'
 import Link from 'next/link'
 

@@ -1,4 +1,4 @@
-import ProfilePicture from '@/components/ProfilePicture'
+import ProfilePicture from '@/components/profile-picture'
 import { cn } from '@/lib/utils'
 
 type ProfilePictureUploaderProps = {

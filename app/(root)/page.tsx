@@ -1,5 +1,5 @@
-import StoryTrack from '@/components/StoryTrack'
+import StoryTrack from '@/components/story-track'
 
-export default function Home() {
+export default async function Home() {
 	return <StoryTrack />
 }

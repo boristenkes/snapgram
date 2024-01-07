@@ -24,7 +24,6 @@ export const RegisterValidation = z
 			.min(8, 'Password must be at least 8 characters long')
 			.max(25, 'Password must be at most 25 characters long'),
 		confirmPassword: z.string()
-		// .refine(data => data === data.password, 'Password did not match')
 	})
 	.refine(
 		data => data.password === data.confirmPassword,

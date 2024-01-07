@@ -1,11 +1,20 @@
-import Profile from '@/components/Profile'
-import { getUser } from '@/lib/actions/user.actions'
+import Profile from '@/components/profile'
+import { getAllUsers, getUser } from '@/lib/actions/user.actions'
 import { getCurrentUser } from '@/lib/session'
 
 type ProfilePageProps = {
 	params: {
 		username: string
 	}
+}
+
+export const revalidate = 3600000 // 1h
+
+export async function generateStaticParams() {
+	const users = await getAllUsers({ select: 'username' })
+	const usernames = await users?.map(user => user.username)
+
+	return usernames?.map(username => ({ username }))
 }
 
 export default async function ProfilePage({

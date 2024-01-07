@@ -1,2 +1,2 @@
-export { default as useArray } from './useArray'
-export { default as useMediaQuery } from './useMediaQuery'
+export { default as useArray } from './use-array'
+export { default as useMediaQuery } from './use-media-query'

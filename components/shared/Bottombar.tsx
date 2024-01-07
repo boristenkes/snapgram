@@ -1,7 +1,5 @@
 import { bottombarLinks } from '@/constants'
-import Image from 'next/image'
-import SidebarLink from './SidebarLink'
-import BottombarLink from './BottombarLink'
+import BottombarLink from './bottombar-link'
 
 export default function Bottombar() {
 	return (

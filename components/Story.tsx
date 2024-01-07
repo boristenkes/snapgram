@@ -1,6 +1,6 @@
 import { cn } from '@/lib/utils'
 import Link from 'next/link'
-import ProfilePicture from './ProfilePicture'
+import ProfilePicture from './profile-picture'
 
 type StoryProps = {
 	story: {

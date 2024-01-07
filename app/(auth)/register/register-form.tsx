@@ -1,17 +1,31 @@
 'use client'
 
-import { Button, Input } from '../elements'
 import Image from 'next/image'
-import { LoginValidation } from '@/lib/validations/user'
-import { Dispatch, SetStateAction, useState } from 'react'
+import { Button, Input } from '../../../components/elements'
+import { registerUser } from '@/lib/actions/user.actions'
+import { Dispatch, SetStateAction, useCallback, useState } from 'react'
 import { signIn } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
+import { RegisterValidation } from '@/lib/validations/user'
 import { FormField } from '@/lib/types'
-import SubmitButton from '../elements/SubmitButton'
-import Loader from '../Loader'
-import ServerErrorMessage from '../ServerErrorMessage'
+import SubmitButton from '../../../components/elements/submit-button'
+import Loader from '../../../components/loader'
+import ServerErrorMessage from '../../../components/server-error-message'
 
 const fields: FormField[] = [
+	{
+		type: 'text',
+		name: 'username',
+		label: 'username',
+		required: true,
+		errors: []
+	},
+	{
+		type: 'text',
+		name: 'name',
+		label: 'name',
+		required: true,
+		errors: []
+	},
 	{
 		type: 'email',
 		name: 'email',
@@ -25,34 +39,42 @@ const fields: FormField[] = [
 		label: 'password',
 		required: true,
 		errors: []
+	},
+	{
+		type: 'password',
+		name: 'confirmPassword',
+		label: 'Confirm Password',
+		required: true,
+		errors: []
 	}
 ]
 
-export default function LoginForm() {
-	const router = useRouter()
+export default function RegisterForm() {
 	const [formFields, setFormFields] = useState<FormField[]>(fields)
 	const [serverError, setServerError] = useState('')
 
-	const clientAction = async (formData: FormData) => {
-		const validationResult = validateForm(setFormFields, formData)
+	const clientAction = useCallback(
+		async (formData: FormData) => {
+			// client-side validation
+			const validationResult = validateForm(setFormFields, formData)
 
-		if (!validationResult) return
+			if (!validationResult) return
 
-		const { email, password } = validationResult.data
+			// register user
+			const response = await registerUser(validationResult.data)
 
-		const fieldsBeforeReset = formFields
-		const res = await signIn('credentials', {
-			redirect: false,
-			email,
-			password
-		})
-		if (!res?.error) {
-			router.push('/')
-		} else {
-			setServerError('Invalid email or password')
-			setFormFields(fieldsBeforeReset) // prevent form reset
-		}
-	}
+			// display error occured in server validation, if there is one
+			if (response?.error) {
+				setServerError(response.error)
+				return
+			}
+
+			// everything went well, sign in new user
+			const { email, password } = validationResult.data
+			signIn('credentials', { email, password, callbackUrl: '/' })
+		},
+		[registerUser, signIn]
+	)
 
 	return (
 		<form
@@ -71,7 +93,7 @@ export default function LoginForm() {
 				className='mt-8'
 				pendingContent={<Loader text='Please wait...' />}
 			>
-				Log in
+				Register
 			</SubmitButton>
 			<div className='or-line' />
 			<Button
@@ -96,9 +118,12 @@ function validateForm(
 	formData: FormData
 ) {
 	// client-side validation
-	const validationResult = LoginValidation.safeParse({
+	const validationResult = RegisterValidation.safeParse({
+		username: formData.get('username'),
+		name: formData.get('name'),
 		email: formData.get('email'),
-		password: formData.get('password')
+		password: formData.get('password'),
+		confirmPassword: formData.get('confirmPassword')
 	})
 
 	// clear previous errors

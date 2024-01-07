@@ -4,14 +4,14 @@
 // TODO: Handle photo remove
 import { FormField } from '@/lib/types'
 import { useCallback, useState } from 'react'
-import { Input } from '../../../../components/elements'
-import SubmitButton from '../../../../components/elements/SubmitButton'
-import Loader from '../../../../components/Loader'
+import { Input } from '@/components/elements'
+import SubmitButton from '@/components/elements/submit-button'
+import Loader from '@/components/loader'
 import { updateUser } from '@/lib/actions/user.actions'
 import { EditProfileValidation } from '@/lib/validations/user'
 import { validateImage } from '@/lib/utils'
 import darkToast from '@/lib/toast'
-import ServerErrorMessage from '../../../../components/ServerErrorMessage'
+import ServerErrorMessage from '@/components/server-error-message'
 import ProfilePictureUploader from './profile-picture-uploader'
 
 const fields: FormField[] = [

@@ -1,5 +1,5 @@
 import { useFormStatus } from 'react-dom'
-import { Button, ButtonProps } from './Button'
+import { Button, ButtonProps } from './button'
 
 type SubmitButtonProps = ButtonProps & {
 	pendingContent?: React.ReactNode
