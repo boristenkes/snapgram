@@ -3,19 +3,26 @@
 import Image from 'next/image'
 import { Button, Input } from '../elements'
 import { registerUser } from '@/lib/actions/user.actions'
-import { Dispatch, SetStateAction, useState } from 'react'
+import { Dispatch, SetStateAction, useCallback, useState } from 'react'
 import { signIn } from 'next-auth/react'
 import { RegisterValidation } from '@/lib/validations/user'
-import toast from 'react-hot-toast'
 import { FormField } from '@/lib/types'
 import SubmitButton from '../elements/SubmitButton'
 import Loader from '../Loader'
+import ServerErrorMessage from '../ServerErrorMessage'
 
 const fields: FormField[] = [
 	{
 		type: 'text',
 		name: 'username',
 		label: 'username',
+		required: true,
+		errors: []
+	},
+	{
+		type: 'text',
+		name: 'name',
+		label: 'name',
 		required: true,
 		errors: []
 	},
@@ -32,45 +39,42 @@ const fields: FormField[] = [
 		label: 'password',
 		required: true,
 		errors: []
+	},
+	{
+		type: 'password',
+		name: 'confirmPassword',
+		label: 'Confirm Password',
+		required: true,
+		errors: []
 	}
 ]
 
 export default function RegisterForm() {
 	const [formFields, setFormFields] = useState<FormField[]>(fields)
+	const [serverError, setServerError] = useState('')
 
-	const clientAction = async (formData: FormData) => {
-		// client-side validation
-		const validationResult = validateForm(setFormFields, formData)
+	const clientAction = useCallback(
+		async (formData: FormData) => {
+			// client-side validation
+			const validationResult = validateForm(setFormFields, formData)
 
-		if (!validationResult) return
+			if (!validationResult) return
 
-		// register user
-		const response = await registerUser(validationResult.data)
+			// register user
+			const response = await registerUser(validationResult.data)
 
-		// display error occured in server validation, if there is one
-		if (response?.error) {
-			toast(response.error, {
-				icon: (
-					<Image
-						src='/assets/icons/error.webp'
-						alt=''
-						width={20}
-						height={20}
-					/>
-				),
-				style: {
-					borderRadius: '8px',
-					background: '#333',
-					color: '#fff'
-				}
-			})
-			return
-		}
+			// display error occured in server validation, if there is one
+			if (response?.error) {
+				setServerError(response.error)
+				return
+			}
 
-		// everything went well, sign in new user
-		const { email, password } = validationResult.data
-		signIn('credentials', { email, password, callbackUrl: '/' })
-	}
+			// everything went well, sign in new user
+			const { email, password } = validationResult.data
+			signIn('credentials', { email, password, callbackUrl: '/' })
+		},
+		[registerUser, signIn]
+	)
 
 	return (
 		<form
@@ -83,12 +87,13 @@ export default function RegisterForm() {
 					{...field}
 				/>
 			))}
+			{serverError && <ServerErrorMessage message={serverError} />}
 			<SubmitButton
 				stretch
 				className='mt-8'
 				pendingContent={<Loader text='Please wait...' />}
 			>
-				Log in
+				Register
 			</SubmitButton>
 			<div className='or-line' />
 			<Button
@@ -115,8 +120,10 @@ function validateForm(
 	// client-side validation
 	const validationResult = RegisterValidation.safeParse({
 		username: formData.get('username'),
+		name: formData.get('name'),
 		email: formData.get('email'),
-		password: formData.get('password')
+		password: formData.get('password'),
+		confirmPassword: formData.get('confirmPassword')
 	})
 
 	// clear previous errors

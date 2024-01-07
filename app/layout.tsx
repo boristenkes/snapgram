@@ -4,6 +4,9 @@ import './globals.css'
 import { Toaster } from 'react-hot-toast'
 import SessionProvider from '@/components/SessionProvider'
 import { getServerSession } from 'next-auth'
+import { NextSSRPlugin } from '@uploadthing/react/next-ssr-plugin'
+import { extractRouterConfig } from 'uploadthing/server'
+import { ourFileRouter } from './api/uploadthing/core'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -17,11 +20,12 @@ export default async function Layout({
 	children: React.ReactNode
 }) {
 	const session = await getServerSession()
-
+	// TODO: create loading.tsx, error.tsx... page for each route (that needs it)
 	return (
 		<html lang='en'>
 			<SessionProvider session={session}>
 				<body className={`${inter.className} bg-neutral-900 text-neutral-100`}>
+					<NextSSRPlugin routerConfig={extractRouterConfig(ourFileRouter)} />
 					{children}
 					<Toaster />
 				</body>

@@ -2,35 +2,58 @@
 
 import Image from 'next/image'
 import { FormField } from '@/lib/types'
-import { LabelHTMLAttributes } from 'react'
 import { cn } from '@/lib/utils'
+import { useFormStatus } from 'react-dom'
 
 type InputProps = FormField & {
 	textarea?: boolean
-	errors?: string[]
-	labelProps?: LabelHTMLAttributes<HTMLLabelElement>
+	labelProps?: React.LabelHTMLAttributes<HTMLLabelElement>
+	textareaProps?: React.TextareaHTMLAttributes<HTMLTextAreaElement>
 }
 
 export default function Input({
 	label,
 	name,
 	textarea,
+	textareaProps,
 	errors = [],
 	labelProps,
 	className,
 	...rest
 }: InputProps) {
+	const { pending } = useFormStatus()
+
 	const InputElement = () => (
 		<div className='relative'>
-			<input
-				className={cn('input', {
-					'input--error': errors.length
-				})}
-				// className={`input${errors.length ? ' input--error' : ''}`}
-				id={label}
-				name={name || label}
-				{...rest}
-			/>
+			{textarea ? (
+				<textarea
+					className={cn(
+						'block bg-neutral-600 p-3 rounded-lg w-full disabled:brightness-75',
+						{
+							'input--error': errors.length
+						}
+					)}
+					id={label}
+					name={name || label}
+					autoComplete='off'
+					disabled={pending}
+					{...textareaProps}
+				/>
+			) : (
+				<input
+					className={cn(
+						'block bg-neutral-600 p-3 rounded-lg w-full disabled:brightness-75',
+						{
+							'border border-semantic-danger': errors.length
+						}
+					)}
+					id={label}
+					name={name || label}
+					autoComplete='off'
+					disabled={pending}
+					{...rest}
+				/>
+			)}
 			{Boolean(errors.length) && (
 				<Image
 					src='/assets/icons/error.webp'
@@ -62,10 +85,10 @@ export default function Input({
 
 	return (
 		<>
-			<div className='input_wrapper'>
+			<div className='grid gap-3 mt-5'>
 				<label
 					htmlFor={label}
-					className='input_label'
+					className='capitalize w-fit'
 					{...labelProps}
 				>
 					{label}

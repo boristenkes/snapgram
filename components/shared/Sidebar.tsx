@@ -10,7 +10,7 @@ export default async function Sidebar() {
 	const { user } = await getCurrentUser()
 
 	return (
-		<aside className='h-screen w-64 fixed top-0 left-0 z-10 bg-neutral-800 border-r-2 border-r-neutral-700 hidden lg:block'>
+		<aside className='h-screen w-64 fixed top-0 left-0 z-50 bg-neutral-800 border-r-2 border-r-neutral-700 hidden lg:block'>
 			<div className='h-full flex flex-col gap-11 py-12 px-6'>
 				<Link href='/'>
 					<Image
@@ -66,7 +66,7 @@ export default async function Sidebar() {
 									src='/assets/icons/logout-primary.svg'
 									alt=''
 									width={24}
-									height={28}
+									height={24}
 								/>
 								Logout
 							</LogoutButton>

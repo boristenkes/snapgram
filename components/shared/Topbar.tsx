@@ -23,14 +23,14 @@ export default function Topbar() {
 	}, [pathname])
 
 	return (
-		<header className='sticky top-0 w-screen lg:hidden'>
-			<div className='flex justify-between items-center py-3 px-4 z-10 bg-neutral-800 border-b-2 border-b-neutral-700'>
+		<header className='sticky top-0 z-50 w-screen lg:hidden'>
+			<div className='flex justify-between items-center py-3 px-4 bg-neutral-800 border-b-2 border-b-neutral-700'>
 				<Link href='/'>
 					<Image
 						src='/assets/logo-text.svg'
 						alt='Snapgram logo'
 						width={131}
-						height={27}
+						height={28}
 						priority
 					/>
 				</Link>
@@ -72,8 +72,8 @@ export default function Topbar() {
 					<Image
 						src='/assets/icons/logout-neutral.svg'
 						alt=''
-						width={18}
-						height={18}
+						width={24}
+						height={24}
 					/>
 					Logout
 				</Button>

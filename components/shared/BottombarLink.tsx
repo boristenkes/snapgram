@@ -36,7 +36,7 @@ export default function BottombarLink({
 					src={icon[isActive ? 'active' : 'default']}
 					alt=''
 					width={24}
-					height={28}
+					height={24}
 				/>
 				{title}
 			</Link>

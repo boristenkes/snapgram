@@ -1,10 +1,16 @@
+import { getCurrentUser } from '@/lib/session'
 import Image from 'next/image'
+import { redirect } from 'next/navigation'
 
-export default function AuthLayout({
+export default async function AuthLayout({
 	children
 }: {
 	children: React.ReactNode
 }) {
+	const session = await getCurrentUser()
+
+	if (session) redirect('/')
+
 	return (
 		<div className='flex h-screen overflow-hidden'>
 			<div className='flex-1 flex flex-col justify-center items-center'>

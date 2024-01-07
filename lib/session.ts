@@ -3,8 +3,7 @@ import GoogleProvider from 'next-auth/providers/google'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import User from '@/lib/models/user.model'
 import connectMongoDB from './mongoose'
-import { SessionType, UserProfile } from './types'
-import { getSession, signOut, useSession } from 'next-auth/react'
+import { SessionType } from './types'
 const bcrypt = require('bcrypt')
 
 const authOptions: NextAuthOptions = {
@@ -47,7 +46,7 @@ const authOptions: NextAuthOptions = {
 				const { name, email, image } = user
 
 				try {
-					connectMongoDB()
+					await connectMongoDB()
 					if (await User.exists({ email })) {
 						return true
 					}
@@ -73,7 +72,7 @@ const authOptions: NextAuthOptions = {
 		},
 		session: async ({ session }) => {
 			try {
-				connectMongoDB()
+				await connectMongoDB()
 
 				const dbUser = await User.findOne({ email: session?.user?.email })
 				const newSession = {

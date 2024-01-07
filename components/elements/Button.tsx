@@ -6,7 +6,7 @@ import Link from 'next/link'
 import { forwardRef } from 'react'
 
 const buttonVariants = cva(
-	'flex justify-center items-center gap-4 font-semibold border-2 rounded-lg  hover:brightness-105 active:brightness-110 transition-colors transition-[filter] duration-200 active:duration-100 ease-in-out',
+	'flex justify-center items-center gap-4 font-semibold border-2 rounded-lg  hover:brightness-105 active:brightness-110 transition-colors transition-[filter] duration-200 active:duration-100 ease-in-out disabled:brightness-75 disabled:cursor-not-allowed',
 	{
 		variants: {
 			variant: {

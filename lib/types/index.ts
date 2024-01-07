@@ -1,7 +1,8 @@
-import { Session, User } from 'next-auth'
+import { Session } from 'next-auth'
 import { InputHTMLAttributes } from 'react'
 
 export type FormField = InputHTMLAttributes<HTMLInputElement> & {
+	name: string
 	label?: string
 	errors: string[]
 }
@@ -22,11 +23,12 @@ export type UserProfile = {
 	username: string
 	email: string
 	image: string
-	followRequests: string[]
+	bio?: string
+	followRequests: UserProfile[]
 	followRequestsCount: number
-	followers: string[]
+	followers: UserProfile[]
 	followersCount: number
-	following: string[]
+	following: UserProfile[]
 	followingCount: number
 	highlights: string[]
 	likedPosts: Post[]
@@ -37,6 +39,7 @@ export type UserProfile = {
 	seenStories: any[]
 	stories: any[]
 	verified: boolean
+	onboarded: boolean
 }
 
 export type Post = {

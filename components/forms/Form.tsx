@@ -1,17 +1,15 @@
 'use client'
 
 import { FormField } from '@/lib/types'
-import Image from 'next/image'
-import React from 'react'
-import toast from 'react-hot-toast'
+import React, { useState } from 'react'
 import { ZodObject } from 'zod'
 
-type FormProps = {
-	action: () => { error: string }
+type FormProps = React.FormHTMLAttributes<HTMLFormElement> & {
+	action: (...args: any[]) => Promise<{ error: string } | undefined>
 	validation: ZodObject<{}>
 	fieldNames: string[]
 	setFormFields: React.Dispatch<React.SetStateAction<FormField[]>>
-	onSuccess: () => void
+	onSuccess: (...args: any[]) => void
 	children: React.ReactNode
 }
 
@@ -25,11 +23,15 @@ export default function Form({
 	onSuccess,
 	children
 }: FormProps) {
+	const [serverError, setServerError] = useState('')
+
 	const clientAction = async (formData: FormData) => {
 		const validationObject: ValidationObject = {}
+
 		fieldNames.forEach(fieldName => {
 			validationObject[fieldName] = formData.get(fieldName)
 		})
+
 		const validationResult = validation.safeParse(validationObject)
 
 		// clear previous errors
@@ -51,24 +53,11 @@ export default function Form({
 			return
 		}
 
-		const response = action()
+		const response = await action()
+
 		if (response?.error) {
-			toast(response.error, {
-				icon: (
-					<Image
-						src='/assets/icons/error.webp'
-						alt=''
-						width={20}
-						height={20}
-					/>
-				),
-				style: {
-					borderRadius: '10px',
-					background: '#333',
-					color: '#fff'
-				}
-			})
-			return
+			setServerError(response.error)
+			return { error: response.error }
 		}
 
 		onSuccess()

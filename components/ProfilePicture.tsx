@@ -1,3 +1,4 @@
+import { cn } from '@/lib/utils'
 import Image from 'next/image'
 
 type ProfilePictureProps = {
@@ -5,6 +6,7 @@ type ProfilePictureProps = {
 	alt?: string
 	width: number
 	height?: number
+	onLoad?: () => void
 	className?: string
 }
 
@@ -13,7 +15,8 @@ export default function ProfilePicture({
 	alt = 'Profile picture',
 	width,
 	height,
-	className = ''
+	className = '',
+	...rest
 }: ProfilePictureProps) {
 	return (
 		<Image
@@ -21,7 +24,11 @@ export default function ProfilePicture({
 			alt={alt}
 			width={width}
 			height={height || width}
-			className={`rounded-full aspect-square bg-neutral-600 ${className}`}
+			className={cn(
+				'rounded-full aspect-square object-cover bg-neutral-600',
+				className
+			)}
+			{...rest}
 		/>
 	)
 }

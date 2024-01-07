@@ -13,6 +13,9 @@ const config: Config = {
 				'gradient-conic':
 					'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))'
 			},
+			width: {
+				paragraph: 'min(70ch, 100% - 2rem)'
+			},
 			colors: {
 				primary: {
 					100: 'hsl(245, 100%, 95%)',

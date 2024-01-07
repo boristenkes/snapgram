@@ -6,10 +6,10 @@ import { LoginValidation } from '@/lib/validations/user'
 import { Dispatch, SetStateAction, useState } from 'react'
 import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
-import toast from 'react-hot-toast'
 import { FormField } from '@/lib/types'
 import SubmitButton from '../elements/SubmitButton'
 import Loader from '../Loader'
+import ServerErrorMessage from '../ServerErrorMessage'
 
 const fields: FormField[] = [
 	{
@@ -31,6 +31,7 @@ const fields: FormField[] = [
 export default function LoginForm() {
 	const router = useRouter()
 	const [formFields, setFormFields] = useState<FormField[]>(fields)
+	const [serverError, setServerError] = useState('')
 
 	const clientAction = async (formData: FormData) => {
 		const validationResult = validateForm(setFormFields, formData)
@@ -48,22 +49,8 @@ export default function LoginForm() {
 		if (!res?.error) {
 			router.push('/')
 		} else {
+			setServerError('Invalid email or password')
 			setFormFields(fieldsBeforeReset) // prevent form reset
-			toast('Invalid email or password', {
-				icon: (
-					<Image
-						src='/assets/icons/error.webp'
-						alt=''
-						width={20}
-						height={20}
-					/>
-				),
-				style: {
-					borderRadius: '8px',
-					background: '#333',
-					color: '#fff'
-				}
-			})
 		}
 	}
 
@@ -78,6 +65,7 @@ export default function LoginForm() {
 					{...field}
 				/>
 			))}
+			{serverError && <ServerErrorMessage message={serverError} />}
 			<SubmitButton
 				stretch
 				className='mt-8'

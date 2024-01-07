@@ -17,6 +17,7 @@ const userSchema = new mongoose.Schema({
 	bio: { type: String, maxLength: 500 },
 	verified: { type: Boolean, default: false },
 	private: { type: Boolean, default: false },
+	onboarded: { type: Boolean, default: false },
 
 	posts: [{ type: ObjectId, ref: 'Post' }],
 	postsCount: { type: Number, default: 0 },

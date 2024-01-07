@@ -1,6 +1,5 @@
 import { useFormStatus } from 'react-dom'
 import { Button, ButtonProps } from './Button'
-import { cn } from '@/lib/utils'
 
 type SubmitButtonProps = ButtonProps & {
 	pendingContent?: React.ReactNode
@@ -19,13 +18,7 @@ export default function SubmitButton({
 		<Button
 			type='submit'
 			disabled={pending}
-			className={cn(
-				{
-					'brightness-75 cursor-wait hover:brightness-75 active:brightness-75':
-						pending
-				},
-				className
-			)}
+			className={className}
 			{...rest}
 		>
 			{pending ? pendingContent || children : children}
