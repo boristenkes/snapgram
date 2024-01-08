@@ -15,20 +15,27 @@ const authOptions: NextAuthOptions = {
 				password: { label: 'Password', type: 'password' }
 			},
 			async authorize(credentials) {
+				console.log('----- authorize -----')
+				console.log('credentials:', credentials)
 				if (!credentials) return null
 
 				const { email, password } = credentials
+				console.log('email:', email)
+				console.log('password:', password)
 
 				if (!email || !password) return null
 
 				const user = await User.findOne({ email })
+				console.log('user:', user)
 
 				if (!user) return null
 
 				const passwordMatch = await bcrypt.compare(password, user.password)
+				console.log('passwordMatch:', passwordMatch)
 
 				if (!passwordMatch) return null
 
+				console.log('---------------------')
 				return user
 			}
 		}),
@@ -51,15 +58,11 @@ const authOptions: NextAuthOptions = {
 						return true
 					}
 
-					// const username = email?.slice(0, email.indexOf('@'))
-					const username = 'user_' + user.id
-					const updatedUser = await User.findOneAndUpdate(
+					await User.findOneAndUpdate(
 						{ email },
-						{ email, name, username, image },
+						{ email, name, image },
 						{ upsert: true } // if user already exists, update user. else create new user
 					)
-
-					console.log('!!! updatedUser:', updatedUser)
 				} catch (error) {
 					console.log(
 						'Error adding user signed in with Google provider to DB:',

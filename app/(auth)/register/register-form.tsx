@@ -2,30 +2,22 @@
 
 import Image from 'next/image'
 import { Button, Input } from '../../../components/elements'
-import { registerUser } from '@/lib/actions/user.actions'
-import { Dispatch, SetStateAction, useCallback, useState } from 'react'
+import { createUser } from '@/lib/actions/user.actions'
+import {
+	Dispatch,
+	SetStateAction,
+	useCallback,
+	useEffect,
+	useState
+} from 'react'
 import { signIn } from 'next-auth/react'
-import { RegisterValidation } from '@/lib/validations/user'
+import { registerUserSchema } from '@/lib/validations/user'
 import { FormField } from '@/lib/types'
 import SubmitButton from '../../../components/elements/submit-button'
 import Loader from '../../../components/loader'
 import ServerErrorMessage from '../../../components/server-error-message'
 
 const fields: FormField[] = [
-	{
-		type: 'text',
-		name: 'username',
-		label: 'username',
-		required: true,
-		errors: []
-	},
-	{
-		type: 'text',
-		name: 'name',
-		label: 'name',
-		required: true,
-		errors: []
-	},
 	{
 		type: 'email',
 		name: 'email',
@@ -56,24 +48,34 @@ export default function RegisterForm() {
 	const clientAction = useCallback(
 		async (formData: FormData) => {
 			// client-side validation
-			const validationResult = validateForm(setFormFields, formData)
+			const formObj = {
+				email: formData.get('email'),
+				password: formData.get('password'),
+				confirmPassword: formData.get('confirmPassword')
+			} as Record<string, string>
+
+			const validationResult = validateForm(formObj, setFormFields)
 
 			if (!validationResult) return
 
-			// register user
-			const response = await registerUser(validationResult.data)
+			const { email, password } = formObj
 
-			// display error occured in server validation, if there is one
-			if (response?.error) {
-				setServerError(response.error)
-				return
+			try {
+				const response = await createUser({ email, password })
+
+				setServerError(response?.error || '')
+				if (response?.error) return
+
+				await signIn('credentials', {
+					email: validationResult.data.email,
+					password: validationResult.data.password,
+					callbackUrl: '/onboarding'
+				})
+			} catch (error) {
+				console.log('Failed to create user:', error)
 			}
-
-			// everything went well, sign in new user
-			const { email, password } = validationResult.data
-			signIn('credentials', { email, password, callbackUrl: '/' })
 		},
-		[registerUser, signIn]
+		[createUser, signIn]
 	)
 
 	return (
@@ -114,17 +116,11 @@ export default function RegisterForm() {
 }
 
 function validateForm(
-	setFormFields: Dispatch<SetStateAction<FormField[]>>,
-	formData: FormData
+	formObj: Record<string, string>,
+	setFormFields: Dispatch<SetStateAction<FormField[]>>
 ) {
 	// client-side validation
-	const validationResult = RegisterValidation.safeParse({
-		username: formData.get('username'),
-		name: formData.get('name'),
-		email: formData.get('email'),
-		password: formData.get('password'),
-		confirmPassword: formData.get('confirmPassword')
-	})
+	const validationResult = registerUserSchema.safeParse(formObj)
 
 	// clear previous errors
 	setFormFields(prevFields =>
@@ -144,5 +140,6 @@ function validateForm(
 		)
 		return
 	}
+
 	return validationResult
 }

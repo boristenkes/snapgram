@@ -94,8 +94,9 @@ export default async function Profile({ user, currentUser }: ProfileProps) {
 						</div>
 					</div>
 					<p className='text-base w-paragraph'>
-						{user?.bio ||
-							'Lorem ipsum dolor, sit amet consectetur adipisicing elit. Placeat, quam provident, tempore impedit ipsam et accusantium, in consequatur maiores deleniti quo! Voluptate atque voluptates accusantium laudantium. Atque minus voluptas autem!'}
+						{user?.bio || (
+							<span className='text-neutral-500 italic'>No bio</span>
+						)}
 					</p>
 				</div>
 			</div>

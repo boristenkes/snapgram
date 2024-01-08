@@ -1,10 +1,19 @@
 import RegisterForm from './register-form'
 import Image from 'next/image'
 import Link from 'next/link'
+import { getCurrentUser } from '@/lib/session'
+import { redirect } from 'next/navigation'
 
-export default function RegisterPage() {
+export default async function RegisterPage() {
+	const session = await getCurrentUser()
+
+	if (session) {
+		console.log('!!! redirected from RegisterPage because of session')
+		redirect(session?.user?.onboarded ? '/' : '/onboarding')
+	}
+
 	return (
-		<main className='w-[min(100%-1rem,25rem)]'>
+		<main className='w-[min(100%-2rem,25rem)]'>
 			<Image
 				src='/assets/logo-text.svg'
 				alt='Logo'

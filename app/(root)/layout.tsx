@@ -1,10 +1,24 @@
 import { Topbar, Sidebar, Bottombar } from '@/components/shared'
+import { getCurrentUser } from '@/lib/session'
+import { redirect } from 'next/navigation'
 
-export default function RootLayout({
+export default async function RootLayout({
 	children
 }: {
 	children: React.ReactNode
 }) {
+	const session = await getCurrentUser()
+
+	if (!session?.user) {
+		console.log('!!! redirected from RootLayout because of !session?.user')
+		redirect('/login')
+	} else if (!session?.user.onboarded) {
+		console.log(
+			'!!! redirected from RootLayout because of !session?.user.onboarded'
+		)
+		redirect('/onboarding')
+	}
+
 	return (
 		<>
 			<Topbar />

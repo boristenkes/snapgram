@@ -2,7 +2,7 @@
 
 import connectMongoDB from '../mongoose'
 import User from '../models/user.model'
-import { EditProfileValidation, RegisterValidation } from '../validations/user'
+import { createUserSchema, editProfileSchema } from '../validations/user'
 import { UTApi } from 'uploadthing/server'
 import { validateImage } from '../utils'
 import { revalidatePath } from 'next/cache'
@@ -11,9 +11,8 @@ const uploadthingApi = new UTApi()
 
 const bcrypt = require('bcrypt')
 
-export async function registerUser(userData: unknown) {
-	// server-side validation
-	const validationResult = RegisterValidation.safeParse(userData)
+export async function createUser({ email, password }: Record<string, unknown>) {
+	const validationResult = createUserSchema.safeParse({ email, password })
 
 	if (!validationResult.success) {
 		let errorMessage = ''
@@ -29,37 +28,107 @@ export async function registerUser(userData: unknown) {
 	try {
 		await connectMongoDB()
 
-		const { username, email, password } = validationResult.data
+		const existingUser = await User.exists({ email })
 
-		// making sure user doesn't already exist
-		const existingUser = await User.exists({
-			$or: [{ email }, { username }]
-		})
-
-		if (existingUser) {
-			console.error('User already exists')
+		if (existingUser)
 			return {
-				error: 'User with this email or username already exists.'
+				error: 'User with this email already exists.'
 			}
-		}
 
-		// registering new user
 		const hashedPassword = await bcrypt.hash(password, 10)
 
-		const newUser = await User.create({
-			email,
-			username,
-			password: hashedPassword
-		})
+		const newUser = await User.create({ email, password: hashedPassword })
 
-		const { newUserEmail, newUserPassword } = newUser._doc
+		// setTimeout(async () => {
+		// 	await User.deleteOne({ email })
+		// 	console.log('Deleted.')
+		// }, 5000)
 
-		return { email: newUserEmail, password: newUserPassword }
+		return { email: newUser.email, password: newUser.password }
 	} catch (error: any) {
-		console.error('Error registering user:', error)
+		console.error('Error creating new user:', error)
 		return { error: error.message }
 	}
 }
+
+export async function onboard(
+	userId: string,
+	data: {
+		name: string
+		username: string
+		bio?: string
+	}
+) {
+	try {
+		await connectMongoDB()
+
+		const existingUser = await User.exists({ username: data.username })
+
+		if (existingUser) {
+			return {
+				error:
+					'User with this username already exists, please choose another one.'
+			}
+		}
+
+		await User.findByIdAndUpdate(userId, {
+			...data,
+			onboarded: true
+		})
+	} catch (error: any) {
+		console.error('Failed to onboard user:', error)
+		return { error: error.message }
+	}
+}
+
+// export async function registerUser(userData: unknown) {
+// 	// server-side validation
+// 	const validationResult = registerUserSchema.safeParse(userData)
+
+// 	if (!validationResult.success) {
+// 		let errorMessage = ''
+
+// 		const errors = validationResult.error.issues
+// 		errors.forEach(error => {
+// 			errorMessage += `${error.message}. `
+// 		})
+
+// 		return { error: errorMessage }
+// 	}
+
+// 	try {
+// 		await connectMongoDB()
+
+// 		const { username, email, password } = validationResult.data
+
+// 		// making sure user doesn't already exist
+// 		const existingUser = await User.exists({
+// 			$or: [{ email }, { username }]
+// 		})
+
+// 		if (existingUser) {
+// 			return {
+// 				error: 'User with this email or username already exists.'
+// 			}
+// 		}
+
+// 		// registering new user
+// 		const hashedPassword = await bcrypt.hash(password, 10)
+
+// 		const newUser = await User.create({
+// 			email,
+// 			username,
+// 			password: hashedPassword
+// 		})
+
+// 		const { newUserEmail, newUserPassword } = newUser._doc
+
+// 		return { email: newUserEmail, password: newUserPassword }
+// 	} catch (error: any) {
+// 		console.error('Error registering user:', error)
+// 		return { error: error.message }
+// 	}
+// }
 
 export async function getUser({ username }: { username: string }) {
 	try {
@@ -155,10 +224,8 @@ export async function updateUser({
 		// bio is only one optional so we need to check if it's even provided
 		if (bio) Object.assign(formObj, { bio })
 
-		console.log('formObj after bio:', formObj)
-
 		// Server-side form validation
-		const validationResult = EditProfileValidation.safeParse(formObj)
+		const validationResult = editProfileSchema.safeParse(formObj)
 
 		if (!validationResult.success) {
 			return { error: 'Invalid data' }
@@ -174,7 +241,7 @@ export async function updateUser({
 			formObj
 		).select('image')
 
-		// Deleting old image from uploadthing, if new image is provided AND if image is successfully updated
+		// Deleting old image from uploadthing, if new image is provided AND if new image is successfully uploaded
 		if (isImageProvided && !imageResponse?.error) {
 			const oldImageUrl = userBeforeUpdate?.image
 

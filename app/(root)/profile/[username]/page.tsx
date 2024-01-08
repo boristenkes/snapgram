@@ -12,9 +12,10 @@ export const revalidate = 3600000 // 1h
 
 export async function generateStaticParams() {
 	const users = await getAllUsers({ select: 'username' })
-	const usernames = await users?.map(user => user.username)
 
-	return usernames?.map(username => ({ username }))
+	return users?.map(user => ({
+		username: user.username
+	}))
 }
 
 export default async function ProfilePage({

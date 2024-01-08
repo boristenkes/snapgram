@@ -2,7 +2,7 @@
 
 import { Button, Input } from '../../../components/elements'
 import Image from 'next/image'
-import { LoginValidation } from '@/lib/validations/user'
+import { loginUserSchema } from '@/lib/validations/user'
 import { Dispatch, SetStateAction, useState } from 'react'
 import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
@@ -96,7 +96,7 @@ function validateForm(
 	formData: FormData
 ) {
 	// client-side validation
-	const validationResult = LoginValidation.safeParse({
+	const validationResult = loginUserSchema.safeParse({
 		email: formData.get('email'),
 		password: formData.get('password')
 	})

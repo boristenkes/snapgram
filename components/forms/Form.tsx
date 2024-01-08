@@ -78,7 +78,7 @@ export default function Form({
 // 	formData: FormData
 // ) {
 // 	// client-side validation
-// 	const validationResult = RegisterValidation.safeParse({
+// 	const validationResult = registerUserSchema.safeParse({
 // 		username: formData.get('username'),
 // 		email: formData.get('email'),
 // 		password: formData.get('password')

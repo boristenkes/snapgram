@@ -1,26 +1,18 @@
 'use client'
 
-// TODO: Don't submit form if data hasn't changed
-// TODO: Handle photo remove
 import { FormField } from '@/lib/types'
 import { useCallback, useState } from 'react'
 import { Input } from '@/components/elements'
 import SubmitButton from '@/components/elements/submit-button'
 import Loader from '@/components/loader'
 import { updateUser } from '@/lib/actions/user.actions'
-import { EditProfileValidation } from '@/lib/validations/user'
+import { editProfileSchema } from '@/lib/validations/user'
 import { validateImage } from '@/lib/utils'
 import darkToast from '@/lib/toast'
 import ServerErrorMessage from '@/components/server-error-message'
 import ProfilePictureUploader from './profile-picture-uploader'
 
 const fields: FormField[] = [
-	{
-		type: 'image',
-		name: 'image',
-		label: 'Change profile photo',
-		errors: []
-	},
 	{
 		type: 'text',
 		name: 'username',
@@ -56,7 +48,6 @@ export default function EditProfileForm({ profile }: EditProfileFormProps) {
 	const [imageBlob, setImageBlob] = useState('')
 	const [imageErrors, setImageErrors] = useState<string[]>([])
 	const [serverError, setServerError] = useState('')
-	const [isFormEdited, setIsFormEdited] = useState(false)
 
 	const handleImageChange = useCallback(
 		(e: React.ChangeEvent<HTMLInputElement>) => {
@@ -74,7 +65,6 @@ export default function EditProfileForm({ profile }: EditProfileFormProps) {
 
 				fileReader.onload = async event => {
 					setImageBlob(event.target?.result?.toString() || '')
-					setIsFormEdited(true)
 				}
 
 				fileReader.readAsDataURL(file)
@@ -85,9 +75,7 @@ export default function EditProfileForm({ profile }: EditProfileFormProps) {
 
 	const clientAction = useCallback(
 		async (formData: FormData) => {
-			if (!isFormEdited) return
-
-			const validationResult = EditProfileValidation.safeParse({
+			const validationResult = editProfileSchema.safeParse({
 				username: formData.get('username'),
 				name: formData.get('name'),
 				email: formData.get('email'),
@@ -133,29 +121,24 @@ export default function EditProfileForm({ profile }: EditProfileFormProps) {
 			noValidate
 			className='max-w-2xl mt-14'
 		>
-			{formFields.map(field =>
-				field.type === 'image' ? (
-					<ProfilePictureUploader
-						key={field.name}
-						imageBlob={imageBlob}
-						imageErrors={imageErrors}
-						imageHandler={handleImageChange}
-						defaultImage={currentUser[field.name]}
-					/>
-				) : (
-					<Input
-						key={field.name}
-						textarea={field.name === 'bio'}
-						textareaProps={{
-							rows: 6,
-							defaultValue: currentUser.bio
-						}}
-						defaultValue={currentUser[field.name]}
-						onInput={() => setIsFormEdited(true)}
-						{...field}
-					/>
-				)
-			)}
+			<ProfilePictureUploader
+				imageBlob={imageBlob}
+				imageErrors={imageErrors}
+				imageHandler={handleImageChange}
+				defaultImage={currentUser?.image}
+			/>
+			{formFields.map(field => (
+				<Input
+					key={field.name}
+					textarea={field.name === 'bio'}
+					textareaProps={{
+						rows: 6,
+						defaultValue: currentUser.bio
+					}}
+					defaultValue={currentUser[field.name]}
+					{...field}
+				/>
+			))}
 
 			{serverError && <ServerErrorMessage message={serverError} />}
 
@@ -168,7 +151,6 @@ export default function EditProfileForm({ profile }: EditProfileFormProps) {
 				}
 				size='sm'
 				className='ml-auto mt-10'
-				disabled={!isFormEdited}
 			>
 				Update Profile
 			</SubmitButton>

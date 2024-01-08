@@ -1,8 +1,17 @@
 import LoginForm from './login-form'
 import Image from 'next/image'
 import Link from 'next/link'
+import { getCurrentUser } from '@/lib/session'
+import { redirect } from 'next/navigation'
 
-export default function LoginPage() {
+export default async function LoginPage() {
+	const session = await getCurrentUser()
+
+	if (session) {
+		console.log('!!! redirected from LoginPage because of session')
+		redirect(session?.user?.onboarded ? '/' : '/onboarding')
+	}
+
 	return (
 		<main className='w-[min(100%-1rem,25rem)]'>
 			<Image

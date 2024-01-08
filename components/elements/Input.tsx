@@ -5,11 +5,7 @@ import { FormField } from '@/lib/types'
 import { cn } from '@/lib/utils'
 import { useFormStatus } from 'react-dom'
 
-type InputProps = FormField & {
-	textarea?: boolean
-	labelProps?: React.LabelHTMLAttributes<HTMLLabelElement>
-	textareaProps?: React.TextareaHTMLAttributes<HTMLTextAreaElement>
-}
+type InputProps = FormField
 
 export default function Input({
 	label,
