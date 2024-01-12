@@ -49,7 +49,7 @@ export default function LoginForm() {
 		if (!res?.error) {
 			router.push('/')
 		} else {
-			setServerError('Invalid email or password')
+			setServerError(res.error ?? 'Invalid email or password')
 			setFormFields(fieldsBeforeReset) // prevent form reset
 		}
 	}

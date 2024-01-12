@@ -15,27 +15,34 @@ const authOptions: NextAuthOptions = {
 				password: { label: 'Password', type: 'password' }
 			},
 			async authorize(credentials) {
-				console.log('----- authorize -----')
-				console.log('credentials:', credentials)
-				if (!credentials) return null
+				if (!credentials) {
+					throw new Error('Crentials not provided')
+				}
 
 				const { email, password } = credentials
-				console.log('email:', email)
-				console.log('password:', password)
 
-				if (!email || !password) return null
+				if (!email || !password) {
+					throw new Error('Email and password are required')
+				}
 
 				const user = await User.findOne({ email })
-				console.log('user:', user)
 
-				if (!user) return null
+				if (!user) {
+					throw new Error('User with this email does not exist')
+				}
+
+				if (!user.password) {
+					throw new Error(
+						'This email was originally registed with Google provider'
+					)
+				}
 
 				const passwordMatch = await bcrypt.compare(password, user.password)
-				console.log('passwordMatch:', passwordMatch)
 
-				if (!passwordMatch) return null
+				if (!passwordMatch) {
+					throw new Error('Invalid password. Please try again')
+				}
 
-				console.log('---------------------')
 				return user
 			}
 		}),

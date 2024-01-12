@@ -39,11 +39,6 @@ export async function createUser({ email, password }: Record<string, unknown>) {
 
 		const newUser = await User.create({ email, password: hashedPassword })
 
-		// setTimeout(async () => {
-		// 	await User.deleteOne({ email })
-		// 	console.log('Deleted.')
-		// }, 5000)
-
 		return { email: newUser.email, password: newUser.password }
 	} catch (error: any) {
 		console.error('Error creating new user:', error)
@@ -80,55 +75,6 @@ export async function onboard(
 		return { error: error.message }
 	}
 }
-
-// export async function registerUser(userData: unknown) {
-// 	// server-side validation
-// 	const validationResult = registerUserSchema.safeParse(userData)
-
-// 	if (!validationResult.success) {
-// 		let errorMessage = ''
-
-// 		const errors = validationResult.error.issues
-// 		errors.forEach(error => {
-// 			errorMessage += `${error.message}. `
-// 		})
-
-// 		return { error: errorMessage }
-// 	}
-
-// 	try {
-// 		await connectMongoDB()
-
-// 		const { username, email, password } = validationResult.data
-
-// 		// making sure user doesn't already exist
-// 		const existingUser = await User.exists({
-// 			$or: [{ email }, { username }]
-// 		})
-
-// 		if (existingUser) {
-// 			return {
-// 				error: 'User with this email or username already exists.'
-// 			}
-// 		}
-
-// 		// registering new user
-// 		const hashedPassword = await bcrypt.hash(password, 10)
-
-// 		const newUser = await User.create({
-// 			email,
-// 			username,
-// 			password: hashedPassword
-// 		})
-
-// 		const { newUserEmail, newUserPassword } = newUser._doc
-
-// 		return { email: newUserEmail, password: newUserPassword }
-// 	} catch (error: any) {
-// 		console.error('Error registering user:', error)
-// 		return { error: error.message }
-// 	}
-// }
 
 export async function getUser({ username }: { username: string }) {
 	try {
@@ -168,13 +114,6 @@ type UpdateUserProps = {
 	bio?: string
 }
 
-// export async function updateUser({
-// 	_id,
-// 	formData
-// }: {
-// 	_id: string
-// 	formData: FormData
-// }) {
 export async function updateUser({
 	_id,
 	formData,
@@ -183,6 +122,22 @@ export async function updateUser({
 	email,
 	bio
 }: UpdateUserProps) {
+	const formObj: FormObj = {
+		username,
+		name,
+		email
+	}
+
+	// bio is only one optional so we need to check if it's even provided
+	if (bio) Object.assign(formObj, { bio })
+
+	// Server-side form validation
+	const validationResult = editProfileSchema.safeParse(formObj)
+
+	if (!validationResult.success) {
+		return { error: 'Invalid data' }
+	}
+
 	try {
 		await connectMongoDB()
 		const image = formData.get('image') as File
@@ -215,22 +170,6 @@ export async function updateUser({
 				console.error('user.actions.ts/updateUser: Failed to rename image')
 		}
 
-		const formObj: FormObj = {
-			username,
-			name,
-			email
-		}
-
-		// bio is only one optional so we need to check if it's even provided
-		if (bio) Object.assign(formObj, { bio })
-
-		// Server-side form validation
-		const validationResult = editProfileSchema.safeParse(formObj)
-
-		if (!validationResult.success) {
-			return { error: 'Invalid data' }
-		}
-
 		// If image is successfully uploaded, we're adding it to formObj
 		if (imageResponse?.data?.url) {
 			formObj.image = imageResponse?.data.url
@@ -241,7 +180,8 @@ export async function updateUser({
 			formObj
 		).select('image')
 
-		// Deleting old image from uploadthing, if new image is provided AND if new image is successfully uploaded
+		// Deleting old image from uploadthing,
+		// if new image is provided AND if new image is successfully uploaded
 		if (isImageProvided && !imageResponse?.error) {
 			const oldImageUrl = userBeforeUpdate?.image
 

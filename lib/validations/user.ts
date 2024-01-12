@@ -11,7 +11,7 @@ export const createUserSchema = z.object({
 
 export const registerUserSchema = z
 	.object({
-		email: z.string().email(),
+		email: z.string().min(1, 'Email is required').email(),
 		password: z
 			.string()
 			.trim()
@@ -19,7 +19,7 @@ export const registerUserSchema = z
 			.max(25, 'Password must be at most 25 characters long'),
 		confirmPassword: z.string().min(1, 'Confirm Password is required')
 	})
-	.refine(d => d.confirmPassword === d.password, {
+	.refine(data => data.confirmPassword === data.password, {
 		message: 'Password did not match',
 		path: ['confirmPassword']
 	})
@@ -48,7 +48,7 @@ export const onboardingSchema = z.object({
 })
 
 export const loginUserSchema = z.object({
-	email: z.string().email(),
+	email: z.string().min(1, 'Email is required').email(),
 	password: z.string().trim().min(1, 'Password is required')
 })
 
