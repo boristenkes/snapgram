@@ -55,6 +55,14 @@ const config: Config = {
 					// danger: 'hsl(0, 100%, 63%)'
 					danger: 'hsl(0, 100%, 68%)'
 				}
+			},
+			fontFamily: {
+				inherit: 'inherit'
+			},
+			screens: {
+				small: '30em',
+				medium: '45em',
+				large: '65em'
 			}
 		}
 	},

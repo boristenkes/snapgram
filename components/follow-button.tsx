@@ -1,6 +1,6 @@
 'use client'
 
-import { Button } from './elements'
+import { Button, type ButtonProps } from './elements'
 import {
 	getUserById,
 	follow,
@@ -13,7 +13,7 @@ import { UserProfile } from '@/lib/types'
 import Loader from './loader'
 import darkToast from '@/lib/toast'
 
-type FollowButtonProps = {
+type FollowButtonProps = ButtonProps & {
 	currentUserStr: string
 	targetUserStr: string
 }
@@ -30,7 +30,8 @@ type ButtonData = {
 
 export default function FollowButton({
 	currentUserStr,
-	targetUserStr
+	targetUserStr,
+	...rest
 }: FollowButtonProps) {
 	const currentUser = useMemo(
 		() => JSON.parse(currentUserStr),
@@ -79,6 +80,7 @@ export default function FollowButton({
 			size='xs'
 			disabled={!buttonData}
 			{...buttonData?.styles}
+			{...rest}
 		>
 			{buttonData?.text || <Loader />}
 		</Button>

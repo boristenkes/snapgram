@@ -12,7 +12,7 @@ const buttonVariants = cva(
 			variant: {
 				primary: 'bg-primary-500 text-neutral-100 border-primary-500',
 				secondary: 'bg-secondary-500 text-neutral-700 border-secondary-500',
-				dark: 'bg-neutral-600 border-neutral-700 text-neutral-100',
+				dark: 'bg-neutral-600 border-neutral-600 text-neutral-100',
 				light: 'bg-neutral-200 border-neutral-200 text-neutral-700'
 			},
 			size: {
