@@ -1,5 +1,5 @@
 import Profile from '@/components/profile'
-import { getAllUsers, getUser } from '@/lib/actions/user.actions'
+import { getAllUsers, getUserProfile } from '@/lib/actions/user.actions'
 import { getCurrentUser } from '@/lib/session'
 
 type ProfilePageProps = {
@@ -31,7 +31,7 @@ export default async function ProfilePage({
 			/>
 		)
 
-	const user = await getUser({ username })
+	const user = await getUserProfile({ username })
 
 	return (
 		<Profile

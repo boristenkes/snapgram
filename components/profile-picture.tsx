@@ -8,6 +8,7 @@ type ProfilePictureProps = {
 	height?: number
 	onLoad?: () => void
 	className?: string
+	priority?: boolean
 }
 
 export default function ProfilePicture({
@@ -16,6 +17,7 @@ export default function ProfilePicture({
 	width,
 	height,
 	className = '',
+	priority,
 	...rest
 }: ProfilePictureProps) {
 	return (
@@ -28,6 +30,7 @@ export default function ProfilePicture({
 				'rounded-full aspect-square object-cover bg-neutral-600',
 				className
 			)}
+			priority={priority}
 			{...rest}
 		/>
 	)

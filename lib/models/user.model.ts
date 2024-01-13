@@ -1,12 +1,12 @@
 import mongoose from 'mongoose'
-const { ObjectId } = mongoose.SchemaTypes
 
 const userSchema = new mongoose.Schema({
 	username: {
 		type: String,
 		unique: true,
-		minLength: 3,
-		maxLength: 30,
+		trim: true,
+		minlength: 3,
+		maxlength: 30,
 		lowercase: true
 	},
 	name: String,
@@ -18,25 +18,25 @@ const userSchema = new mongoose.Schema({
 	private: { type: Boolean, default: false },
 	onboarded: { type: Boolean, default: false },
 
-	posts: [{ type: ObjectId, ref: 'Post' }],
+	posts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post' }],
 	postsCount: { type: Number, default: 0 },
-	followers: [{ type: ObjectId, ref: 'User' }],
+	followers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
 	followersCount: { type: Number, default: 0 },
-	following: [{ type: ObjectId, ref: 'User' }],
+	following: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
 	followingCount: { type: Number, default: 0 },
-	followRequests: [{ type: ObjectId, ref: 'User' }],
+	followRequests: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
 	followRequestsCount: { type: Number, default: 0 },
 
-	stories: [{ type: ObjectId, ref: 'Story' }],
+	stories: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Story' }],
 	seenStories: [
 		{
-			story: { type: ObjectId, ref: 'Story' },
+			story: { type: mongoose.Schema.Types.ObjectId, ref: 'Story' },
 			seenAt: { type: Date, default: Date.now }
 		}
 	],
-	highlights: [{ type: ObjectId, ref: 'Highlight' }],
-	savedPosts: [{ type: ObjectId, ref: 'Post' }],
-	likedPosts: [{ type: ObjectId, ref: 'Post' }]
+	highlights: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Highlight' }],
+	savedPosts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post' }],
+	likedPosts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post' }]
 })
 
 const User = mongoose.models.User || mongoose.model('User', userSchema)

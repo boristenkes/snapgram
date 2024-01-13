@@ -1,7 +1,8 @@
 import { UserProfile } from '@/lib/types'
 import Image from 'next/image'
-import ProfilePicture from './profile-picture'
-import { Button } from './elements'
+import ProfilePicture from '../profile-picture'
+import { Button } from '../elements'
+import FollowButton from '../follow-button'
 
 type ProfileProps = {
 	user: UserProfile
@@ -10,10 +11,6 @@ type ProfileProps = {
 
 export default async function Profile({ user, currentUser }: ProfileProps) {
 	const isMyProfile = user?._id === currentUser?._id
-
-	const isInFollowing =
-		!isMyProfile &&
-		currentUser?.following.some(user => user._id === currentUser?._id)
 
 	return (
 		<main className='my-20 mx-16'>
@@ -28,6 +25,7 @@ export default async function Profile({ user, currentUser }: ProfileProps) {
 					width={150}
 					height={150}
 					className='w-40 h-40'
+					priority
 				/>
 				<div>
 					<div className='flex items-center gap-12 mb-2'>
@@ -59,19 +57,14 @@ export default async function Profile({ user, currentUser }: ProfileProps) {
 							</Button>
 						) : (
 							<div className='flex gap-3'>
-								{isInFollowing ? (
-									<Button
-										size='xs'
-										className='bg-neutral-600 border-neutral-600'
-									>
-										Following
-									</Button>
-								) : (
-									<Button size='xs'>Follow</Button>
-								)}
+								<FollowButton
+									currentUserStr={JSON.stringify(currentUser)}
+									targetUserStr={JSON.stringify(user)}
+								/>
 								<Button
 									size='xs'
 									variant='light'
+									href={`/chat/${user?._id}`}
 								>
 									Message
 								</Button>

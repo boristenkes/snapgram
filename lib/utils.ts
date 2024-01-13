@@ -11,11 +11,18 @@ export function isBase64(imageData: string) {
 	return base64Regex.test(imageData)
 }
 
-export function currentTime() {
+export function currentTime({ millis }: { millis?: boolean } = {}) {
 	const d = new Date()
 	const hrs = leadingZeros(d.getHours())
 	const mins = leadingZeros(d.getMinutes())
 	const secs = leadingZeros(d.getSeconds())
+
+	if (millis) {
+		const m = d.getMilliseconds()
+		const millis = m < 10 ? `00${m}` : m < 100 ? `0${m}` : m.toString()
+		return `${hrs}:${mins}:${secs}:${millis}:`
+	}
+
 	return `${hrs}:${mins}:${secs}:`
 }
 

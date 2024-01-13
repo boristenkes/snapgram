@@ -2,14 +2,14 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import ProfilePicture from '../profile-picture'
-import MenuButton from '../menu-button'
+import ProfilePicture from '../../profile-picture'
+import MenuButton from './menu-button'
 import clientSession from '@/lib/client-session'
 import { useEffect, useState } from 'react'
 import { topbarLinks } from '@/constants'
-import SidebarLink from './sidebar-link'
+import SidebarLink from '../sidebar/sidebar-link'
 import { cn } from '@/lib/utils'
-import { Button } from '../elements'
+import { Button } from '../../elements'
 import { signOut } from 'next-auth/react'
 import { usePathname } from 'next/navigation'
 

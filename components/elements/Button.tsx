@@ -12,7 +12,7 @@ const buttonVariants = cva(
 			variant: {
 				primary: 'bg-primary-500 text-neutral-100 border-primary-500',
 				secondary: 'bg-secondary-500 text-neutral-700 border-secondary-500',
-				dark: 'bg-neutral-700 border-neutral-700 text-neutral-100',
+				dark: 'bg-neutral-600 border-neutral-700 text-neutral-100',
 				light: 'bg-neutral-200 border-neutral-200 text-neutral-700'
 			},
 			size: {
@@ -63,7 +63,6 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 					href={href}
 					className={cn(buttonVariants({ variant, size, className }))}
 				>
-					<p className='border-2'></p>
 					{children}
 				</a>
 			) : (

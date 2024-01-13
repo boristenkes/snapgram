@@ -1,27 +1,25 @@
 import Image from 'next/image'
-import { Renderable, toast } from 'react-hot-toast'
+import { toast } from 'react-hot-toast'
 
 type ToastProps = {
-	icon?: Renderable | undefined
+	iconUrl?: string
+	iconAlt?: string
 	style?: React.CSSProperties
 }
 
 export default function darkToast(
 	message: string,
-	{
-		icon = (
+	{ iconUrl = '/assets/icons/check.svg', iconAlt = '', style }: ToastProps = {}
+) {
+	return toast(message, {
+		icon: (
 			<Image
-				src='/assets/icons/check.svg'
-				alt=''
+				src={iconUrl}
+				alt={iconAlt}
 				width={20}
 				height={20}
 			/>
 		),
-		style
-	}: ToastProps = {}
-) {
-	return toast(message, {
-		icon,
 		style: {
 			borderRadius: '8px',
 			background: '#333',

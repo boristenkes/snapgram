@@ -76,7 +76,25 @@ export async function onboard(
 	}
 }
 
-export async function getUser({ username }: { username: string }) {
+export async function getUserById(
+	userId: string,
+	props?: Parameters<typeof User.findById>[0]
+) {
+	if (!userId) return
+
+	try {
+		await connectMongoDB()
+
+		const user = await User.findById(userId, props)
+
+		return JSON.stringify(user)
+	} catch (error) {
+		console.error('User not found in `getUserById()`:', error)
+		return { error: 'User not found' }
+	}
+}
+
+export async function getUserProfile({ username }: { username: string }) {
 	try {
 		await connectMongoDB()
 
@@ -86,7 +104,7 @@ export async function getUser({ username }: { username: string }) {
 
 		return user
 	} catch (error: any) {
-		console.error('User not found in `getUser()`:', error)
+		console.error('User not found in `getUserProfile()`:', error)
 		return { error: 'User not found' }
 	}
 }
@@ -204,4 +222,76 @@ export async function updateUser({
 		console.log('Error in `updateUser`:', error)
 		return { error: error.message }
 	}
+}
+
+// Handling followers
+
+export async function follow(currentUserId: string, targetUserId: string) {
+	if (typeof currentUserId !== 'string' || typeof targetUserId !== 'string')
+		return { error: 'Invalid currentUserId or targetUserId' }
+
+	try {
+		await connectMongoDB()
+
+		await Promise.all([
+			User.findByIdAndUpdate(currentUserId, {
+				$push: { following: targetUserId },
+				$inc: { followingCount: 1 }
+			}),
+			User.findByIdAndUpdate(targetUserId, {
+				$push: { followers: currentUserId },
+				$inc: { followersCount: 1 }
+			})
+		])
+
+		revalidatePath(`/profile/${targetUserId}`)
+	} catch (error: any) {
+		console.log('Error in `follow`:', error)
+		return { error: 'Failed to follow user. Please try again later.' }
+	}
+}
+
+export async function unfollow(currentUserId: string, targetUserId: string) {
+	if (typeof currentUserId !== 'string' || typeof targetUserId !== 'string')
+		return { error: 'Invalid currentUserId or targetUserId' }
+
+	try {
+		await connectMongoDB()
+
+		await Promise.all([
+			User.findByIdAndUpdate(currentUserId, {
+				$pull: { following: targetUserId },
+				$inc: { followingCount: -1 }
+			}),
+			User.findByIdAndUpdate(targetUserId, {
+				$pull: { followers: currentUserId },
+				$inc: { followersCount: -1 }
+			})
+		])
+
+		revalidatePath(`/profile/${targetUserId}`)
+	} catch (error) {
+		console.log('Error in `unfollow`:', error)
+		return { error: 'Failed to unfollow user. Please try again later.' }
+	}
+}
+
+export async function sendFollowRequest(
+	currentUserId: string,
+	targetUserId: string
+) {
+	if (typeof currentUserId !== 'string' || typeof targetUserId !== 'string')
+		return { error: 'Invalid currentUserId or targetUserId' }
+
+	console.log({ action: 'sendFollowRequest' })
+}
+
+export async function unsendFollowRequest(
+	currentUserId: string,
+	targetUserId: string
+) {
+	if (typeof currentUserId !== 'string' || typeof targetUserId !== 'string')
+		return { error: 'Invalid currentUserId or targetUserId' }
+
+	console.log({ action: 'unsendFollowRequest' })
 }

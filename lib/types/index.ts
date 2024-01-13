@@ -20,18 +20,17 @@ export type SessionType = Session & {
 	}
 }
 
-export type UserProfile = {
-	_id: string
+export type UserProfile = { _id: string } & Partial<{
 	name: string
 	username: string
 	email: string
 	image: string
-	bio?: string
-	followRequests: UserProfile[]
+	bio: string
+	followRequests: string[]
 	followRequestsCount: number
-	followers: UserProfile[]
+	followers: string[]
 	followersCount: number
-	following: UserProfile[]
+	following: string[]
 	followingCount: number
 	highlights: string[]
 	likedPosts: Post[]
@@ -43,7 +42,7 @@ export type UserProfile = {
 	stories: any[]
 	verified: boolean
 	onboarded: boolean
-}
+}>
 
 export type Post = {
 	author: UserProfile
