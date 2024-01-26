@@ -50,7 +50,7 @@ export default function Input({
 					{...rest}
 				/>
 			)}
-			{Boolean(errors.length) && (
+			{!!errors.length && (
 				<Image
 					src='/assets/icons/error.webp'
 					alt='Error'
@@ -63,7 +63,7 @@ export default function Input({
 	)
 
 	const InputError = () =>
-		Boolean(errors?.length) && (
+		!!errors?.length && (
 			<ul className='text-semantic-danger'>
 				{errors.map((error, i) => (
 					<li key={i}>{error}</li>

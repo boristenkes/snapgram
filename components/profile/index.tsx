@@ -13,7 +13,7 @@ export default async function Profile({ user, currentUser }: ProfileProps) {
 	const isMyProfile = user?._id === currentUser?._id
 
 	return (
-		<div className='w-[min(65.5rem,100%-2rem)] my-10 mx-auto px-4 | large:my-20 large:px-16'>
+		<main className='w-[min(65.5rem,100%-2rem)] my-10 mx-auto px-4 | large:my-20 large:px-16'>
 			<div className='flex gap-4 | large:gap-8'>
 				<ProfilePicture
 					url={user?.image}
@@ -158,7 +158,7 @@ export default async function Profile({ user, currentUser }: ProfileProps) {
 					)}
 				</div>
 			</div>
-		</div>
+		</main>
 	)
 }
 

@@ -17,7 +17,7 @@ export default function Story({ story, author }: StoryProps) {
 	return (
 		<li
 			key={story.id}
-			className='relative text-center'
+			className='relative text-center flex-none'
 		>
 			<Link href={`/story/${story.id}`}>
 				<div
@@ -31,7 +31,7 @@ export default function Story({ story, author }: StoryProps) {
 						alt={`${author.username}'s story`}
 						width={62}
 						height={62}
-						className='p-0.5'
+						className='p-0.5 mx-auto'
 					/>
 				</div>
 				{author.username}

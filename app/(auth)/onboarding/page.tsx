@@ -7,7 +7,6 @@ export default async function OnboardingPage() {
 	const session = await getCurrentUser()
 
 	if (!session) {
-		console.log('!!! redirected from OnboardingPage because of !session')
 		redirect('/login')
 	}
 

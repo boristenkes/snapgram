@@ -7,11 +7,11 @@ import MenuButton from './menu-button'
 import clientSession from '@/lib/client-session'
 import { useEffect, useState } from 'react'
 import { topbarLinks } from '@/constants'
-import SidebarLink from '../sidebar/sidebar-link'
 import { cn } from '@/lib/utils'
 import { Button } from '../../elements'
 import { signOut } from 'next-auth/react'
 import { usePathname } from 'next/navigation'
+import TopbarLink from './topbar-link'
 
 export default function Topbar() {
 	const { user } = clientSession()
@@ -23,7 +23,7 @@ export default function Topbar() {
 	}, [pathname])
 
 	return (
-		<header className='sticky top-0 z-50 w-screen lg:hidden'>
+		<header className='sticky top-0 z-40 w-screen | md:hidden'>
 			<div className='flex justify-between items-center py-3 px-4 bg-neutral-800 border-b-2 border-b-neutral-700'>
 				<Link href='/'>
 					<Image
@@ -57,7 +57,7 @@ export default function Topbar() {
 				<nav>
 					<ul>
 						{topbarLinks.map(link => (
-							<SidebarLink
+							<TopbarLink
 								key={link.path}
 								{...link}
 							/>

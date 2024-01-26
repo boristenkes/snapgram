@@ -8,7 +8,6 @@ export default async function LoginPage() {
 	const session = await getCurrentUser()
 
 	if (session) {
-		console.log('!!! redirected from LoginPage because of session')
 		redirect(session?.user?.onboarded ? '/' : '/onboarding')
 	}
 

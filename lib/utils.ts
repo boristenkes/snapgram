@@ -62,3 +62,23 @@ export function validateImage(
 
 	return { success: false, errors }
 }
+
+export function delay(ms: number) {
+	return new Promise(resolve => setTimeout(resolve, ms))
+}
+
+export function deepFreeze(value: Record<any, any> | any[]) {
+	const isArray = Array.isArray(value)
+
+	const propNames = isArray ? value : Object.keys(value)
+
+	for (const name of propNames) {
+		const val = isArray ? name : value[name]
+
+		if ((val && typeof val === 'object') || typeof val === 'function') {
+			deepFreeze(val)
+		}
+	}
+
+	return Object.freeze(value)
+}

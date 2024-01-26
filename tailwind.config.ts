@@ -63,6 +63,15 @@ const config: Config = {
 				small: '30em',
 				medium: '45em',
 				large: '65em'
+			},
+			keyframes: {
+				'slide-in': {
+					from: { transform: 'translateY(10%)', opacity: '0.2' },
+					to: { transform: 'translateY(0)', opacity: '1' }
+				}
+			},
+			animation: {
+				'slide-in': 'slide-in 700ms ease-out'
 			}
 		}
 	},

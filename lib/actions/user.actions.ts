@@ -4,8 +4,9 @@ import connectMongoDB from '../mongoose'
 import User from '../models/user.model'
 import { createUserSchema, editProfileSchema } from '../validations/user'
 import { UTApi } from 'uploadthing/server'
-import { validateImage } from '../utils'
+import { delay, validateImage } from '../utils'
 import { revalidatePath } from 'next/cache'
+import { getCurrentUser } from '../session'
 
 const uploadthingApi = new UTApi()
 
@@ -223,9 +224,6 @@ export async function updateUser({
 		return { error: error.message }
 	}
 }
-
-// Handling followers
-
 export async function follow(currentUserId: string, targetUserId: string) {
 	if (typeof currentUserId !== 'string' || typeof targetUserId !== 'string')
 		return { error: 'Invalid currentUserId or targetUserId' }
@@ -294,4 +292,33 @@ export async function unsendFollowRequest(
 		return { error: 'Invalid currentUserId or targetUserId' }
 
 	console.log({ action: 'unsendFollowRequest' })
+}
+
+export async function searchUsers(searchTerm: string) {
+	if (!searchTerm || typeof searchTerm !== 'string') return
+
+	try {
+		await connectMongoDB()
+
+		const { user: currentUser } = await getCurrentUser()
+
+		// searching users whose `name` or `username` includes `searchTerm`
+		const searchResults = await User.find({
+			$and: [
+				{ _id: { $ne: currentUser._id } }, // exclude current user
+				{
+					$or: [
+						{ name: { $regex: searchTerm, $options: 'i' } },
+						{ username: { $regex: searchTerm, $options: 'i' } }
+					]
+				}
+			]
+		})
+			.limit(5)
+			.select('image username name')
+
+		return JSON.stringify(searchResults)
+	} catch (error: any) {
+		console.log('Error searching users:', error)
+	}
 }

@@ -45,7 +45,7 @@ export default function ProfilePictureUploader({
 					Change profile photo
 				</label>
 			</div>
-			{Boolean(imageErrors?.length) && (
+			{!!imageErrors?.length && (
 				<ul className='text-semantic-danger'>
 					{imageErrors?.map((error, i) => (
 						<li key={i}>{error}</li>

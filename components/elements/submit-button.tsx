@@ -1,12 +1,13 @@
 import { useFormStatus } from 'react-dom'
 import { Button, ButtonProps } from './button'
+import Loader from '../loader'
 
 type SubmitButtonProps = ButtonProps & {
 	pendingContent?: React.ReactNode
 }
 
 export default function SubmitButton({
-	pendingContent,
+	pendingContent = <Loader />,
 	children,
 	className,
 	...rest

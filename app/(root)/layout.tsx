@@ -10,22 +10,17 @@ export default async function RootLayout({
 	const session = await getCurrentUser()
 
 	if (!session?.user) {
-		console.log('!!! redirected from RootLayout because of !session?.user')
 		redirect('/login')
 	} else if (!session?.user.onboarded) {
-		console.log(
-			'!!! redirected from RootLayout because of !session?.user.onboarded'
-		)
 		redirect('/onboarding')
 	}
 
 	return (
 		<>
 			<Topbar />
-			<div className='flex lg:pl-64'>
+			<div className='flex'>
 				<Sidebar />
-				{/* TODO: remove this min-h-... */}
-				<main className='flex-1 min-h-[calc(100vh-60px-84px)]'>{children}</main>
+				<div className='flex-1'>{children}</div>
 			</div>
 			<Bottombar />
 		</>

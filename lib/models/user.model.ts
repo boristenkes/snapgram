@@ -39,6 +39,8 @@ const userSchema = new mongoose.Schema({
 	likedPosts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post' }]
 })
 
+// userSchema.index({ name: 'text', username: 'text' })
+
 const User = mongoose.models.User || mongoose.model('User', userSchema)
 
 export default User

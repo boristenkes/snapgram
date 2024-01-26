@@ -10,15 +10,26 @@ export default async function Sidebar() {
 	const { user } = await getCurrentUser()
 
 	return (
-		<aside className='h-screen w-64 fixed top-0 left-0 z-50 bg-neutral-800 border-r-2 border-r-neutral-700 hidden lg:block'>
+		<aside className='h-screen w-full max-w-fit sticky top-0 left-0 z-40 bg-neutral-800 border-r-2 border-r-neutral-700 hidden | md:block xl:max-w-64'>
 			<div className='h-full flex flex-col gap-11 py-12 px-6'>
 				<Link href='/'>
+					{/* dekstop logo */}
 					<Image
 						src='/assets/logo-text.svg'
 						alt='Snapgram logo'
 						width={171}
 						height={36}
 						priority
+						className='hidden xl:block'
+					/>
+					{/* mobile logo */}
+					<Image
+						src='/assets/logo.svg'
+						alt='Snapgram logo'
+						width={30}
+						height={30}
+						priority
+						className='mx-auto xl:hidden'
 					/>
 				</Link>
 				<Link
@@ -30,9 +41,9 @@ export default async function Sidebar() {
 						width={54}
 						height={54}
 					/>
-					<div className='flex-1'>
-						<p className='text-lg font-bold break-keep flex items-center gap-1'>
-							{user?.name}
+					<div className='flex-1 hidden xl:block'>
+						<p className='text-lg break-keep flex items-center gap-1'>
+							<strong>{user?.name}</strong>
 							{user?.verified && (
 								<Image
 									src='/assets/icons/verified.svg'
@@ -68,7 +79,7 @@ export default async function Sidebar() {
 									width={24}
 									height={24}
 								/>
-								Logout
+								<span className='hidden xl:block'>Logout</span>
 							</LogoutButton>
 						</li>
 						<SidebarLink

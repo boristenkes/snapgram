@@ -80,6 +80,7 @@ export default function OnboardingForm() {
 			{serverError && <ServerErrorMessage message={serverError} />}
 
 			<div className='flex justify-between items-center mt-8'>
+				{/* TODO: Finish "Back" button */}
 				<Button
 					variant='dark'
 					onClick={() => signOut()}

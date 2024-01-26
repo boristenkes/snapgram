@@ -15,7 +15,7 @@ export default function MenuButton({ isOpen, setOpen }: MenuButtonProps) {
 			className='p-2'
 			onClick={() => setOpen(prev => !prev)}
 		>
-			<div className='grid gap-1 w-5 h-[14px]'>
+			<div className='grid gap-1 w-5 h-3.5'>
 				<div
 					className={cn('menu-icon-line', {
 						'rotate-45 translate-y-[.36rem]': isOpen

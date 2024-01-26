@@ -2,20 +2,20 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import { sidebarLinks } from '@/constants'
+import { topbarLinks } from '@/constants'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
 
-type SidebarLinkProps = (typeof sidebarLinks)[0] & {
+type TopbarLinkProps = (typeof topbarLinks)[0] & {
 	className?: string
 }
 
-export default function SidebarLink({
+export default function TopbarLink({
 	path,
 	icon,
 	title,
 	className
-}: SidebarLinkProps) {
+}: TopbarLinkProps) {
 	const pathname = usePathname()
 	const isActive =
 		(pathname.includes(path) && path.length > 1) || pathname === path
@@ -38,7 +38,7 @@ export default function SidebarLink({
 					width={24}
 					height={28}
 				/>
-				<span className='hidden xl:block'>{title}</span>
+				{title}
 			</Link>
 		</li>
 	)

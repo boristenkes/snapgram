@@ -1,3 +1,5 @@
+import { deepFreeze } from '@/lib/utils'
+
 const sidebarLinks = [
 	{
 		title: 'Home',
@@ -57,6 +59,8 @@ const sidebarLinks = [
 	}
 ]
 
+deepFreeze(sidebarLinks)
+
 const topbarLinks = [
 	{
 		title: 'Create Post',
@@ -84,6 +88,8 @@ const topbarLinks = [
 		}
 	}
 ]
+
+deepFreeze(topbarLinks)
 
 const bottombarLinks = [
 	{
@@ -119,5 +125,7 @@ const bottombarLinks = [
 		}
 	}
 ]
+
+deepFreeze(bottombarLinks)
 
 export { sidebarLinks, topbarLinks, bottombarLinks }

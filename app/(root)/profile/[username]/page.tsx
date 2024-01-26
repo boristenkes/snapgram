@@ -1,5 +1,7 @@
 import Profile from '@/components/profile'
 import { getAllUsers, getUserProfile } from '@/lib/actions/user.actions'
+import User from '@/lib/models/user.model'
+import connectMongoDB from '@/lib/mongoose'
 import { getCurrentUser } from '@/lib/session'
 
 type ProfilePageProps = {
@@ -16,6 +18,14 @@ export async function generateStaticParams() {
 	return users?.map(user => ({
 		username: user.username
 	}))
+}
+
+export async function generateMetadata({
+	params: { username }
+}: ProfilePageProps) {
+	return {
+		title: `Snapgram | ${username}`
+	}
 }
 
 export default async function ProfilePage({
