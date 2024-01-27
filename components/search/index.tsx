@@ -1,17 +1,23 @@
+'use client'
+
 import Image from 'next/image'
 import SearchInput from './search-input'
 import { searchUsers } from '@/lib/actions/user.actions'
+import { useState } from 'react'
+import Link from 'next/link'
+import ProfilePicture from '../profile-picture'
 
 export type SearchProps = React.InputHTMLAttributes<HTMLInputElement> & {}
+export type SearchResult = {
+	name: string
+	username: string
+	image: string
+}
 
 export default function Search({ ...rest }: SearchProps) {
-	const handleSearchAction = async (formData: FormData) => {
-		'use server'
-
-		const searchTerm = formData.get('search') as string
-
-		searchUsers(searchTerm)
-	}
+	const [searchResults, setSearchResults] = useState<SearchResult[] | null>(
+		null
+	)
 
 	return (
 		<div className='flex gap-4 bg-neutral-700 p-3 rounded-2xl relative'>
@@ -21,22 +27,41 @@ export default function Search({ ...rest }: SearchProps) {
 				width={24}
 				height={24}
 			/>
-			<form
-				action={handleSearchAction}
-				className='flex-1'
-			>
-				<label
-					htmlFor='search-users'
-					className='sr-only'
-				>
-					Search users
-				</label>
+
+			<div className='flex-1'>
 				<SearchInput
 					handleSearch={searchUsers}
-					id='search-users'
+					setSearchResults={setSearchResults}
 					{...rest}
 				/>
-			</form>
+				{searchResults !== null && (
+					<ul className='absolute top-full left-0 w-full bg-neutral-700 mt-3 p-4 space-y-4 rounded-lg shadow-xl'>
+						{!!searchResults?.length ? (
+							searchResults.map(item => (
+								<li key={item.username}>
+									<Link
+										href={`/profile/${item.username}`}
+										className='flex items-center gap-2'
+									>
+										<ProfilePicture
+											url={item.image}
+											width={40}
+										/>
+										<div className='flex-1 grid'>
+											<strong>{item.name}</strong>
+											<small>{item.username}</small>
+										</div>
+									</Link>
+								</li>
+							))
+						) : (
+							<li>
+								<em className='text-primary-700'>No results</em>
+							</li>
+						)}
+					</ul>
+				)}
+			</div>
 		</div>
 	)
 }

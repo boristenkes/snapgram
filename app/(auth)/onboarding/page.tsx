@@ -11,9 +11,6 @@ export default async function OnboardingPage() {
 	}
 
 	if (session && session?.user?.onboarded) {
-		console.log(
-			'!!! redirected from OnboardingPage because of (session && session?.user?.onboarded)'
-		)
 		redirect('/')
 	}
 

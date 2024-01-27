@@ -7,6 +7,7 @@ import { UTApi } from 'uploadthing/server'
 import { delay, validateImage } from '../utils'
 import { revalidatePath } from 'next/cache'
 import { getCurrentUser } from '../session'
+import { UserProfile } from '../types'
 
 const uploadthingApi = new UTApi()
 
@@ -320,5 +321,21 @@ export async function searchUsers(searchTerm: string) {
 		return JSON.stringify(searchResults)
 	} catch (error: any) {
 		console.log('Error searching users:', error)
+	}
+}
+
+export async function fetchSuggestedAccounts(currentUser: UserProfile) {
+	if (!currentUser) return
+
+	try {
+		await connectMongoDB()
+
+		const users = await User.find({
+			_id: { $ne: currentUser._id } // exclude current user
+		}).select('image username name')
+
+		return JSON.stringify(users)
+	} catch (error) {
+		console.log('Error fetching suggested accounts:', error)
 	}
 }

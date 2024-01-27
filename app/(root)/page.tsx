@@ -1,5 +1,6 @@
-import Search from '@/components/search'
+import Searchbar from '@/components/search'
 import StoryTrack from '@/components/story-track'
+import SuggestedAccounts from './suggested-accounts'
 
 export default function Home() {
 	return (
@@ -7,8 +8,9 @@ export default function Home() {
 			<main className='flex-1'>
 				<StoryTrack />
 			</main>
-			<aside className='h-screen w-full max-w-md px-6 py-14 position-sticky top-0 right-0 bg-neutral-800 border-l border-l-neutral-700'>
-				<Search placeholder='Search users...' />
+			<aside className='position-sticky right-0 top-0 h-screen w-full max-w-sm border-l border-l-neutral-700 bg-neutral-800 px-6 py-14 hidden lg:block xl:max-w-md'>
+				<Searchbar placeholder='Search users...' />
+				<SuggestedAccounts />
 			</aside>
 		</div>
 	)

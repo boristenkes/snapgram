@@ -1,13 +1,10 @@
 import { cn } from '@/lib/utils'
 import Image from 'next/image'
 
-type ProfilePictureProps = {
+type ProfilePictureProps = React.ImgHTMLAttributes<HTMLImageElement> & {
 	url: string | undefined | null
-	alt?: string
 	width: number
 	height?: number
-	onLoad?: () => void
-	className?: string
 	priority?: boolean
 }
 

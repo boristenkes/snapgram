@@ -40,13 +40,6 @@ export default function Form({
 				errorsObj[fieldName] = _errors || []
 
 			setErrors(errorsObj)
-			// setFormFields(prevFields =>
-			// 	prevFields.map(field => ({
-			// 		...field,
-			// 		// @ts-ignore
-			// 		errors: formattedErrors[field.name]?._errors || []
-			// 	}))
-			// )
 
 			return
 		}

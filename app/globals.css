@@ -43,3 +43,12 @@
 	box-shadow: 0 0 0 30px hsl(240, 6%, 7%) inset !important;
 	-webkit-text-fill-color: hsl(0 0% 100%) !important;
 }
+
+.scrollbar-hide::-webkit-scrollbar {
+	display: none;
+}
+
+.scrollbar-hide {
+	-ms-overflow-style: none;
+	scrollbar-width: none;
+}
