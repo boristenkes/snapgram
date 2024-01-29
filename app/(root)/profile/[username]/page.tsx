@@ -1,7 +1,5 @@
 import Profile from '@/components/profile'
 import { getAllUsers, getUserProfile } from '@/lib/actions/user.actions'
-import User from '@/lib/models/user.model'
-import connectMongoDB from '@/lib/mongoose'
 import { getCurrentUser } from '@/lib/session'
 
 type ProfilePageProps = {
@@ -10,7 +8,7 @@ type ProfilePageProps = {
 	}
 }
 
-export const revalidate = 3600000 // 1h
+export const revalidate = 3600 // 1h
 
 export async function generateStaticParams() {
 	const users = await getAllUsers({ select: 'username' })
