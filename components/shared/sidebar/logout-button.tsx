@@ -1,7 +1,7 @@
 'use client'
 
 import { signOut } from 'next-auth/react'
-import { Button, ButtonProps } from '../../elements/button'
+import { Button, ButtonProps } from '@/components/elements/button'
 
 type LogoutButtonProps = ButtonProps & {
 	children: React.ReactNode

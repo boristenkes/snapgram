@@ -1,21 +1,15 @@
 'use client'
 
 import Image from 'next/image'
-import { Button, Input } from '../../../components/elements'
+import { Button, Input } from '@/components/elements'
 import { createUser } from '@/lib/actions/user.actions'
-import {
-	Dispatch,
-	SetStateAction,
-	useCallback,
-	useEffect,
-	useState
-} from 'react'
+import { Dispatch, SetStateAction, useCallback, useState } from 'react'
 import { signIn } from 'next-auth/react'
 import { registerUserSchema } from '@/lib/validations/user'
 import { FormField } from '@/lib/types'
-import SubmitButton from '../../../components/elements/submit-button'
-import Loader from '../../../components/loader'
-import ServerErrorMessage from '../../../components/server-error-message'
+import SubmitButton from '@/components/elements/submit-button'
+import Loader from '@/components/loader'
+import ServerErrorMessage from '@/components/server-error-message'
 
 const fields: FormField[] = [
 	{
