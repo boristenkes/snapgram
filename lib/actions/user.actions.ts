@@ -225,12 +225,20 @@ export async function updateUser({
 		return { error: error.message }
 	}
 }
-export async function follow(currentUserId: string, targetUserId: string) {
-	if (typeof currentUserId !== 'string' || typeof targetUserId !== 'string')
-		return { error: 'Invalid currentUserId or targetUserId' }
+
+export async function follow(formData: FormData) {
+	if (!formData) return
+
+	const currentUserId = formData.get('currentUserId') as string
+	const targetUserId = formData.get('targetUserId') as string
 
 	try {
 		await connectMongoDB()
+
+		const currentUser = await User.findById(currentUserId)
+		const isAlreadyFollower = currentUser?.followers?.includes(targetUserId)
+
+		if (isAlreadyFollower) return
 
 		await Promise.all([
 			User.findByIdAndUpdate(currentUserId, {
@@ -250,9 +258,11 @@ export async function follow(currentUserId: string, targetUserId: string) {
 	}
 }
 
-export async function unfollow(currentUserId: string, targetUserId: string) {
-	if (typeof currentUserId !== 'string' || typeof targetUserId !== 'string')
-		return { error: 'Invalid currentUserId or targetUserId' }
+export async function unfollow(formData: FormData) {
+	if (!formData) return
+
+	const currentUserId = formData.get('currentUserId') as string
+	const targetUserId = formData.get('targetUserId') as string
 
 	try {
 		await connectMongoDB()
@@ -275,22 +285,20 @@ export async function unfollow(currentUserId: string, targetUserId: string) {
 	}
 }
 
-export async function sendFollowRequest(
-	currentUserId: string,
-	targetUserId: string
-) {
-	if (typeof currentUserId !== 'string' || typeof targetUserId !== 'string')
-		return { error: 'Invalid currentUserId or targetUserId' }
+export async function sendFollowRequest(formData: FormData) {
+	if (!formData) return
+
+	const currentUserId = formData.get('currentUserId') as string
+	const targetUserId = formData.get('targetUserId') as string
 
 	console.log({ action: 'sendFollowRequest' })
 }
 
-export async function unsendFollowRequest(
-	currentUserId: string,
-	targetUserId: string
-) {
-	if (typeof currentUserId !== 'string' || typeof targetUserId !== 'string')
-		return { error: 'Invalid currentUserId or targetUserId' }
+export async function unsendFollowRequest(formData: FormData) {
+	if (!formData) return
+
+	const currentUserId = formData.get('currentUserId') as string
+	const targetUserId = formData.get('targetUserId') as string
 
 	console.log({ action: 'unsendFollowRequest' })
 }

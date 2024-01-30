@@ -16,25 +16,21 @@ const fields: FormField[] = [
 	{
 		type: 'text',
 		name: 'username',
-		label: 'Username',
-		errors: []
+		label: 'Username'
 	},
 	{
 		type: 'text',
 		name: 'name',
-		label: 'Name',
-		errors: []
+		label: 'Name'
 	},
 	{
 		type: 'email',
 		name: 'email',
-		label: 'Email',
-		errors: []
+		label: 'Email'
 	},
 	{
 		name: 'bio',
-		label: 'Bio',
-		errors: []
+		label: 'Bio'
 	}
 ]
 

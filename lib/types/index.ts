@@ -4,7 +4,7 @@ import { InputHTMLAttributes } from 'react'
 export type FormField = InputHTMLAttributes<HTMLInputElement> & {
 	name: string
 	label?: string
-	errors: string[]
+	errors?: string[]
 	textarea?: boolean
 	labelProps?: React.LabelHTMLAttributes<HTMLLabelElement>
 	textareaProps?: React.TextareaHTMLAttributes<HTMLTextAreaElement>

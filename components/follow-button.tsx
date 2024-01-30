@@ -1,17 +1,14 @@
-'use client'
-
-import { Button, type ButtonProps } from './elements'
+import { type ButtonProps } from './elements'
 import {
-	getUserById,
 	follow,
 	unfollow,
 	sendFollowRequest,
 	unsendFollowRequest
 } from '@/lib/actions/user.actions'
-import { useEffect, useMemo, useState } from 'react'
+import { useMemo } from 'react'
 import { UserProfile } from '@/lib/types'
 import Loader from './loader'
-import darkToast from '@/lib/toast'
+import SubmitButton from './elements/submit-button'
 
 type FollowButtonProps = ButtonProps & {
 	currentUserStr: string
@@ -38,52 +35,33 @@ export default function FollowButton({
 		[currentUserStr]
 	)
 	const targetUser = useMemo(() => JSON.parse(targetUserStr), [targetUserStr])
-
-	const [targetUserProfile, setTargetUserProfile] =
-		useState<UserProfile | null>(null)
-	const [buttonData, setButtonData] = useState<ButtonData>()
-
-	useEffect(() => {
-		;(async () => {
-			const user = await getUserById(
-				targetUser?._id,
-				'followers followRequests following username private'
-			)
-
-			if (typeof user === 'string') {
-				setTargetUserProfile(JSON.parse(user))
-			}
-		})()
+	const buttonData = useMemo(() => {
+		return determineButtonData(currentUser, targetUser)
 	}, [currentUser, targetUser])
 
-	useEffect(() => {
-		if (!targetUserProfile) return
-
-		const buttondata = determineButtonData(currentUser, targetUser)
-
-		setButtonData(buttondata)
-	}, [targetUserProfile])
-
-	const handleClick = async () => {
-		const resp = await buttonData?.action(currentUser._id, targetUser._id)
-
-		if (resp?.error)
-			darkToast(resp.error, {
-				iconUrl: '/assets/icons/error.svg',
-				iconAlt: 'Error'
-			})
-	}
-
 	return (
-		<Button
-			onClick={handleClick}
-			size='xs'
-			disabled={!buttonData}
-			{...buttonData?.styles}
-			{...rest}
-		>
-			{buttonData?.text || <Loader />}
-		</Button>
+		<form action={buttonData?.action}>
+			<input
+				hidden
+				readOnly
+				name='currentUserId'
+				value={currentUser?._id}
+			/>
+			<input
+				hidden
+				readOnly
+				name='targetUserId'
+				value={targetUser?._id}
+			/>
+			<SubmitButton
+				size='xs'
+				disabled={!buttonData}
+				{...buttonData?.styles}
+				{...rest}
+			>
+				{buttonData?.text || <Loader />}
+			</SubmitButton>
+		</form>
 	)
 }
 

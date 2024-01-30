@@ -16,22 +16,19 @@ const fields: FormField[] = [
 		type: 'email',
 		name: 'email',
 		label: 'email',
-		required: true,
-		errors: []
+		required: true
 	},
 	{
 		type: 'password',
 		name: 'password',
 		label: 'password',
-		required: true,
-		errors: []
+		required: true
 	},
 	{
 		type: 'password',
 		name: 'confirmPassword',
 		label: 'Confirm Password',
-		required: true,
-		errors: []
+		required: true
 	}
 ]
 

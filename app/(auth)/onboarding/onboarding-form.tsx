@@ -16,13 +16,11 @@ import { useState } from 'react'
 const fields: FormField[] = [
 	{
 		name: 'name',
-		label: 'Full name',
-		errors: []
+		label: 'Full name'
 	},
 	{
 		name: 'username',
-		label: 'Username',
-		errors: []
+		label: 'Username'
 	},
 	{
 		name: 'bio',
@@ -30,8 +28,7 @@ const fields: FormField[] = [
 		textarea: true,
 		textareaProps: {
 			rows: 6
-		},
-		errors: []
+		}
 	}
 ]
 

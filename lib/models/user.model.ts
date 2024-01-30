@@ -1,4 +1,5 @@
 import mongoose from 'mongoose'
+const { ObjectId } = mongoose.SchemaTypes
 
 const userSchema = new mongoose.Schema({
 	username: {
@@ -18,25 +19,25 @@ const userSchema = new mongoose.Schema({
 	private: { type: Boolean, default: false },
 	onboarded: { type: Boolean, default: false },
 
-	posts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post' }],
+	posts: [{ type: ObjectId, ref: 'Post' }],
 	postsCount: { type: Number, default: 0 },
-	followers: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+	followers: [{ type: ObjectId, ref: 'User' }],
 	followersCount: { type: Number, default: 0 },
-	following: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+	following: [{ type: ObjectId, ref: 'User' }],
 	followingCount: { type: Number, default: 0 },
-	followRequests: [{ type: mongoose.Schema.Types.ObjectId, ref: 'User' }],
+	followRequests: [{ type: ObjectId, ref: 'User' }],
 	followRequestsCount: { type: Number, default: 0 },
 
-	stories: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Story' }],
+	stories: [{ type: ObjectId, ref: 'Story' }],
 	seenStories: [
 		{
-			story: { type: mongoose.Schema.Types.ObjectId, ref: 'Story' },
+			story: { type: ObjectId, ref: 'Story' },
 			seenAt: { type: Date, default: Date.now }
 		}
 	],
-	highlights: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Highlight' }],
-	savedPosts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post' }],
-	likedPosts: [{ type: mongoose.Schema.Types.ObjectId, ref: 'Post' }]
+	highlights: [{ type: ObjectId, ref: 'Highlight' }],
+	savedPosts: [{ type: ObjectId, ref: 'Post' }],
+	likedPosts: [{ type: ObjectId, ref: 'Post' }]
 })
 
 // userSchema.index({ name: 'text', username: 'text' })
