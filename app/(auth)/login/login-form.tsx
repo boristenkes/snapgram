@@ -1,6 +1,6 @@
 'use client'
 
-import { Button, Input } from '@/components/elements'
+import { Button, TextInput } from '@/components/elements'
 import Image from 'next/image'
 import { loginUserSchema } from '@/lib/validations/user'
 import { Dispatch, SetStateAction, useState } from 'react'
@@ -58,7 +58,7 @@ export default function LoginForm() {
 			noValidate
 		>
 			{formFields.map(field => (
-				<Input
+				<TextInput
 					key={field.name}
 					{...field}
 				/>

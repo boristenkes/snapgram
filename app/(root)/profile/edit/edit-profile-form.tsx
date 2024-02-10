@@ -2,15 +2,15 @@
 
 import { FormField } from '@/lib/types'
 import { useCallback, useState } from 'react'
-import { Input } from '@/components/elements'
+import { TextInput } from '@/components/elements'
 import SubmitButton from '@/components/elements/submit-button'
 import Loader from '@/components/loader'
 import { updateUser } from '@/lib/actions/user.actions'
 import { editProfileSchema } from '@/lib/validations/user'
-import { validateImage } from '@/lib/utils'
+import { megabytesToBytes, validateImage } from '@/lib/utils'
 import darkToast from '@/lib/toast'
 import ServerErrorMessage from '@/components/server-error-message'
-import ProfilePictureUploader from './profile-picture-uploader'
+import Dropzone from '@/components/dropzone'
 
 const fields: FormField[] = [
 	{
@@ -41,36 +41,19 @@ type EditProfileFormProps = {
 export default function EditProfileForm({ profile }: EditProfileFormProps) {
 	const currentUser = JSON.parse(profile)
 	const [formFields, setFormFields] = useState<FormField[]>(fields)
-	const [imageBlob, setImageBlob] = useState('')
-	const [imageErrors, setImageErrors] = useState<string[]>([])
 	const [serverError, setServerError] = useState('')
-
-	const handleImageChange = useCallback(
-		(e: React.ChangeEvent<HTMLInputElement>) => {
-			setImageErrors([])
-
-			const fileReader = new FileReader()
-
-			if (e.target.files?.length) {
-				const file = e.target.files[0]
-
-				const imageValidation = validateImage(file)
-
-				setImageErrors(imageValidation.errors)
-				if (!imageValidation.success) return
-
-				fileReader.onload = async event => {
-					setImageBlob(event.target?.result?.toString() || '')
-				}
-
-				fileReader.readAsDataURL(file)
-			}
-		},
-		[]
-	)
+	const [profilePicture, setProfilePicture] = useState<File[]>([])
 
 	const clientAction = useCallback(
 		async (formData: FormData) => {
+			const pic = profilePicture[0]
+			formData.set(
+				'image',
+				new File([pic], pic.name, {
+					type: pic.type
+				})
+			)
+
 			const validationResult = editProfileSchema.safeParse({
 				username: formData.get('username'),
 				name: formData.get('name'),
@@ -117,14 +100,26 @@ export default function EditProfileForm({ profile }: EditProfileFormProps) {
 			noValidate
 			className='max-w-2xl mt-14'
 		>
-			<ProfilePictureUploader
-				imageBlob={imageBlob}
-				imageErrors={imageErrors}
-				imageHandler={handleImageChange}
-				defaultImage={currentUser?.image}
+			<Dropzone
+				endpoint='profilePicture'
+				name='image'
+				dropzoneOptions={{
+					onDrop: acceptedFiles => {
+						console.log({ acceptedFiles })
+					},
+					maxSize: megabytesToBytes(2),
+					maxFiles: 1
+				}}
+				initialPreviews={[
+					{
+						url: currentUser.image,
+						alt: currentUser.name
+					}
+				]}
+				setFiles={setProfilePicture}
 			/>
 			{formFields.map(field => (
-				<Input
+				<TextInput
 					key={field.name}
 					textarea={field.name === 'bio'}
 					textareaProps={{
@@ -139,12 +134,7 @@ export default function EditProfileForm({ profile }: EditProfileFormProps) {
 			{serverError && <ServerErrorMessage message={serverError} />}
 
 			<SubmitButton
-				pendingContent={
-					<Loader
-						// text={isUploading ? 'Uploading image' : 'Updating profile...'}
-						text={'Updating profile...'}
-					/>
-				}
+				pendingContent={<Loader text='Updating profile...' />}
 				size='sm'
 				className='ml-auto mt-10'
 			>

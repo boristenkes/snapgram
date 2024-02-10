@@ -1,6 +1,6 @@
 'use client'
 
-import { Button, Input } from '@/components/elements'
+import { Button, TextInput } from '@/components/elements'
 import SubmitButton from '@/components/elements/submit-button'
 import Loader from '@/components/loader'
 import ServerErrorMessage from '@/components/server-error-message'
@@ -67,7 +67,7 @@ export default function OnboardingForm() {
 			noValidate
 		>
 			{formFields.map(field => (
-				<Input
+				<TextInput
 					key={field.name}
 					defaultValue={currentUser[field.name]}
 					{...field}

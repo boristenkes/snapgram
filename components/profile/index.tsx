@@ -27,7 +27,7 @@ export default async function Profile({ user, currentUser }: ProfileProps) {
 					className='w-20 h-20 | large:w-40 large:h-40'
 					priority
 				/>
-				<div>
+				<div className='flex-1'>
 					<div className='hidden items-center gap-12 mb-2 | small:flex'>
 						<h1 className='text-xl font-semibold flex items-center gap-2.5 text-nowrap | large:text-4xl'>
 							{user?.name}
@@ -143,7 +143,8 @@ export default async function Profile({ user, currentUser }: ProfileProps) {
 							<FollowButton
 								currentUserStr={JSON.stringify(currentUser)}
 								targetUserStr={JSON.stringify(user)}
-								className='flex-1'
+								formProps={{ className: 'flex-1' }}
+								stretch
 							/>
 
 							<Button

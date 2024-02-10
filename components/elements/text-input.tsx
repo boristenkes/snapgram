@@ -5,9 +5,9 @@ import { FormField } from '@/lib/types'
 import { cn } from '@/lib/utils'
 import { useFormStatus } from 'react-dom'
 
-type InputProps = FormField
+type TextInputProps = FormField
 
-export default function Input({
+export default function TextInput({
 	label,
 	name,
 	textarea,
@@ -16,17 +16,17 @@ export default function Input({
 	labelProps,
 	className,
 	...rest
-}: InputProps) {
+}: TextInputProps) {
 	const { pending } = useFormStatus()
 
-	const InputElement = () => (
+	const TextInputElement = () => (
 		<div className='relative'>
 			{textarea ? (
 				<textarea
 					className={cn(
 						'block bg-neutral-600 p-3 rounded-lg w-full disabled:brightness-75',
 						{
-							'input--error': errors.length
+							'border border-semantic-danger': errors.length
 						}
 					)}
 					id={label}
@@ -62,7 +62,7 @@ export default function Input({
 		</div>
 	)
 
-	const InputError = () =>
+	const TextInputError = () =>
 		!!errors?.length && (
 			<ul className='text-semantic-danger'>
 				{errors.map((error, i) => (
@@ -74,8 +74,8 @@ export default function Input({
 	if (!label)
 		return (
 			<>
-				<InputElement />
-				<InputError />
+				<TextInputElement />
+				<TextInputError />
 			</>
 		)
 
@@ -90,9 +90,9 @@ export default function Input({
 					{label}
 				</label>
 
-				<InputElement />
+				<TextInputElement />
 			</div>
-			<InputError />
+			<TextInputError />
 		</>
 	)
 }

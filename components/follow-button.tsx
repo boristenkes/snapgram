@@ -13,6 +13,7 @@ import SubmitButton from './elements/submit-button'
 type FollowButtonProps = ButtonProps & {
 	currentUserStr: string
 	targetUserStr: string
+	formProps?: React.FormHTMLAttributes<HTMLFormElement>
 }
 
 type ButtonData = {
@@ -28,6 +29,7 @@ type ButtonData = {
 export default function FollowButton({
 	currentUserStr,
 	targetUserStr,
+	formProps,
 	...rest
 }: FollowButtonProps) {
 	const currentUser = useMemo(
@@ -40,7 +42,10 @@ export default function FollowButton({
 	}, [currentUser, targetUser])
 
 	return (
-		<form action={buttonData?.action}>
+		<form
+			action={buttonData?.action}
+			{...formProps}
+		>
 			<input
 				hidden
 				readOnly

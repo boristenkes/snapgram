@@ -16,9 +16,9 @@ const buttonVariants = cva(
 				light: 'bg-neutral-200 border-neutral-200 text-neutral-700'
 			},
 			size: {
-				xs: 'py-2 px-5 text-xs',
-				sm: 'py-3 px-5 text-sm',
-				rg: 'py-3 px-5 text-base'
+				xs: 'py-2 px-4 text-xs',
+				sm: 'py-2.5 px-5 text-sm',
+				rg: 'py-3 px-6 text-base'
 			}
 		},
 		defaultVariants: {
@@ -57,18 +57,24 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 		},
 		ref
 	) => {
+		const classNames = cn(buttonVariants({ variant, size, className }), {
+			'p-0 w-fit h-fit bg-transparent border-transparent': ghost,
+			'w-full': stretch,
+			'aspect-square': square
+		})
+
 		if (href) {
 			return href.includes('http') ? (
 				<a
 					href={href}
-					className={cn(buttonVariants({ variant, size, className }))}
+					className={classNames}
 				>
 					{children}
 				</a>
 			) : (
 				<Link
 					href={href}
-					className={cn(buttonVariants({ variant, size, className }))}
+					className={classNames}
 				>
 					{children}
 				</Link>
@@ -79,11 +85,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
 			<button
 				type={type}
 				ref={ref}
-				className={cn(buttonVariants({ variant, size, className }), {
-					'p-0 w-fit h-fit bg-transparent border-transparent': ghost,
-					'w-full': stretch,
-					'aspect-square': square
-				})}
+				className={classNames}
 				{...rest}
 			>
 				{children}

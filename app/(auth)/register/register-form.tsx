@@ -1,7 +1,7 @@
 'use client'
 
 import Image from 'next/image'
-import { Button, Input } from '@/components/elements'
+import { Button, TextInput } from '@/components/elements'
 import { createUser } from '@/lib/actions/user.actions'
 import { Dispatch, SetStateAction, useCallback, useState } from 'react'
 import { signIn } from 'next-auth/react'
@@ -75,7 +75,7 @@ export default function RegisterForm() {
 			noValidate
 		>
 			{formFields.map(field => (
-				<Input
+				<TextInput
 					key={field.name}
 					{...field}
 				/>

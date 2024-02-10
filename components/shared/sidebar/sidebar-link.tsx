@@ -36,7 +36,8 @@ export default function SidebarLink({
 					src={icon[isActive ? 'active' : 'default']}
 					alt=''
 					width={24}
-					height={28}
+					height={24}
+					className='w-6 h-6'
 				/>
 				<span className='hidden xl:block'>{title}</span>
 			</Link>

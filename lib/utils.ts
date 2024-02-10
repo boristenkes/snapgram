@@ -1,6 +1,5 @@
 import clsx, { ClassValue } from 'clsx'
 import { twMerge } from 'tailwind-merge'
-import { toast as originalToast } from 'react-hot-toast'
 
 export function cn(...args: ClassValue[]) {
 	return twMerge(clsx(args))
@@ -11,7 +10,7 @@ export function isBase64(imageData: string) {
 	return base64Regex.test(imageData)
 }
 
-export function currentTime({ millis }: { millis?: boolean } = {}) {
+export function time({ millis }: { millis?: boolean } = {}) {
 	const d = new Date()
 	const hrs = leadingZeros(d.getHours())
 	const mins = leadingZeros(d.getMinutes())
@@ -52,19 +51,23 @@ export function validateImage(
 ) {
 	const errors = []
 
-	if (!acceptableTypes.includes(image.type))
-		errors.push('Only .jpeg, .jpg, .png and .webp images are allowed.')
+	if (!acceptableTypes.includes(image.type)) {
+		const acceptableTypesStr = `${acceptableTypes
+			.map(type => type.slice(6)) // exclude "image/" from type
+			.slice(0, -1) // exclude last type
+			.join(', ')} and ${acceptableTypes.at(-1)?.slice(6)}`
+
+		errors.push(`Only ${acceptableTypesStr} images are allowed.`)
+	}
 
 	if (image?.size > maxSize)
-		errors.push('Please choose an image smaller than 2MB')
+		errors.push(
+			`Please choose an image smaller than ${bytesToMegabytes(maxSize)}MB`
+		)
 
 	if (!errors.length) return { success: true, errors }
 
 	return { success: false, errors }
-}
-
-export function delay(ms: number) {
-	return new Promise(resolve => setTimeout(resolve, ms))
 }
 
 export function deepFreeze(value: Record<any, any> | any[]) {
@@ -81,4 +84,18 @@ export function deepFreeze(value: Record<any, any> | any[]) {
 	}
 
 	return Object.freeze(value)
+}
+
+export const delay = (ms: number) =>
+	new Promise(resolve => setTimeout(resolve, ms))
+
+export const bytesToMegabytes = (bytes: number) => bytes / (1024 * 1024)
+
+export const megabytesToBytes = (mb: number) => mb * (1024 * 1024)
+
+export const id = () => {
+	const rand = Math.random().toString(36)
+	const date = Date.now().toString(36)
+
+	return (rand + date).slice(2)
 }

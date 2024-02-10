@@ -1,6 +1,5 @@
 import { getCurrentUser } from '@/lib/session'
 import Story from './story'
-import { getMyStories } from '@/lib/actions/story.actions'
 import ProfilePicture from './profile-picture'
 import Link from 'next/link'
 import Image from 'next/image'
@@ -30,10 +29,6 @@ const stories = [
 
 export default async function StoryTrack() {
 	const { user: currentUser } = await getCurrentUser()
-
-	// const stories = await getMyStories({
-	// 	following: currentUser?.following
-	// })
 
 	return (
 		<div>
