@@ -1,19 +1,19 @@
-import ProfilePicture from '@/components/profile-picture'
+import Avatar from '@/components/avatar'
 import { cn } from '@/lib/utils'
 
-type ProfilePictureUploaderProps = {
+type AvatarUploaderProps = {
 	imageErrors: string[]
 	imageHandler: (e: React.ChangeEvent<HTMLInputElement>) => void
 	imageBlob: string
 	defaultImage?: string
 }
 
-export default function ProfilePictureUploader({
+export default function AvatarUploader({
 	imageErrors,
 	imageHandler,
 	imageBlob,
 	defaultImage
-}: ProfilePictureUploaderProps) {
+}: AvatarUploaderProps) {
 	return (
 		<>
 			<div
@@ -36,7 +36,7 @@ export default function ProfilePictureUploader({
 						onChange={imageHandler}
 						className='sr-only'
 					/>
-					<ProfilePicture
+					<Avatar
 						url={imageBlob || defaultImage}
 						width={100}
 						height={100}

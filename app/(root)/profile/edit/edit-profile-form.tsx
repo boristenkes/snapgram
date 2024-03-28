@@ -7,9 +7,9 @@ import SubmitButton from '@/components/elements/submit-button'
 import Loader from '@/components/loader'
 import { updateUser } from '@/lib/actions/user.actions'
 import { editProfileSchema } from '@/lib/validations/user'
-import { megabytesToBytes, validateImage } from '@/lib/utils'
+import { id, megabytesToBytes } from '@/lib/utils'
 import darkToast from '@/lib/toast'
-import ServerErrorMessage from '@/components/server-error-message'
+import ErrorMessage from '@/components/error-message'
 import Dropzone from '@/components/dropzone'
 
 const fields: FormField[] = [
@@ -42,7 +42,7 @@ export default function EditProfileForm({ profile }: EditProfileFormProps) {
 	const currentUser = JSON.parse(profile)
 	const [formFields, setFormFields] = useState<FormField[]>(fields)
 	const [serverError, setServerError] = useState('')
-	const [profilePicture, setProfilePicture] = useState<File[]>([])
+	const [profilePicture, setAvatar] = useState<File[]>([])
 
 	const clientAction = useCallback(
 		async (formData: FormData) => {
@@ -86,9 +86,10 @@ export default function EditProfileForm({ profile }: EditProfileFormProps) {
 				...validationResult.data
 			})
 
-			setServerError(response?.error || '')
-			if (response?.success) {
-				darkToast(response.success)
+			if (response.success) {
+				darkToast(response.message)
+			} else {
+				setServerError(response.message)
 			}
 		},
 		[currentUser, updateUser]
@@ -104,19 +105,19 @@ export default function EditProfileForm({ profile }: EditProfileFormProps) {
 				endpoint='profilePicture'
 				name='image'
 				dropzoneOptions={{
-					onDrop: acceptedFiles => {
-						console.log({ acceptedFiles })
-					},
+					onDrop: acceptedFiles => setAvatar(acceptedFiles),
 					maxSize: megabytesToBytes(2),
 					maxFiles: 1
 				}}
-				initialPreviews={[
-					{
-						url: currentUser.image,
-						alt: currentUser.name
-					}
-				]}
-				setFiles={setProfilePicture}
+				initialPreviews={
+					currentUser.image && [
+						{
+							id: id(),
+							url: currentUser.image,
+							alt: currentUser.name
+						}
+					]
+				}
 			/>
 			{formFields.map(field => (
 				<TextInput
@@ -131,12 +132,12 @@ export default function EditProfileForm({ profile }: EditProfileFormProps) {
 				/>
 			))}
 
-			{serverError && <ServerErrorMessage message={serverError} />}
+			{serverError && <ErrorMessage message={serverError} />}
 
 			<SubmitButton
 				pendingContent={<Loader text='Updating profile...' />}
 				size='sm'
-				className='ml-auto mt-10'
+				className='mt-10 ml-auto'
 			>
 				Update Profile
 			</SubmitButton>

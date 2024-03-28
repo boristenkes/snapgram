@@ -9,6 +9,7 @@ type TextInputProps = FormField
 
 export default function TextInput({
 	label,
+	description,
 	name,
 	textarea,
 	textareaProps,
@@ -20,7 +21,7 @@ export default function TextInput({
 	const { pending } = useFormStatus()
 
 	const TextInputElement = () => (
-		<div className='relative'>
+		<div className={cn('relative', !label && className)}>
 			{textarea ? (
 				<textarea
 					className={cn(
@@ -36,19 +37,24 @@ export default function TextInput({
 					{...textareaProps}
 				/>
 			) : (
-				<input
-					className={cn(
-						'block bg-neutral-600 p-3 rounded-lg w-full disabled:brightness-75',
-						{
-							'border border-semantic-danger': errors.length
-						}
+				<>
+					{description?.length && (
+						<p className='text-neutral-500 text-sm mb-2'>{description}</p>
 					)}
-					id={label}
-					name={name || label}
-					autoComplete='off'
-					disabled={pending}
-					{...rest}
-				/>
+					<input
+						className={cn(
+							'block bg-neutral-600 p-3 rounded-lg w-full disabled:brightness-75',
+							{
+								'border border-semantic-danger': errors.length
+							}
+						)}
+						id={label}
+						name={name || label}
+						autoComplete='off'
+						disabled={pending}
+						{...rest}
+					/>
+				</>
 			)}
 			{!!errors.length && (
 				<Image
@@ -81,7 +87,7 @@ export default function TextInput({
 
 	return (
 		<>
-			<div className='grid gap-3 mt-5'>
+			<div className={cn('grid gap-3 mt-5', label && className)}>
 				<label
 					htmlFor={label}
 					className='capitalize w-fit'

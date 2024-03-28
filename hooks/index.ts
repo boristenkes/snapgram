@@ -1,2 +1,6 @@
 export { default as useArray } from './use-array'
+export { default as useDebounce } from './use-debounce'
+export { default as useEventListener } from './use-event-listener'
 export { default as useMediaQuery } from './use-media-query'
+export { default as useTimeout } from './use-timeout'
+export { default as useUpdateEffect } from './use-update-effect'

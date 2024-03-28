@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import ProfilePicture from '@/components/profile-picture'
+import Avatar from '@/components/avatar'
 import SidebarLink from '@/components/shared/sidebar/sidebar-link'
 import LogoutButton from './logout-button'
 import Link from 'next/link'
@@ -36,7 +36,7 @@ export default async function Sidebar() {
 					href={`/profile/${user?.username}`}
 					className='flex gap-2.5 items-center'
 				>
-					<ProfilePicture
+					<Avatar
 						url={user?.image}
 						width={54}
 						height={54}

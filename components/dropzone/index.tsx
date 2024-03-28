@@ -11,7 +11,6 @@ import Previews, { type Preview } from './previews'
 type ImageUploadProps = {
 	endpoint: 'profilePicture' | 'storyContent'
 	dropzoneOptions: DropzoneOptions
-	setFiles: React.Dispatch<React.SetStateAction<File[]>>
 	label?: React.ReactNode
 	initialPreviews?: Preview[]
 	name?: string
@@ -22,7 +21,6 @@ export default function Dropzone({
 	label = "Drag 'n' drop files here or click to browse",
 	dropzoneOptions,
 	initialPreviews,
-	setFiles,
 	name
 }: ImageUploadProps) {
 	const { permittedFileInfo } = useUploadThing(endpoint)
@@ -34,10 +32,7 @@ export default function Dropzone({
 	const { getRootProps, getInputProps, acceptedFiles, fileRejections } =
 		useDropzone({
 			accept: fileTypes,
-			...dropzoneOptions,
-			onDrop: acceptedFiles => {
-				setFiles(acceptedFiles)
-			}
+			...dropzoneOptions
 		})
 
 	return (
@@ -45,7 +40,7 @@ export default function Dropzone({
 			<div
 				{...getRootProps()}
 				className={cn(
-					'flex items-stretch px-10 min-h-40 w-full bg-neutral-600 rounded-lg relative overflow-hidden cursor-pointer',
+					'relative flex items-stretch w-full px-10 overflow-hidden rounded-lg cursor-pointer min-h-40 bg-neutral-600',
 					{
 						'border-2 border-semantic-danger':
 							!!fileRejections?.length && !acceptedFiles.length
@@ -54,7 +49,7 @@ export default function Dropzone({
 			>
 				<span
 					className={cn(
-						'absolute inset-0 grid place-items-center cursor-pointer',
+						'absolute inset-0 grid place-items-center cursor-pointer text-center px-4',
 						{ 'sr-only': initialPreviews?.length || acceptedFiles.length }
 					)}
 				>

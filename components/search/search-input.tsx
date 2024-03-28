@@ -2,11 +2,11 @@
 
 import { useEffect, useState } from 'react'
 import useDebounce from '@/hooks/use-debounce'
-import { SearchResult, type SearchProps } from '.'
+import type { SearchResult, SearchProps } from '.'
 import Loader from '../loader'
 
 type SearchInputProps = SearchProps & {
-	handleSearch: (...props: any) => any
+	handleSearch: (...args: any[]) => any
 	setSearchResults: React.Dispatch<React.SetStateAction<SearchResult[] | null>>
 }
 
@@ -32,7 +32,7 @@ export default function SearchInput({
 	}, [debouncedValue])
 
 	return (
-		<form>
+		<div>
 			<label
 				htmlFor='search-users'
 				className='sr-only'
@@ -51,6 +51,6 @@ export default function SearchInput({
 			/>
 
 			{isPending && <Loader className='mx-auto my-2 absolute top-2 right-10' />}
-		</form>
+		</div>
 	)
 }

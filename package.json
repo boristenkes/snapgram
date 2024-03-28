@@ -20,6 +20,7 @@
     "react-dom": "^18",
     "react-dropzone": "^14.2.3",
     "react-hot-toast": "^2.4.1",
+    "react-insta-stories": "^2.6.2",
     "sharp": "^0.33.1",
     "tailwind-merge": "^2.2.0",
     "uploadthing": "^6.1.1",

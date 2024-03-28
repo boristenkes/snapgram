@@ -13,34 +13,27 @@ const userSchema = new mongoose.Schema({
 	name: String,
 	image: String,
 	email: { type: String, required: true, unique: true, lowercase: true },
-	password: { type: String, required: true, minLength: 8 },
+	password: { type: String, minLength: 8 },
 	bio: { type: String, maxLength: 500 },
 	verified: { type: Boolean, default: false },
 	private: { type: Boolean, default: false },
 	onboarded: { type: Boolean, default: false },
 
 	posts: [{ type: ObjectId, ref: 'Post' }],
-	postsCount: { type: Number, default: 0 },
-	followers: [{ type: ObjectId, ref: 'User' }],
-	followersCount: { type: Number, default: 0 },
-	following: [{ type: ObjectId, ref: 'User' }],
-	followingCount: { type: Number, default: 0 },
-	followRequests: [{ type: ObjectId, ref: 'User' }],
-	followRequestsCount: { type: Number, default: 0 },
-
-	stories: [{ type: ObjectId, ref: 'Story' }],
-	seenStories: [
-		{
-			story: { type: ObjectId, ref: 'Story' },
-			seenAt: { type: Date, default: Date.now }
-		}
-	],
-	highlights: [{ type: ObjectId, ref: 'Highlight' }],
+	postsCount: { type: Number, default: 0, min: 0 },
 	savedPosts: [{ type: ObjectId, ref: 'Post' }],
-	likedPosts: [{ type: ObjectId, ref: 'Post' }]
-})
+	likedPosts: [{ type: ObjectId, ref: 'Post' }],
 
-// userSchema.index({ name: 'text', username: 'text' })
+	followers: [{ type: ObjectId, ref: 'User' }],
+	followersCount: { type: Number, default: 0, min: 0 },
+	following: [{ type: ObjectId, ref: 'User' }],
+	followingCount: { type: Number, default: 0, min: 0 },
+	followRequests: [{ type: ObjectId, ref: 'User' }],
+	followRequestsCount: { type: Number, default: 0, min: 0 },
+
+	seenStories: [{ type: ObjectId, ref: 'Story' }],
+	highlights: [{ type: ObjectId, ref: 'Highlight' }]
+})
 
 const User = mongoose.models.User || mongoose.model('User', userSchema)
 

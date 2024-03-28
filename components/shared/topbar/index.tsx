@@ -2,7 +2,7 @@
 
 import Image from 'next/image'
 import Link from 'next/link'
-import ProfilePicture from '@/components/profile-picture'
+import Avatar from '@/components/avatar'
 import MenuButton from './menu-button'
 import clientSession from '@/lib/client-session'
 import { useEffect, useState } from 'react'
@@ -36,7 +36,7 @@ export default function Topbar() {
 				</Link>
 				<div className='flex items-center gap-3'>
 					<Link href={`/profile/${user?.username}`}>
-						<ProfilePicture
+						<Avatar
 							url={user?.image}
 							alt={user?.name}
 							width={30}

@@ -1,11 +1,11 @@
-import StoryTrack from '@/components/story-track'
+import StoryBubbleTrack from '@/components/story-bubble-track'
 import RightSidebar from './right-sidebar'
 
 export default function Home() {
 	return (
 		<div className='flex'>
 			<main className='flex-1'>
-				<StoryTrack />
+				<StoryBubbleTrack />
 			</main>
 
 			<RightSidebar />

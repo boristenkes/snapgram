@@ -20,11 +20,10 @@ export default function Errors({ fileRejections }: ErrorsProps) {
 							key={file.name}
 							className='flex items-center'
 						>
-							&ldquo;
-							<span className='text-semantic-danger inline-block max-w-[20ch] overflow-x-hidden text-ellipsis whitespace-nowrap'>
+							<q className='text-semantic-danger inline-block max-w-[20ch] overflow-x-hidden text-ellipsis whitespace-nowrap'>
 								{file.name}
-							</span>
-							&rdquo;:&nbsp;
+							</q>
+							:&nbsp;
 							<span className='inline-block text-semantic-danger/80'>
 								{errors.map(error => error.message)}
 							</span>

@@ -4,6 +4,7 @@ import { InputHTMLAttributes } from 'react'
 export type FormField = InputHTMLAttributes<HTMLInputElement> & {
 	name: string
 	label?: string
+	description?: string
 	errors?: string[]
 	textarea?: boolean
 	labelProps?: React.LabelHTMLAttributes<HTMLLabelElement>
@@ -38,11 +39,23 @@ export type UserProfile = { _id: string } & Partial<{
 	postsCount: number
 	private: boolean
 	savedPosts: Post[]
-	seenStories: any[]
-	stories: any[]
+	seenStories: string[]
+	stories: Story[]
 	verified: boolean
 	onboarded: boolean
 }>
+
+export type Story = {
+	_id: string
+	author: UserProfile
+	content: string
+	alt?: string
+	mentions: UserProfile[]
+	tags: string
+	views: UserProfile[]
+	createdAt: Date
+	updatedAt: Date
+}
 
 export type Post = {
 	author: UserProfile

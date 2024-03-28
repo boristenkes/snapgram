@@ -1,5 +1,6 @@
+import ErrorMessage from '@/components/error-message'
 import Profile from '@/components/profile'
-import { getAllUsers, getUserProfile } from '@/lib/actions/user.actions'
+import { fetchAllUsers, getUserProfile } from '@/lib/actions/user.actions'
 import { getCurrentUser } from '@/lib/session'
 
 type ProfilePageProps = {
@@ -11,7 +12,7 @@ type ProfilePageProps = {
 export const revalidate = 3600 // 1h
 
 export async function generateStaticParams() {
-	const users = await getAllUsers({ select: 'username' })
+	const users = await fetchAllUsers({ select: 'username' })
 
 	return users?.map(user => ({
 		username: user.username
@@ -39,11 +40,15 @@ export default async function ProfilePage({
 			/>
 		)
 
-	const user = await getUserProfile({ username })
+	const response = await getUserProfile({ username })
+
+	if (!response.success) {
+		return <ErrorMessage message={response.message} />
+	}
 
 	return (
 		<Profile
-			user={user}
+			user={response.user}
 			currentUser={currentUser}
 		/>
 	)

@@ -86,6 +86,18 @@ export function deepFreeze(value: Record<any, any> | any[]) {
 	return Object.freeze(value)
 }
 
+export function removeDuplicates(array: any[], id?: string | number) {
+	if (typeof array[0] !== 'object') {
+		return Array.from(new Set([...array]))
+	}
+
+	if (!id) throw new Error('id is required when array contains objects')
+
+	return array.filter(
+		(item, index, self) => index === self.findIndex(t => t[id] === item[id])
+	)
+}
+
 export const delay = (ms: number) =>
 	new Promise(resolve => setTimeout(resolve, ms))
 
@@ -93,9 +105,4 @@ export const bytesToMegabytes = (bytes: number) => bytes / (1024 * 1024)
 
 export const megabytesToBytes = (mb: number) => mb * (1024 * 1024)
 
-export const id = () => {
-	const rand = Math.random().toString(36)
-	const date = Date.now().toString(36)
-
-	return (rand + date).slice(2)
-}
+export const id = () => Math.random().toString(36).slice(2)

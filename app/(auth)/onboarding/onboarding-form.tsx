@@ -3,7 +3,7 @@
 import { Button, TextInput } from '@/components/elements'
 import SubmitButton from '@/components/elements/submit-button'
 import Loader from '@/components/loader'
-import ServerErrorMessage from '@/components/server-error-message'
+import ErrorMessage from '@/components/error-message'
 import { onboard } from '@/lib/actions/user.actions'
 import clientSession from '@/lib/client-session'
 import { FormField } from '@/lib/types'
@@ -74,7 +74,7 @@ export default function OnboardingForm() {
 				/>
 			))}
 
-			{serverError && <ServerErrorMessage message={serverError} />}
+			{serverError && <ErrorMessage message={serverError} />}
 
 			<div className='flex justify-between items-center mt-8'>
 				{/* TODO: Finish "Back" button */}

@@ -9,7 +9,7 @@ import { useRouter } from 'next/navigation'
 import { FormField } from '@/lib/types'
 import SubmitButton from '@/components/elements/submit-button'
 import Loader from '@/components/loader'
-import ServerErrorMessage from '@/components/server-error-message'
+import ErrorMessage from '@/components/error-message'
 
 const fields: FormField[] = [
 	{
@@ -63,7 +63,7 @@ export default function LoginForm() {
 					{...field}
 				/>
 			))}
-			{serverError && <ServerErrorMessage message={serverError} />}
+			{serverError && <ErrorMessage message={serverError} />}
 			<SubmitButton
 				stretch
 				className='mt-8'

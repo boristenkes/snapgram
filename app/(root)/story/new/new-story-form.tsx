@@ -2,50 +2,90 @@
 
 import SubmitButton from '@/components/elements/submit-button'
 import Loader from '@/components/loader'
-import TagInput from './tag-input'
+import MentionInput from './mention-input'
 import { createStory } from '@/lib/actions/story.actions'
-import { useState } from 'react'
+import { useRef, useState } from 'react'
 import Dropzone from '@/components/dropzone'
+import ErrorMessage from '@/components/error-message'
+import type { Mention } from './mention-input'
+import TagInput from './tag-input'
+import darkToast from '@/lib/toast'
+import { useRouter } from 'next/navigation'
+import { TextInput } from '@/components/elements'
+
+// TODO: Make this form responsive
 
 export default function NewStoryForm() {
-	const [content, setContent] = useState<File[]>([])
+	const router = useRouter()
+	const [content, setContent] = useState<File | null>(null)
+	const [mentions, setMentions] = useState<Mention[]>([])
+	const [tags, setTags] = useState<string[]>([])
+	const [error, setError] = useState('')
 
 	const clientAction = async (formData: FormData) => {
-		content.forEach(file => {
-			formData.append(
-				'content',
-				new File([file], file.name, {
-					type: file.type
-				})
-			)
-		})
+		if (!content) {
+			setError('You need to provide some content')
+			return
+		}
 
-		await createStory({ formData })
+		formData.set(
+			'content',
+			new File([content], content.name, {
+				type: content.type
+			})
+		)
+
+		const response = await createStory({ formData, mentions, tags })
+		if (response.success) {
+			darkToast(response.message)
+			router.push('/')
+		} else {
+			setError(response.message)
+		}
 	}
 
 	return (
 		<form
 			action={clientAction}
-			className='max-w-2xl space-y-8'
+			className='max-w-2xl'
 		>
-			<Dropzone
-				dropzoneOptions={{
-					maxFiles: 10
-				}}
-				endpoint='storyContent'
-				name='content'
-				setFiles={setContent}
+			{error && <ErrorMessage message={error} />}
+			<div className='mb-8'>
+				<Dropzone
+					dropzoneOptions={{
+						onDrop: acceptedFiles => setContent(acceptedFiles[0]),
+						maxFiles: 1
+					}}
+					endpoint='storyContent'
+					name='content'
+					label='Drag and drop content here or click to browse files'
+				/>
+			</div>
+
+			<MentionInput
+				mentions={mentions}
+				setMentions={setMentions}
 			/>
 
-			<TagInput />
+			<TagInput
+				tags={tags}
+				setTags={setTags}
+			/>
+
+			<TextInput
+				name='alt'
+				label='Alt text'
+				className='mb-8 gap-1'
+				description='Alt text describes your photos for people with visual impairments.'
+			/>
 
 			<SubmitButton
-				pendingContent={<Loader text='Creating...' />}
+				pendingContent={<Loader text='Sharing...' />}
 				size='sm'
-				className='ml-auto transition-all'
-				disabled={!content.length}
+				className='ml-auto mt-8 transition-all'
+				disabled={!content}
 			>
-				Create
+				Share
 			</SubmitButton>
 		</form>
 	)

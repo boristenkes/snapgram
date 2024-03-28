@@ -14,9 +14,23 @@
 	@apply h-[2px] bg-primary-500 rounded-full transition-all duration-200;
 }
 
+.custom-scrollbar::-webkit-scrollbar {
+	width: 10px;
+	height: 10px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-button {
+	@apply bg-transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+	@apply bg-neutral-800 rounded-lg;
+}
+
 .no-scrollbar::-webkit-scrollbar {
 	display: none;
 }
+
 .no-scrollbar {
 	-ms-overflow-style: none;
 	scrollbar-width: none;

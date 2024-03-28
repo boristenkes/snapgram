@@ -1,6 +1,7 @@
 import mongoose from 'mongoose'
+import { Story } from '../types'
 
-const storySchema = new mongoose.Schema(
+const storySchema = new mongoose.Schema<Story>(
 	{
 		author: {
 			type: mongoose.SchemaTypes.ObjectId,
@@ -8,10 +9,15 @@ const storySchema = new mongoose.Schema(
 			required: true
 		},
 		content: { type: String, required: true },
-		views: {
-			type: mongoose.SchemaTypes.ObjectId,
-			ref: 'User'
-		}
+		alt: { type: String, default: '' },
+		mentions: [{ type: mongoose.SchemaTypes.ObjectId, ref: 'User' }],
+		tags: [String],
+		views: [
+			{
+				type: mongoose.SchemaTypes.ObjectId,
+				ref: 'User'
+			}
+		]
 	},
 	{
 		timestamps: true

@@ -2,13 +2,14 @@
 
 import Image from 'next/image'
 import SearchInput from './search-input'
-import { searchUsers } from '@/lib/actions/user.actions'
 import { useState } from 'react'
 import Link from 'next/link'
-import ProfilePicture from '../profile-picture'
+import Avatar from '../avatar'
+import { searchUsers } from '@/lib/actions/user.actions'
 
 export type SearchProps = React.InputHTMLAttributes<HTMLInputElement> & {}
 export type SearchResult = {
+	_id: string
 	name: string
 	username: string
 	image: string
@@ -43,7 +44,7 @@ export default function Search({ ...rest }: SearchProps) {
 										href={`/profile/${item.username}`}
 										className='flex items-center gap-2'
 									>
-										<ProfilePicture
+										<Avatar
 											url={item.image}
 											width={40}
 										/>

@@ -4,7 +4,7 @@ import connectMongoDB from '../mongoose'
 import User from '../models/user.model'
 import { createUserSchema, editProfileSchema } from '../validations/user'
 import { UTApi } from 'uploadthing/server'
-import { delay, validateImage } from '../utils'
+import { validateImage } from '../utils'
 import { revalidatePath } from 'next/cache'
 import { getCurrentUser } from '../session'
 import { UserProfile } from '../types'
@@ -78,7 +78,7 @@ export async function onboard(
 	}
 }
 
-export async function getUserById(
+export async function fetchUser(
 	userId: string,
 	props?: Parameters<typeof User.findById>[0]
 ) {
@@ -91,8 +91,7 @@ export async function getUserById(
 
 		return JSON.stringify(user)
 	} catch (error) {
-		console.error('User not found in `getUserById()`:', error)
-		return { error: 'User not found' }
+		console.error('User not found in `fetchUser()`:', error)
 	}
 }
 
@@ -104,18 +103,18 @@ export async function getUserProfile({ username }: { username: string }) {
 			'image name username postsCount followersCount followingCount bio posts private verified'
 		)
 
-		return user
+		return { success: true, user }
 	} catch (error: any) {
 		console.error('User not found in `getUserProfile()`:', error)
-		return { error: 'User not found' }
+		return { success: false, message: error.message }
 	}
 }
 
-type GetAllUsersProps = {
+type fetchAllUsersProps = {
 	select?: string | string[]
 }
 
-export async function getAllUsers({ select = '' }: GetAllUsersProps = {}) {
+export async function fetchAllUsers({ select = '' }: fetchAllUsersProps = {}) {
 	await connectMongoDB()
 
 	const users = await User.find().select(select)
@@ -142,24 +141,23 @@ export async function updateUser({
 	email,
 	bio
 }: UpdateUserProps) {
-	const formObj: FormObj = {
-		username,
-		name,
-		email
-	}
-
-	// bio is only one optional so we need to check if it's even provided
-	if (bio) Object.assign(formObj, { bio })
-
-	// Server-side form validation
-	const validationResult = editProfileSchema.safeParse(formObj)
-
-	if (!validationResult.success) {
-		return { error: 'Invalid data' }
-	}
-
 	try {
+		const formObj: FormObj = {
+			username,
+			name,
+			email
+		}
+
+		// bio is only one optional so we need to check if it's even provided
+		if (bio) Object.assign(formObj, { bio })
+
+		// Server-side form validation
+		const validationResult = editProfileSchema.safeParse(formObj)
+
+		if (!validationResult.success) throw new Error('Invalid data')
+
 		await connectMongoDB()
+
 		const image = formData.get('image') as File
 
 		// const image = formData.get('image') as File
@@ -170,19 +168,14 @@ export async function updateUser({
 		if (isImageProvided) {
 			const imageValidation = validateImage(image as File)
 
-			if (!imageValidation.success) {
-				return { error: 'Invalid image' }
-			}
+			if (!imageValidation.success) throw new Error('Invalid image')
 
 			imageResponse = await uploadthingApi.uploadFiles(image)
 
-			if (imageResponse?.error) {
-				return {
-					error: 'Image failed to upload:' + imageResponse.error.message
-				}
-			}
+			if (imageResponse?.error)
+				throw new Error('Image failed to upload:' + imageResponse.error.message)
 
-			const isRenamed = await uploadthingApi.renameFile({
+			const isRenamed = await uploadthingApi.renameFiles({
 				fileKey: imageResponse?.data?.key,
 				newName: `avatar_${username}`
 			})
@@ -191,9 +184,7 @@ export async function updateUser({
 		}
 
 		// If image is successfully uploaded, we're adding it to formObj
-		if (imageResponse?.data?.url) {
-			formObj.image = imageResponse?.data.url
-		}
+		if (imageResponse?.data?.url) formObj.image = imageResponse?.data.url
 
 		const userBeforeUpdate = await User.findOneAndUpdate(
 			{ _id },
@@ -219,10 +210,10 @@ export async function updateUser({
 		}
 
 		revalidatePath('/profile/edit')
-		return { success: 'Successfully updated.' }
+		return { success: true, message: 'Successfully updated.' }
 	} catch (error: any) {
 		console.log('Error in `updateUser`:', error)
-		return { error: error.message }
+		return { success: false, message: error.message }
 	}
 }
 

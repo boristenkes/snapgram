@@ -1,14 +1,14 @@
 import { cn } from '@/lib/utils'
 import Image from 'next/image'
 
-type ProfilePictureProps = React.ImgHTMLAttributes<HTMLImageElement> & {
+type AvatarProps = React.ImgHTMLAttributes<HTMLImageElement> & {
 	url: string | undefined | null
 	width: number
 	height?: number
 	priority?: boolean
 }
 
-export default function ProfilePicture({
+export default function Avatar({
 	url,
 	alt = 'Profile picture',
 	width,
@@ -16,18 +16,18 @@ export default function ProfilePicture({
 	className = '',
 	priority,
 	...rest
-}: ProfilePictureProps) {
+}: AvatarProps) {
 	return (
 		<Image
 			src={url || '/assets/default.jpg'}
 			alt={alt}
 			width={width}
-			height={height || width}
+			height={height ?? width}
 			className={cn(
 				'rounded-full aspect-square object-cover bg-neutral-600',
 				className
 			)}
-			priority={priority}
+			priority={!!priority}
 			{...rest}
 		/>
 	)

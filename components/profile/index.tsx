@@ -1,6 +1,6 @@
 import { UserProfile } from '@/lib/types'
 import Image from 'next/image'
-import ProfilePicture from '../profile-picture'
+import Avatar from '../avatar'
 import { Button } from '../elements'
 import FollowButton from '../follow-button'
 
@@ -15,7 +15,7 @@ export default async function Profile({ user, currentUser }: ProfileProps) {
 	return (
 		<main className='w-[min(65.5rem,100%-2rem)] my-10 mx-auto px-4 | large:my-20 large:px-16'>
 			<div className='flex gap-4 | large:gap-8'>
-				<ProfilePicture
+				<Avatar
 					url={user?.image}
 					alt={
 						isMyProfile

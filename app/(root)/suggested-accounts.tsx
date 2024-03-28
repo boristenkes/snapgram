@@ -1,5 +1,5 @@
 import FollowButton from '@/components/follow-button'
-import ProfilePicture from '@/components/profile-picture'
+import Avatar from '@/components/avatar'
 import { fetchSuggestedAccounts } from '@/lib/actions/user.actions'
 import { getCurrentUser } from '@/lib/session'
 import { UserProfile } from '@/lib/types'
@@ -24,13 +24,13 @@ export default async function SuggestedAccounts() {
 							href={`/profile/${account.username}`}
 							className='flex items-center gap-2'
 						>
-							<ProfilePicture
+							<Avatar
 								url={account.image}
 								width={40}
 							/>
 							<div className='flex-1 grid'>
 								<strong>{account.name}</strong>
-								<small>{account.username}</small>
+								<small className='text-neutral-500'>{account.username}</small>
 							</div>
 						</Link>
 						<FollowButton

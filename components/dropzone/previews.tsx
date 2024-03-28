@@ -10,6 +10,7 @@ type PreviewsProps = {
 }
 
 export type Preview = {
+	id: string
 	url: string
 	alt: string
 }
@@ -20,32 +21,47 @@ export default function Previews({ files, initialPreviews }: PreviewsProps) {
 	useEffect(() => {
 		if (!files.length) return
 
-		setPreviews(
-			files.map(file => ({
-				url: URL.createObjectURL(file),
-				alt: file.name
-			}))
-		)
+		const readFiles = async () => {
+			const newPreviews = await Promise.all(
+				files.map(async file => {
+					const result = await new Promise<string>(resolve => {
+						const fileReader = new FileReader()
 
-		return () => previews.forEach(({ url }) => URL.revokeObjectURL(url))
+						fileReader.onload = event => {
+							resolve(event.target?.result?.toString() || '')
+						}
+
+						fileReader.readAsDataURL(file)
+					})
+
+					return {
+						id: id(),
+						url: result,
+						alt: file.name
+					}
+				})
+			)
+
+			setPreviews(prev => [...prev, ...newPreviews])
+		}
+
+		readFiles()
 	}, [files])
 
 	return (
 		!!previews.length && (
-			<ul className='flex items-center gap-2'>
+			<ul className='flex items-center gap-2 flex-nowrap overflow-x-auto custom-scrollbar'>
 				{previews.map(preview => (
 					<li
-						key={id()}
-						className='relative isolate'
+						key={preview.id}
+						className='relative isolate flex-none'
 					>
-						<div className='absolute inset-0 bg-neutral-700 animate-pulse -z-10' />
 						<Image
 							src={preview.url}
 							alt={preview.alt}
 							width={80}
 							height={80}
 							className='rounded-lg overflow-hidden border p-px aspect-square object-cover'
-							onLoad={() => URL.revokeObjectURL(preview.url)}
 						/>
 					</li>
 				))}

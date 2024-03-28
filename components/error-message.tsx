@@ -1,15 +1,15 @@
 import { cn } from '@/lib/utils'
 import Image from 'next/image'
 
-type ServerErrorMessageProps = {
+type ErrorMessageProps = {
 	message: string
 	className?: string
 }
 
-export default function ServerErrorMessage({
+export default function ErrorMessage({
 	message,
 	className
-}: ServerErrorMessageProps) {
+}: ErrorMessageProps) {
 	return (
 		<p
 			className={cn(
