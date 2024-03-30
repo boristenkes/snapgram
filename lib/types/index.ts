@@ -1,3 +1,4 @@
+import mongoose from 'mongoose'
 import { Session } from 'next-auth'
 import { InputHTMLAttributes } from 'react'
 
@@ -34,11 +35,11 @@ export type UserProfile = { _id: string } & Partial<{
 	following: string[]
 	followingCount: number
 	highlights: string[]
-	likedPosts: Post[]
+	likedPosts: string[]
 	posts: Post[]
 	postsCount: number
 	private: boolean
-	savedPosts: Post[]
+	savedPosts: string[]
 	seenStories: string[]
 	stories: Story[]
 	verified: boolean
@@ -58,12 +59,13 @@ export type Story = {
 }
 
 export type Post = {
+	_id: mongoose.Schema.Types.ObjectId
 	author: UserProfile
 	caption: string
 	tags: string[]
 	type: 'photo' | 'video' | 'gallery' | 'reel'
-	content: string
-	altText?: string
+	content: string[]
+	altText: string
 	likes: UserProfile[]
 	likeCount: number
 	comments: Comment[]
@@ -72,6 +74,8 @@ export type Post = {
 	shareCount: number
 	taggedUsers: UserProfile[]
 	taggedUsersCount: number
+	createdAt: string
+	updatedAt: string
 }
 
 export type Comment = {
@@ -80,5 +84,5 @@ export type Comment = {
 	content: string
 	replies: Comment[]
 	likes: UserProfile[]
-	likesCount: number
+	likeCount: number
 }

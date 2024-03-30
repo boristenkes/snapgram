@@ -6,11 +6,12 @@ const postSchema = new mongoose.Schema(
 		author: { type: ObjectId, ref: 'User' },
 		caption: String,
 		tags: [String],
-		type: {
-			type: String,
-			enum: ['photo', 'video', 'gallery', 'reel'],
-			required: true
-		},
+		mentions: [{ type: ObjectId, ref: 'User' }],
+		// type: {
+		// 	type: String,
+		// 	enum: ['photo', 'video', 'gallery', 'reel'],
+		// 	required: true
+		// },
 		content: [{ type: String, required: true }],
 		altText: { type: String, default: '' },
 

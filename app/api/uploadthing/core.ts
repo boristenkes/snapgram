@@ -31,9 +31,23 @@ const storyContent = f({
 	})
 	.onUploadComplete(async ({ metadata, file }) => {})
 
+const postContent = f({
+	image: { maxFileSize: '4MB', maxFileCount: 10 },
+	video: { maxFileSize: '8MB', maxFileCount: 10 }
+})
+	.middleware(async ({ req }) => {
+		const { user } = await getCurrentUser()
+
+		if (!user) throw new Error('Unauthrized')
+
+		return { userId: user?._id }
+	})
+	.onUploadComplete(async ({ metadata, file }) => {})
+
 export const ourFileRouter = {
 	profilePicture,
-	storyContent
+	storyContent,
+	postContent
 } satisfies FileRouter
 
 export type OurFileRouter = typeof ourFileRouter

@@ -128,6 +128,7 @@ export default function EditProfileForm({ profile }: EditProfileFormProps) {
 						defaultValue: currentUser.bio
 					}}
 					defaultValue={currentUser[field.name]}
+					className='mt-5'
 					{...field}
 				/>
 			))}
