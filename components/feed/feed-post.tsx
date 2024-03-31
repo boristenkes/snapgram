@@ -7,6 +7,13 @@ import { LikeButton, ShareButton, SaveButton } from './action-buttons'
 import CommentInput from './comment-input'
 import { Fragment } from 'react'
 import { format } from 'date-fns'
+import {
+	Carousel,
+	CarouselContent,
+	CarouselItem,
+	CarouselNext,
+	CarouselPrevious
+} from '@/components/ui/carousel'
 
 export default async function FeedPost({ post }: { post: PostType }) {
 	const { user: currentUser } = await getCurrentUser()
@@ -62,7 +69,25 @@ export default async function FeedPost({ post }: { post: PostType }) {
 				</pre>
 			)}
 
-			{/* Content goes here */}
+			<div className='rounded-3xl overflow-hidden'>
+				<Carousel className='max-h-[32.5rem]'>
+					<CarouselContent>
+						{post.content.map(contentUrl => (
+							<CarouselItem key={contentUrl}>
+								<Image
+									src={contentUrl}
+									alt={post.altText}
+									width={542}
+									height={520}
+									className='aspect-square object-cover'
+								/>
+							</CarouselItem>
+						))}
+					</CarouselContent>
+					<CarouselPrevious className='left-4 bg-neutral-700 border-neutral-700' />
+					<CarouselNext className='right-4 bg-neutral-700 border-neutral-700' />
+				</Carousel>
+			</div>
 
 			<div className='flex items-center justify-between mt-8 mb-10'>
 				<div className='flex items-center gap-7'>
