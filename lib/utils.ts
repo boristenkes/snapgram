@@ -21,6 +21,47 @@ export function deepFreeze(value: Record<any, any> | any[]) {
 	return Object.freeze(value)
 }
 
+const MAX_IMAGE_FILE_SIZE = 2 * 1024 * 1024 // 2 MB
+const ACCEPTABLE_IMAGE_TYPES = [
+	'image/jpeg',
+	'image/jpg',
+	'image/png',
+	'image/webp'
+]
+
+type ValidateImageOptions = {
+	maxSize?: number
+	acceptableTypes?: string[]
+}
+
+export function validateImage(
+	image: File,
+	{
+		maxSize = MAX_IMAGE_FILE_SIZE,
+		acceptableTypes = ACCEPTABLE_IMAGE_TYPES
+	}: ValidateImageOptions = {}
+) {
+	const errors = []
+
+	if (!acceptableTypes.includes(image.type))
+		errors.push('Only .jpeg, .jpg, .png and .webp images are allowed.')
+	if (!acceptableTypes.includes(image.type)) {
+		const acceptableTypesStr = `${acceptableTypes
+			.map(type => type.slice(6)) // exclude "image/" from type
+			.slice(0, -1) // exclude last type
+			.join(', ')} and ${acceptableTypes.at(-1)?.slice(6)}`
+
+		errors.push(`Only ${acceptableTypesStr} images are allowed.`)
+	}
+
+	if (image?.size > maxSize)
+		errors.push(
+			`Please choose an image smaller than ${bytesToMegabytes(maxSize)}MB`
+		)
+
+	return { success: !errors.length, errors }
+}
+
 export function removeDuplicates(array: any[], id?: string | number) {
 	if (typeof array[0] !== 'object') {
 		return Array.from(new Set([...array]))
