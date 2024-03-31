@@ -106,15 +106,15 @@ export async function fetchPostsForUser(
 	try {
 		if (!following) throw new Error('`following` not provided')
 
-		if (!following.length) return { success: true, posts: [] }
-
 		const { user: currentUser } = await getCurrentUser()
 
 		await connectMongoDB()
 
 		let query = Post.find({
 			$or: [{ author: { $in: following } }, { author: currentUser._id }]
-		}).select(select)
+		})
+			.select(select)
+			.sort({ createdAt: -1 })
 
 		if (populateAuthor) query = query.populate('author', 'image name username')
 

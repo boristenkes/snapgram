@@ -14,6 +14,7 @@ import {
 	CarouselNext,
 	CarouselPrevious
 } from '@/components/ui/carousel'
+import PostContent from '../post-content'
 
 export default async function FeedPost({ post }: { post: PostType }) {
 	const { user: currentUser } = await getCurrentUser()
@@ -70,23 +71,36 @@ export default async function FeedPost({ post }: { post: PostType }) {
 			)}
 
 			<div className='rounded-3xl overflow-hidden'>
-				<Carousel className='max-h-[32.5rem]'>
-					<CarouselContent>
-						{post.content.map(contentUrl => (
-							<CarouselItem key={contentUrl}>
-								<Image
-									src={contentUrl}
-									alt={post.altText}
-									width={542}
-									height={520}
-									className='aspect-square object-cover'
-								/>
-							</CarouselItem>
-						))}
-					</CarouselContent>
-					<CarouselPrevious className='left-4 bg-neutral-700 border-neutral-700' />
-					<CarouselNext className='right-4 bg-neutral-700 border-neutral-700' />
-				</Carousel>
+				{post.content.length === 1 ? (
+					<PostContent
+						src={post.content[0]}
+						alt={post.altText}
+						width={542}
+						height={520}
+						className='aspect-square object-cover'
+					/>
+				) : (
+					<Carousel className='max-h-[32.5rem]'>
+						<CarouselContent>
+							{post.content.map(contentUrl => (
+								<CarouselItem
+									key={contentUrl}
+									className='p-0'
+								>
+									<PostContent
+										src={contentUrl}
+										alt={post.altText}
+										width={542}
+										height={520}
+										className='aspect-square object-cover'
+									/>
+								</CarouselItem>
+							))}
+						</CarouselContent>
+						<CarouselPrevious className='left-4 bg-neutral-700 border-neutral-700' />
+						<CarouselNext className='right-4 bg-neutral-700 border-neutral-700' />
+					</Carousel>
+				)}
 			</div>
 
 			<div className='flex items-center justify-between mt-8 mb-10'>
