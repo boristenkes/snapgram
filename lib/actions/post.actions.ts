@@ -151,6 +151,65 @@ export async function fetchTopPostsByUser(userId: string) {
 	}
 }
 
+type ActionPostProps = {
+	currentUserId: string
+	postId: string
+}
+
+export async function togglePostLike({
+	currentUserId,
+	postId
+}: ActionPostProps) {
+	try {
+		await connectMongoDB()
+
+		const currentUser = await User.findById(currentUserId)
+		const isLiked = currentUser.likedPosts.includes(postId)
+
+		await Promise.all([
+			User.findByIdAndUpdate(
+				currentUserId,
+				isLiked
+					? { $pull: { likedPosts: postId } }
+					: { $push: { likedPosts: postId } }
+			),
+			Post.findByIdAndUpdate(
+				postId,
+				isLiked
+					? { $pull: { likes: currentUserId }, $inc: { likeCount: -1 } }
+					: { $push: { likes: currentUserId }, $inc: { likeCount: 1 } }
+			)
+		])
+
+		return { success: true }
+	} catch (error: any) {
+		return { success: false, message: error.message }
+	}
+}
+
+export async function togglePostSave({
+	currentUserId,
+	postId
+}: ActionPostProps) {
+	try {
+		await connectMongoDB()
+
+		const currentUser = await User.findById(currentUserId)
+		const isSaved = currentUser.savedPosts.includes(postId)
+
+		await User.findByIdAndUpdate(
+			currentUserId,
+			isSaved
+				? { $pull: { savedPosts: postId } }
+				: { $push: { savedPosts: postId } }
+		)
+
+		return { success: true }
+	} catch (error: any) {
+		return { success: false, message: error.message }
+	}
+}
+
 export async function deletePost(postId: string) {
 	try {
 		await connectMongoDB()

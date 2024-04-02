@@ -42,6 +42,7 @@ export default function PostContent({
 			className={className}
 			controls
 			autoPlay
+			muted
 			{...props}
 		>
 			<source

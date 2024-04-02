@@ -26,7 +26,7 @@ export default async function CommentInput() {
 						src='/assets/icons/send.svg'
 						alt='Comment'
 						width={20}
-						height={20}
+						height={19}
 					/>
 					<span className='sr-only'>Post comment</span>
 				</button>

@@ -106,9 +106,10 @@ export default async function FeedPost({ post }: { post: PostType }) {
 			<div className='flex items-center justify-between mt-8 mb-10'>
 				<div className='flex items-center gap-7'>
 					<LikeButton
-						currentUserId={currentUser._id}
+						currentUserId={currentUser._id.toString()}
 						postId={post._id.toString()}
 						likeCount={post.likeCount}
+						isLiked={!!currentUser.likedPosts?.includes(post._id.toString())}
 					/>
 
 					<Link
@@ -131,7 +132,11 @@ export default async function FeedPost({ post }: { post: PostType }) {
 					/>
 				</div>
 
-				<SaveButton postId={post._id.toString()} />
+				<SaveButton
+					currentUserId={currentUser._id.toString()}
+					postId={post._id.toString()}
+					isSaved={!!currentUser.savedPosts?.includes(post._id.toString())}
+				/>
 			</div>
 
 			<CommentInput />

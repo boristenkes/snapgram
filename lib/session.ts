@@ -33,7 +33,7 @@ const authOptions: NextAuthOptions = {
 
 				if (!user.password) {
 					throw new Error(
-						'This email was originally registed with Google provider'
+						'This email was originally registered with Google provider'
 					)
 				}
 

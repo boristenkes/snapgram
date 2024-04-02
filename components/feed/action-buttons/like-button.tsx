@@ -1,47 +1,70 @@
-import { getCurrentUser } from '@/lib/session'
+'use client'
+
+import { togglePostLike } from '@/lib/actions/post.actions'
+import darkToast from '@/lib/toast'
 import Image from 'next/image'
+import { useCallback, useOptimistic, useState } from 'react'
 
 type LikeButtonProps = {
 	currentUserId: string
 	postId: string
 	likeCount: number
+	isLiked: boolean
 }
 
-export default async function LikeButton({
+export default function LikeButton({
 	currentUserId,
 	postId,
-	likeCount
+	likeCount,
+	isLiked
 }: LikeButtonProps) {
-	const { user: currentUser } = await getCurrentUser()
-	const isLiked = currentUser.likedPosts?.includes(postId)
+	const [likes, setLikes] = useState({
+		liked: isLiked,
+		total: likeCount
+	})
+	const [optimisticLikes, setOptimisticLikes] = useOptimistic(likes)
+
+	const toggleLike = useCallback(async () => {
+		setOptimisticLikes(prev => ({
+			liked: !prev.liked,
+			total: prev.liked ? prev.total - 1 : prev.total + 1
+		}))
+
+		const response = await togglePostLike({ currentUserId, postId })
+
+		if (!response.success) {
+			setLikes(likes)
+			darkToast(response.message, {
+				iconUrl: '/assets/icons/error.svg',
+				iconAlt: 'Error'
+			})
+			return
+		}
+
+		setLikes(prev => ({
+			liked: !prev.liked,
+			total: prev.liked ? prev.total - 1 : prev.total + 1
+		}))
+	}, [likes, setLikes, optimisticLikes, setOptimisticLikes, togglePostLike])
 
 	return (
-		<form>
-			<input
-				name='currentUserId'
-				value={currentUserId.toString()}
-				hidden
-				readOnly
-			/>
-			<input
-				name='postId'
-				value={postId.toString()}
-				hidden
-				readOnly
-			/>
+		<form action={toggleLike}>
 			<button
 				type='submit'
 				className='flex items-center gap-2'
 			>
 				<Image
 					src={
-						isLiked ? '/assets/icons/like-active.svg' : '/assets/icons/like.svg'
+						optimisticLikes.liked
+							? '/assets/icons/like-active.svg'
+							: '/assets/icons/like.svg'
 					}
-					alt={isLiked ? 'Dislike Post' : 'Like Post'}
+					alt={optimisticLikes.liked ? 'Dislike Post' : 'Like Post'}
 					width={20}
 					height={20}
+					className='w-5 h-5'
 				/>
-				{likeCount}
+				{optimisticLikes.total}
 			</button>
 		</form>
 	)
