@@ -1,7 +1,7 @@
 'use client'
 
 import { togglePostLike } from '@/lib/actions/post.actions'
-import darkToast from '@/lib/toast'
+import toast from '@/lib/toast'
 import Image from 'next/image'
 import { useCallback, useOptimistic, useState } from 'react'
 
@@ -34,10 +34,7 @@ export default function LikeButton({
 
 		if (!response.success) {
 			setLikes(likes)
-			darkToast(response.message, {
-				iconUrl: '/assets/icons/error.svg',
-				iconAlt: 'Error'
-			})
+			toast(response.message, { type: 'error' })
 			return
 		}
 

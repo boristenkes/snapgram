@@ -4,7 +4,10 @@ import { Button, TextInput } from '@/components/elements'
 import SubmitButton from '@/components/elements/submit-button'
 import Loader from '@/components/loader'
 import ErrorMessage from '@/components/error-message'
-import { onboard } from '@/lib/actions/user.actions'
+import {
+	handleOnboardingBackButtonClick,
+	onboard
+} from '@/lib/actions/user.actions'
 import clientSession from '@/lib/client-session'
 import { FormField } from '@/lib/types'
 import { onboardingSchema } from '@/lib/validations/user'
@@ -70,6 +73,7 @@ export default function OnboardingForm() {
 				<TextInput
 					key={field.name}
 					defaultValue={currentUser[field.name]}
+					className='mt-6'
 					{...field}
 				/>
 			))}
@@ -77,10 +81,15 @@ export default function OnboardingForm() {
 			{serverError && <ErrorMessage message={serverError} />}
 
 			<div className='flex justify-between items-center mt-8'>
-				{/* TODO: Finish "Back" button */}
 				<Button
 					variant='dark'
-					onClick={() => signOut()}
+					size='sm'
+					onClick={async () => {
+						await Promise.all([
+							handleOnboardingBackButtonClick({ email: currentUser.email }),
+							signOut({ callbackUrl: '/register' })
+						])
+					}}
 				>
 					<Image
 						src='/assets/icons/arrow-left.svg'

@@ -8,7 +8,7 @@ import SubmitButton from '@/components/elements/submit-button'
 import Loader from '@/components/loader'
 import TagInput from '../../story/new/tag-input'
 import { createPost } from '@/lib/actions/post.actions'
-import darkToast from '@/lib/toast'
+import toast from '@/lib/toast'
 import { useRouter } from 'next/navigation'
 import ErrorMessage from '@/components/error-message'
 
@@ -37,7 +37,7 @@ export default function NewPostForm() {
 		const response = await createPost({ formData, mentions, tags })
 
 		if (response.success) {
-			darkToast(response.message)
+			toast(response.message)
 			router.push('/')
 		} else {
 			setErrorMessage(response.message)

@@ -8,6 +8,7 @@ import { validateImage } from '../utils'
 import { revalidatePath } from 'next/cache'
 import { getCurrentUser } from '../session'
 import { UserProfile } from '../types'
+import { FilterQuery } from 'mongoose'
 
 const uploadthingApi = new UTApi()
 
@@ -336,5 +337,40 @@ export async function fetchSuggestedAccounts(currentUser: UserProfile) {
 		return JSON.stringify(users)
 	} catch (error) {
 		console.log('Error fetching suggested accounts:', error)
+	}
+}
+
+export async function handleOnboardingBackButtonClick({
+	email
+}: {
+	email: string
+}) {
+	try {
+		await connectMongoDB()
+
+		const response = await deleteUser({ email: email })
+
+		return response
+	} catch (error: any) {
+		return { success: false, message: error.message }
+	}
+}
+
+export async function deleteUser(filters: FilterQuery<UserProfile>) {
+	try {
+		await connectMongoDB()
+
+		// TODO: Delete user's photo from uploadthing
+		throw new Error('First do this 👆')
+
+		const response = await User.deleteOne(filters)
+
+		if (response.deletedCount !== 1)
+			throw new Error('Failed to delete user. Please try again later.')
+
+		return { success: true }
+	} catch (error: any) {
+		console.log('Error in `deleteUser`:', error)
+		return { success: false, message: error.message }
 	}
 }

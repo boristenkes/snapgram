@@ -60,6 +60,7 @@ export default function LoginForm() {
 			{formFields.map(field => (
 				<TextInput
 					key={field.name}
+					className='mt-6'
 					{...field}
 				/>
 			))}

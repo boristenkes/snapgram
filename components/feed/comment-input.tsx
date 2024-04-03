@@ -18,10 +18,13 @@ export default async function CommentInput() {
 					type='text'
 					name='comment'
 					autoComplete='off'
-					className='outline-none border-none bg-transparent flex-1 placeholder-neutral-300 mr-3'
+					className='outline-none border-none bg-transparent flex-1 placeholder-neutral-300 mr-3 w-full'
 					placeholder='Write your comment...'
 				/>
-				<button type='submit'>
+				<button
+					type='submit'
+					className='flex-none'
+				>
 					<Image
 						src='/assets/icons/send.svg'
 						alt='Comment'

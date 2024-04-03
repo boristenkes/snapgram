@@ -23,7 +23,7 @@ export default async function FeedPost({ post }: { post: PostType }) {
 	const formattedDate = format(post.createdAt, "d MMMM 'at' hh:mm a")
 
 	return (
-		<article className='bg-[#09090A] w-[min(37.5rem,100%-2rem)] py-9 px-7 rounded-3xl border-2 border-neutral-700'>
+		<article className='bg-[#09090A] w-[min(37.5rem,100%-2rem)] py-9 px-7 mx-auto rounded-3xl border-2 border-neutral-700'>
 			<div className='flex justify-between mb-5'>
 				<Link
 					href={`/profile/${post.author.username}`}
@@ -103,7 +103,7 @@ export default async function FeedPost({ post }: { post: PostType }) {
 				)}
 			</div>
 
-			<div className='flex items-center justify-between mt-8 mb-10'>
+			<div className='flex items-center justify-between my-6'>
 				<div className='flex items-center gap-7'>
 					<LikeButton
 						currentUserId={currentUser._id.toString()}

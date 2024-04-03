@@ -19,7 +19,7 @@ export default async function StoryBubbleTrack() {
 
 	return (
 		<div>
-			<ul className='flex items-center gap-6 p-16'>
+			<ul className='flex items-center gap-6 px-4 py-5 mb-4 md:p-10 lg:p-16'>
 				<MyStory currentUser={currentUser} />
 
 				{response.stories?.map(story => (

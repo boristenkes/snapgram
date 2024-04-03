@@ -43,7 +43,9 @@ export default async function Sidebar() {
 					/>
 					<div className='flex-1 hidden xl:block'>
 						<p className='text-lg break-keep flex items-center gap-1'>
-							<strong>{user?.name}</strong>
+							<strong className='text-ellipsis overflow-hidden whitespace-nowrap max-w-36'>
+								{user?.name}
+							</strong>
 							{user?.verified && (
 								<Image
 									src='/assets/icons/verified.svg'

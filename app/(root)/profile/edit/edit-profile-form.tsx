@@ -8,7 +8,7 @@ import Loader from '@/components/loader'
 import { updateUser } from '@/lib/actions/user.actions'
 import { editProfileSchema } from '@/lib/validations/user'
 import { id, megabytesToBytes } from '@/lib/utils'
-import darkToast from '@/lib/toast'
+import toast from '@/lib/toast'
 import ErrorMessage from '@/components/error-message'
 import Dropzone from '@/components/dropzone'
 
@@ -47,12 +47,14 @@ export default function EditProfileForm({ profile }: EditProfileFormProps) {
 	const clientAction = useCallback(
 		async (formData: FormData) => {
 			const pic = profilePicture[0]
-			formData.set(
-				'image',
-				new File([pic], pic.name, {
-					type: pic.type
-				})
-			)
+			if (pic) {
+				formData.set(
+					'image',
+					new File([pic], pic.name, {
+						type: pic.type
+					})
+				)
+			}
 
 			const validationResult = editProfileSchema.safeParse({
 				username: formData.get('username'),
@@ -87,7 +89,7 @@ export default function EditProfileForm({ profile }: EditProfileFormProps) {
 			})
 
 			if (response.success) {
-				darkToast(response.message)
+				toast(response.message)
 			} else {
 				setServerError(response.message)
 			}

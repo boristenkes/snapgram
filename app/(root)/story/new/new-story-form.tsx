@@ -4,16 +4,14 @@ import SubmitButton from '@/components/elements/submit-button'
 import Loader from '@/components/loader'
 import MentionInput from './mention-input'
 import { createStory } from '@/lib/actions/story.actions'
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 import Dropzone from '@/components/dropzone'
 import ErrorMessage from '@/components/error-message'
 import type { Mention } from './mention-input'
 import TagInput from './tag-input'
-import darkToast from '@/lib/toast'
+import toast from '@/lib/toast'
 import { useRouter } from 'next/navigation'
 import { TextInput } from '@/components/elements'
-
-// TODO: Make this form responsive
 
 export default function NewStoryForm() {
 	const router = useRouter()
@@ -37,7 +35,7 @@ export default function NewStoryForm() {
 
 		const response = await createStory({ formData, mentions, tags })
 		if (response.success) {
-			darkToast(response.message)
+			toast(response.message)
 			router.push('/')
 		} else {
 			setError(response.message)

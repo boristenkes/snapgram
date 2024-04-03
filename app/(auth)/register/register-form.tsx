@@ -77,6 +77,7 @@ export default function RegisterForm() {
 			{formFields.map(field => (
 				<TextInput
 					key={field.name}
+					className='mt-6'
 					{...field}
 				/>
 			))}
