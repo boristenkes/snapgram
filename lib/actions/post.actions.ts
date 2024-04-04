@@ -7,6 +7,7 @@ import { getCurrentUser } from '../session'
 import Post from '../models/post.model'
 import { revalidatePath } from 'next/cache'
 import User from '../models/user.model'
+import { type Post as PostType } from '../types'
 
 let isCleanedUp = false
 
@@ -147,6 +148,25 @@ export async function fetchTopPostsByUser(userId: string) {
 		return { success: true, posts }
 	} catch (error: any) {
 		console.log('Error in `fetchTopPostsByUser`:', error)
+		return { success: false, message: error.message }
+	}
+}
+
+type FetchUserPosts =
+	| { success: true; posts: PostType[] }
+	| { success: false; message: string }
+
+export async function fetchUserPosts(userId: string): Promise<FetchUserPosts> {
+	try {
+		await connectMongoDB()
+
+		const posts = await Post.find({ author: userId })
+
+		if (!posts) throw new Error('Failed to fetch posts.')
+
+		return { success: true, posts }
+	} catch (error: any) {
+		console.log('Error in `fetchUserPosts`:', error)
 		return { success: false, message: error.message }
 	}
 }

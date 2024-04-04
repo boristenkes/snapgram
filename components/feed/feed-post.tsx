@@ -23,7 +23,7 @@ export default async function FeedPost({ post }: { post: PostType }) {
 	const formattedDate = format(post.createdAt, "d MMMM 'at' hh:mm a")
 
 	return (
-		<article className='bg-[#09090A] w-[min(37.5rem,100%-2rem)] py-9 px-7 mx-auto rounded-3xl border-2 border-neutral-700'>
+		<article className='bg-[#09090A] w-[min(37.5rem,100%-2rem)] py-9 px-7 mx-auto rounded-lg border-2 border-neutral-700'>
 			<div className='flex justify-between mb-5'>
 				<Link
 					href={`/profile/${post.author.username}`}
@@ -70,7 +70,7 @@ export default async function FeedPost({ post }: { post: PostType }) {
 				</pre>
 			)}
 
-			<div className='rounded-3xl overflow-hidden'>
+			<div className='rounded-lg overflow-hidden'>
 				{post.content.length === 1 ? (
 					<PostContent
 						src={post.content[0]}
