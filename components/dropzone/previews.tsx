@@ -42,7 +42,7 @@ export default function Previews({ files, initialPreviews }: PreviewsProps) {
 				})
 			)
 
-			setPreviews(prev => [...prev, ...newPreviews])
+			setPreviews(newPreviews)
 		}
 
 		readFiles()

@@ -9,81 +9,72 @@ import {
 	onboard
 } from '@/lib/actions/user.actions'
 import clientSession from '@/lib/client-session'
-import { FormField } from '@/lib/types'
-import { onboardingSchema } from '@/lib/validations/user'
+import { OnboardingFields, onboardingSchema } from '@/lib/zod/user.schema'
 import { signOut } from 'next-auth/react'
 import Image from 'next/image'
-import { redirect } from 'next/navigation'
-import { useState } from 'react'
-
-const fields: FormField[] = [
-	{
-		name: 'name',
-		label: 'Full name'
-	},
-	{
-		name: 'username',
-		label: 'Username'
-	},
-	{
-		name: 'bio',
-		label: 'Bio (optional)',
-		textarea: true,
-		textareaProps: {
-			rows: 6
-		}
-	}
-]
+import { redirect, useRouter } from 'next/navigation'
+import { SubmitHandler, useForm } from 'react-hook-form'
+import Textarea from '@/components/elements/textarea'
+import { zodResolver } from '@hookform/resolvers/zod'
 
 export default function OnboardingForm() {
 	const { user: currentUser } = clientSession()
-	const [formFields, setFormFields] = useState<FormField[]>(fields)
-	const [serverError, setServerError] = useState('')
+	const {
+		register,
+		handleSubmit,
+		setError,
+		formState: { errors, isSubmitting }
+	} = useForm<OnboardingFields>({
+		resolver: zodResolver(onboardingSchema)
+	})
+	const router = useRouter()
 
-	const clientAction = async (formData: FormData) => {
-		const formObj = {
-			name: formData.get('name'),
-			username: formData.get('username'),
-			bio: formData.get('bio')
-		} as Record<string, string>
+	const onSubmit: SubmitHandler<OnboardingFields> = async data => {
+		const response = await onboard(currentUser._id, { ...data })
 
-		const validationResult = validateForm(formObj, setFormFields)
-
-		if (!validationResult?.success) return
-
-		const response = await onboard(currentUser._id, {
-			...validationResult.data
-		})
-
-		if (response?.error) {
-			setServerError(response.error)
+		if (response?.success) {
+			setError('root', { message: response.message })
 			return
-		} else {
-			setServerError('')
-			redirect('/')
 		}
+
+		router.replace('/')
 	}
 
 	return (
 		<form
-			action={clientAction}
+			onSubmit={handleSubmit(onSubmit)}
 			noValidate
 		>
-			{formFields.map(field => (
-				<TextInput
-					key={field.name}
-					defaultValue={currentUser[field.name]}
-					className='mt-6'
-					{...field}
-				/>
-			))}
+			<TextInput
+				label='Full Name'
+				className='mt-6'
+				disabled={isSubmitting}
+				errors={errors.name?.message}
+				{...register('name')}
+			/>
+			<TextInput
+				label='Username'
+				className='mt-6'
+				disabled={isSubmitting}
+				errors={errors.username?.message}
+				{...register('username')}
+			/>
+			<Textarea
+				label='Bio (optional)'
+				rows={6}
+				className='mt-6'
+				disabled={isSubmitting}
+				errors={errors.bio?.message}
+				{...register('bio')}
+			/>
 
-			{serverError && <ErrorMessage message={serverError} />}
+			{errors.root && <ErrorMessage message={errors.root.message} />}
 
 			<div className='flex justify-between items-center mt-8'>
 				<Button
 					variant='dark'
 					size='sm'
+					disabled={isSubmitting}
 					onClick={async () => {
 						await Promise.all([
 							handleOnboardingBackButtonClick({ email: currentUser.email }),
@@ -99,42 +90,15 @@ export default function OnboardingForm() {
 					/>
 					Back
 				</Button>
+
 				<SubmitButton
 					pendingContent={<Loader text={'Please wait...'} />}
 					size='sm'
+					disabled={isSubmitting}
 				>
 					Continue to Snapgram
 				</SubmitButton>
 			</div>
 		</form>
 	)
-}
-
-function validateForm(
-	formObj: Record<string, string>,
-	setFormFields: React.Dispatch<React.SetStateAction<FormField[]>>
-) {
-	// client-side validation
-	const validationResult = onboardingSchema.safeParse(formObj)
-
-	// clear previous errors
-	setFormFields(prevFields =>
-		prevFields.map(field => ({ ...field, errors: [] }))
-	)
-
-	// display new errors, if there are any
-	if (!validationResult.success) {
-		const formattedErrors = validationResult.error.format()
-
-		setFormFields(prevFields =>
-			prevFields.map(field => ({
-				...field,
-				// @ts-ignore
-				errors: formattedErrors[field.name]?._errors || []
-			}))
-		)
-		return
-	}
-
-	return validationResult
 }

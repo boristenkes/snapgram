@@ -43,8 +43,6 @@ export function validateImage(
 ) {
 	const errors = []
 
-	if (!acceptableTypes.includes(image.type))
-		errors.push('Only .jpeg, .jpg, .png and .webp images are allowed.')
 	if (!acceptableTypes.includes(image.type)) {
 		const acceptableTypesStr = `${acceptableTypes
 			.map(type => type.slice(6)) // exclude "image/" from type
@@ -62,7 +60,12 @@ export function validateImage(
 	return { success: !errors.length, errors }
 }
 
-export function removeDuplicates(array: any[], id?: string | number) {
+export function removeDuplicates(
+	array: any[] | undefined,
+	id?: string | number
+) {
+	if (!array) return
+
 	if (typeof array[0] !== 'object') {
 		return Array.from(new Set([...array]))
 	}

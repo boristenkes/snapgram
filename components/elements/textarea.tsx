@@ -1,40 +1,43 @@
 'use client'
 
 import Image from 'next/image'
-import { FormField } from '@/lib/types'
 import { cn } from '@/lib/utils'
 import { useFormStatus } from 'react-dom'
 import { forwardRef } from 'react'
 
-type TextInputProps = FormField
+type TextareaProps = React.TextareaHTMLAttributes<HTMLTextAreaElement> & {
+	label?: string
+	description?: string
+	errors?: string | string[] | undefined
+	labelProps?: React.LabelHTMLAttributes<HTMLLabelElement>
+}
 
-const Input = forwardRef<
-	HTMLInputElement,
-	TextInputProps & { pending?: boolean }
+const TextareaElement = forwardRef<
+	HTMLTextAreaElement,
+	TextareaProps & { pending?: boolean }
 >(
 	(
-		{ label, className, description, errors, name, disabled, pending, ...rest },
+		{ label, className, errors, name, disabled, pending, description, ...rest },
 		ref
 	) => (
 		<div className={cn('relative', !label && className)}>
-			{description?.length && (
-				<p className='text-neutral-500 text-sm mb-2'>{description}</p>
-			)}
-			<input
+			<textarea
 				className={cn(
-					'block bg-neutral-600 p-3 rounded-lg w-full disabled:brightness-50',
+					'block bg-neutral-600 p-3 rounded-lg w-full disabled:brightness-50 no-scrollbar',
 					{
-						'border border-semantic-danger outline-semantic-danger':
-							errors?.length
+						'border border-semantic-danger': errors?.length
 					}
 				)}
-				id={name}
+				id={label}
 				name={name || label}
 				autoComplete='off'
 				disabled={disabled || pending}
 				ref={ref}
 				{...rest}
 			/>
+			{description?.length && (
+				<p className='text-neutral-500 text-sm mb-2'>{description}</p>
+			)}
 			{!!errors?.length && (
 				<Image
 					src='/assets/icons/error.webp'
@@ -63,7 +66,7 @@ const Errors = ({ errors }: { errors: string | string[] | undefined }) => {
 	)
 }
 
-const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
+const Textarea = forwardRef<HTMLTextAreaElement, TextareaProps>(
 	(
 		{
 			label,
@@ -82,14 +85,14 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
 		if (!label)
 			return (
 				<>
-					<Input
+					<TextareaElement
 						label={label}
 						className={className}
-						description={description}
 						errors={errors}
 						name={name}
 						disabled={disabled}
 						pending={pending}
+						description={description}
 						ref={ref}
 						{...rest}
 					/>
@@ -101,21 +104,21 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
 			<>
 				<div className={cn('grid gap-3', label && className)}>
 					<label
-						htmlFor={name}
+						htmlFor={label}
 						className='capitalize w-fit'
 						{...labelProps}
 					>
 						{label}
 					</label>
 
-					<Input
+					<TextareaElement
 						label={label}
 						className={className}
-						description={description}
 						errors={errors}
 						name={name}
 						disabled={disabled}
 						pending={pending}
+						description={description}
 						ref={ref}
 						{...rest}
 					/>
@@ -125,6 +128,6 @@ const TextInput = forwardRef<HTMLInputElement, TextInputProps>(
 		)
 	}
 )
-TextInput.displayName = 'TextInput'
+Textarea.displayName = 'Textarea'
 
-export default TextInput
+export default Textarea

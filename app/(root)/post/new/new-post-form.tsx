@@ -1,7 +1,7 @@
 'use client'
 
 import Dropzone from '@/components/dropzone'
-import { TextInput } from '@/components/elements'
+import { TextInput, Textarea } from '@/components/elements'
 import { useState } from 'react'
 import MentionInput, { Mention } from '../../story/new/mention-input'
 import SubmitButton from '@/components/elements/submit-button'
@@ -63,13 +63,9 @@ export default function NewPostForm() {
 				</p>
 			</div>
 
-			<TextInput
+			<Textarea
 				name='caption'
 				label='Caption'
-				textarea
-				textareaProps={{
-					rows: 4
-				}}
 				className='mb-6'
 			/>
 
@@ -98,7 +94,6 @@ export default function NewPostForm() {
 				pendingContent={<Loader text='Sharing Post...' />}
 				size='sm'
 				className='ml-auto mt-8 transition-all'
-				disabled={!content}
 			>
 				Share Post
 			</SubmitButton>

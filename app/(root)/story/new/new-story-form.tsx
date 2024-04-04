@@ -73,17 +73,16 @@ export default function NewStoryForm() {
 			<TextInput
 				name='alt'
 				label='Alt text'
-				className='mb-8 gap-1'
+				className='mt-6 mb-8 gap-1'
 				description='Alt text describes your photos for people with visual impairments.'
 			/>
 
 			<SubmitButton
-				pendingContent={<Loader text='Sharing...' />}
+				pendingContent={<Loader text='Uploading...' />}
 				size='sm'
 				className='ml-auto mt-8 transition-all'
-				disabled={!content}
 			>
-				Share
+				Upload
 			</SubmitButton>
 		</form>
 	)

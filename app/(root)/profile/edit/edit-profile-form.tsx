@@ -1,105 +1,66 @@
 'use client'
 
-import { FormField } from '@/lib/types'
-import { useCallback, useState } from 'react'
-import { TextInput } from '@/components/elements'
+import { useState } from 'react'
+import { TextInput, Textarea } from '@/components/elements'
 import SubmitButton from '@/components/elements/submit-button'
 import Loader from '@/components/loader'
 import { updateUser } from '@/lib/actions/user.actions'
-import { editProfileSchema } from '@/lib/validations/user'
+import { EditProfileFields, editProfileSchema } from '@/lib/zod/user.schema'
 import { id, megabytesToBytes } from '@/lib/utils'
 import toast from '@/lib/toast'
 import ErrorMessage from '@/components/error-message'
 import Dropzone from '@/components/dropzone'
+import { SubmitHandler, useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { UserProfile } from '@/lib/types'
 
-const fields: FormField[] = [
-	{
-		type: 'text',
-		name: 'username',
-		label: 'Username'
-	},
-	{
-		type: 'text',
-		name: 'name',
-		label: 'Name'
-	},
-	{
-		type: 'email',
-		name: 'email',
-		label: 'Email'
-	},
-	{
-		name: 'bio',
-		label: 'Bio'
-	}
-]
+export default function EditProfileForm({ profile }: { profile: UserProfile }) {
+	const currentUser = profile
+	const {
+		register,
+		handleSubmit,
+		setError,
+		formState: { errors, isSubmitting }
+	} = useForm<EditProfileFields>({
+		resolver: zodResolver(editProfileSchema),
+		defaultValues: {
+			username: currentUser.username,
+			name: currentUser.name,
+			email: currentUser.email,
+			bio: currentUser.bio
+		}
+	})
+	const [profilePicture, setProfilePicture] = useState<File[]>([])
 
-type EditProfileFormProps = {
-	profile: string
-}
+	const onSubmit: SubmitHandler<EditProfileFields> = async data => {
+		const pic = profilePicture[0]
+		const formData = new FormData()
 
-export default function EditProfileForm({ profile }: EditProfileFormProps) {
-	const currentUser = JSON.parse(profile)
-	const [formFields, setFormFields] = useState<FormField[]>(fields)
-	const [serverError, setServerError] = useState('')
-	const [profilePicture, setAvatar] = useState<File[]>([])
-
-	const clientAction = useCallback(
-		async (formData: FormData) => {
-			const pic = profilePicture[0]
-			if (pic) {
-				formData.set(
-					'image',
-					new File([pic], pic.name, {
-						type: pic.type
-					})
-				)
-			}
-
-			const validationResult = editProfileSchema.safeParse({
-				username: formData.get('username'),
-				name: formData.get('name'),
-				email: formData.get('email'),
-				bio: formData.get('bio')
-			})
-
-			// clear previous errors
-			setFormFields(prevFields =>
-				prevFields.map(field => ({ ...field, errors: [] }))
+		if (pic) {
+			formData.set(
+				'image',
+				new File([pic], pic.name, {
+					type: pic.type
+				})
 			)
+		}
 
-			if (!validationResult.success) {
-				const formattedErrors = validationResult.error.format()
+		const response = await updateUser({
+			userId: currentUser._id,
+			formData,
+			...data
+		})
 
-				setFormFields(prevFields =>
-					prevFields.map(field => ({
-						...field,
-						// @ts-ignore
-						errors: formattedErrors[field.name]?._errors || []
-					}))
-				)
-				return
-			}
-
-			// const response = await updateUser({ _id: currentUser._id, formData })
-			const response = await updateUser({
-				_id: currentUser._id,
-				formData,
-				...validationResult.data
-			})
-
-			if (response.success) {
-				toast(response.message)
-			} else {
-				setServerError(response.message)
-			}
-		},
-		[currentUser, updateUser]
-	)
+		if (response.success) {
+			toast(response.message)
+		} else {
+			setError('root', { message: response.message })
+		}
+	}
 
 	return (
 		<form
-			action={clientAction}
+			onSubmit={handleSubmit(onSubmit)}
 			noValidate
 			className='max-w-2xl mt-14'
 		>
@@ -107,10 +68,11 @@ export default function EditProfileForm({ profile }: EditProfileFormProps) {
 				endpoint='profilePicture'
 				name='image'
 				dropzoneOptions={{
-					onDrop: acceptedFiles => setAvatar(acceptedFiles),
+					onDrop: acceptedFiles => setProfilePicture(acceptedFiles),
 					maxSize: megabytesToBytes(2),
 					maxFiles: 1
 				}}
+				// @ts-ignore TODO
 				initialPreviews={
 					currentUser.image && [
 						{
@@ -121,26 +83,46 @@ export default function EditProfileForm({ profile }: EditProfileFormProps) {
 					]
 				}
 			/>
-			{formFields.map(field => (
-				<TextInput
-					key={field.name}
-					textarea={field.name === 'bio'}
-					textareaProps={{
-						rows: 6,
-						defaultValue: currentUser.bio
-					}}
-					defaultValue={currentUser[field.name]}
-					className='mt-5'
-					{...field}
-				/>
-			))}
+			<TextInput
+				type='username'
+				label='Username'
+				className='mt-6'
+				disabled={isSubmitting}
+				errors={errors.username?.message}
+				{...register('username')}
+			/>
+			<TextInput
+				type='name'
+				label='Name'
+				className='mt-6'
+				disabled={isSubmitting}
+				errors={errors.name?.message}
+				{...register('name')}
+			/>
+			<TextInput
+				type='email'
+				label='Email'
+				className='mt-6'
+				disabled={isSubmitting}
+				errors={errors.email?.message}
+				{...register('email')}
+			/>
+			<Textarea
+				label='Bio (optional)'
+				rows={6}
+				className='mt-6'
+				disabled={isSubmitting}
+				errors={errors.bio?.message}
+				{...register('bio')}
+			/>
 
-			{serverError && <ErrorMessage message={serverError} />}
+			{errors.root && <ErrorMessage message={errors.root.message} />}
 
 			<SubmitButton
 				pendingContent={<Loader text='Updating profile...' />}
 				size='sm'
 				className='mt-10 ml-auto'
+				disabled={isSubmitting}
 			>
 				Update Profile
 			</SubmitButton>

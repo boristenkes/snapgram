@@ -17,7 +17,7 @@ export default async function EditProfilePage() {
 				/>
 				Edit Profile
 			</h1>
-			<EditProfileForm profile={JSON.stringify(currentUser)} />
+			<EditProfileForm profile={currentUser} />
 		</main>
 	)
 }

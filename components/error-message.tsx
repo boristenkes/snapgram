@@ -2,12 +2,12 @@ import { cn } from '@/lib/utils'
 import Image from 'next/image'
 
 type ErrorMessageProps = {
-	message: string
+	message: string | undefined
 	className?: string
 }
 
 export default function ErrorMessage({
-	message,
+	message = 'Something went wrong. Please try again later.',
 	className
 }: ErrorMessageProps) {
 	return (

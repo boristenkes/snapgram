@@ -30,7 +30,7 @@ async function cleanUp() {
 
 type CreateStoryProps = {
 	formData: FormData
-	mentions: Mention[]
+	mentions: Mention[] | undefined
 	tags: string[]
 }
 
@@ -134,7 +134,7 @@ export async function fetchStoriesForToday(
 			currentUser.seenStories.includes(story._id) ? 1 : -1
 		)
 
-		const grouped = removeDuplicates(stories, 'author')
+		const grouped = removeDuplicates(stories, 'author') as StoryType[]
 
 		return { success: true, stories: grouped }
 	} catch (error: any) {

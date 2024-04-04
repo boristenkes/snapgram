@@ -2,7 +2,7 @@
 
 import connectMongoDB from '../mongoose'
 import User from '../models/user.model'
-import { createUserSchema, editProfileSchema } from '../validations/user'
+import { createUserSchema, editProfileSchema } from '../zod/user.schema'
 import { UTApi } from 'uploadthing/server'
 import { validateImage } from '../utils'
 import { revalidatePath } from 'next/cache'
@@ -10,42 +10,41 @@ import { getCurrentUser } from '../session'
 import { UserProfile } from '../types'
 import { FilterQuery } from 'mongoose'
 
+// TODO: Serialize return data with JSON.stringify(data)
+
 const uploadthingApi = new UTApi()
 
 const bcrypt = require('bcrypt')
 
 export async function createUser({ email, password }: Record<string, unknown>) {
-	const validationResult = createUserSchema.safeParse({ email, password })
-
-	if (!validationResult.success) {
-		let errorMessage = ''
-
-		const errors = validationResult.error.issues
-		errors.forEach(error => {
-			errorMessage += `${error.message}. `
-		})
-
-		return { error: errorMessage }
-	}
-
 	try {
+		const validationResult = createUserSchema.safeParse({ email, password })
+
+		if (!validationResult.success) {
+			let errorMessage = ''
+
+			const errors = validationResult.error.issues
+			errors.forEach(error => {
+				errorMessage += `${error.message}. `
+			})
+
+			throw new Error(errorMessage)
+		}
+
 		await connectMongoDB()
 
 		const existingUser = await User.exists({ email })
 
-		if (existingUser)
-			return {
-				error: 'User with this email already exists.'
-			}
+		if (existingUser) throw new Error('User with this email already exists.')
 
 		const hashedPassword = await bcrypt.hash(password, 10)
 
 		const newUser = await User.create({ email, password: hashedPassword })
 
-		return { email: newUser.email, password: newUser.password }
+		return { success: true, email: newUser.email, password: newUser.password }
 	} catch (error: any) {
 		console.error('Error creating new user:', error)
-		return { error: error.message }
+		return { success: false, message: error.message }
 	}
 }
 
@@ -62,20 +61,23 @@ export async function onboard(
 
 		const existingUser = await User.exists({ username: data.username })
 
-		if (existingUser) {
-			return {
-				error:
-					'User with this username already exists, please choose another one.'
-			}
-		}
+		if (existingUser)
+			throw new Error(
+				'User with this username already exists, please choose another one.'
+			)
 
-		await User.findByIdAndUpdate(userId, {
+		const response = await User.findByIdAndUpdate(userId, {
 			...data,
 			onboarded: true
 		})
+
+		if (response)
+			throw new Error('Failed to create user. Please try again later.')
+
+		return { success: true }
 	} catch (error: any) {
 		console.error('Failed to onboard user:', error)
-		return { error: error.message }
+		return { success: false, message: error.message }
 	}
 }
 
@@ -126,7 +128,7 @@ export async function fetchAllUsers({ select = '' }: fetchAllUsersProps = {}) {
 type FormObj = Record<string, FormDataEntryValue | string>
 
 type UpdateUserProps = {
-	_id: string
+	userId: string
 	formData: FormData
 	username: string
 	name: string
@@ -135,7 +137,7 @@ type UpdateUserProps = {
 }
 
 export async function updateUser({
-	_id,
+	userId,
 	formData,
 	username,
 	name,
@@ -187,8 +189,8 @@ export async function updateUser({
 		// If image is successfully uploaded, we're adding it to formObj
 		if (imageResponse?.data?.url) formObj.image = imageResponse?.data.url
 
-		const userBeforeUpdate = await User.findOneAndUpdate(
-			{ _id },
+		const userBeforeUpdate = await User.findByIdAndUpdate(
+			userId,
 			formObj
 		).select('image')
 
@@ -210,7 +212,6 @@ export async function updateUser({
 			}
 		}
 
-		revalidatePath('/profile/edit')
 		return { success: true, message: 'Successfully updated.' }
 	} catch (error: any) {
 		console.log('Error in `updateUser`:', error)

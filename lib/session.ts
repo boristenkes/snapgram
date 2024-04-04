@@ -105,7 +105,7 @@ const authOptions: NextAuthOptions = {
 export async function getCurrentUser() {
 	const session = (await getServerSession(authOptions)) as SessionType
 
-	return session
+	return JSON.parse(JSON.stringify(session))
 }
 
 export default authOptions

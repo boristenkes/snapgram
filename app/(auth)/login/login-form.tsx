@@ -2,77 +2,76 @@
 
 import { Button, TextInput } from '@/components/elements'
 import Image from 'next/image'
-import { loginUserSchema } from '@/lib/validations/user'
-import { Dispatch, SetStateAction, useState } from 'react'
+import { loginUserSchema, type LoginFields } from '@/lib/zod/user.schema'
 import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
-import { FormField } from '@/lib/types'
 import SubmitButton from '@/components/elements/submit-button'
 import Loader from '@/components/loader'
 import ErrorMessage from '@/components/error-message'
-
-const fields: FormField[] = [
-	{
-		type: 'email',
-		name: 'email',
-		label: 'email',
-		required: true
-	},
-	{
-		type: 'password',
-		name: 'password',
-		label: 'password',
-		required: true
-	}
-]
+import { useForm, type SubmitHandler } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
 
 export default function LoginForm() {
+	const {
+		register,
+		handleSubmit,
+		setError,
+		formState: { errors, isSubmitting }
+	} = useForm<LoginFields>({
+		resolver: zodResolver(loginUserSchema)
+	})
 	const router = useRouter()
-	const [formFields, setFormFields] = useState<FormField[]>(fields)
-	const [serverError, setServerError] = useState('')
 
-	const clientAction = async (formData: FormData) => {
-		const validationResult = validateForm(setFormFields, formData)
-
-		if (!validationResult) return
-
-		const { email, password } = validationResult.data
-
-		const fieldsBeforeReset = formFields
+	const onSubmit: SubmitHandler<LoginFields> = async data => {
 		const res = await signIn('credentials', {
-			redirect: false,
-			email,
-			password
+			email: data.email,
+			password: data.password,
+			redirect: false
 		})
-		if (!res?.error) {
-			router.push('/')
-		} else {
-			setServerError(res.error ?? 'Invalid email or password')
-			setFormFields(fieldsBeforeReset) // prevent form reset
+
+		if (res?.error) {
+			setError('root', { message: res.error })
+			return
 		}
+
+		router.replace('/')
 	}
 
 	return (
 		<form
-			action={clientAction}
+			onSubmit={handleSubmit(onSubmit)}
 			noValidate
 		>
-			{formFields.map(field => (
-				<TextInput
-					key={field.name}
-					className='mt-6'
-					{...field}
-				/>
-			))}
-			{serverError && <ErrorMessage message={serverError} />}
+			<TextInput
+				type='email'
+				label='Email'
+				className='mt-6'
+				disabled={isSubmitting}
+				errors={errors.email?.message}
+				{...register('email')}
+			/>
+			<TextInput
+				type='password'
+				label='Password'
+				className='mt-6'
+				disabled={isSubmitting}
+				errors={errors.password?.message}
+				{...register('password')}
+			/>
+
+			{errors.root && <ErrorMessage message={errors.root.message} />}
+
 			<SubmitButton
 				stretch
 				className='mt-8'
 				pendingContent={<Loader text='Please wait...' />}
+				disabled={isSubmitting}
 			>
 				Log in
 			</SubmitButton>
+
 			<div className='or-line' />
+
 			<Button
 				variant='light'
 				onClick={() => signIn('google', { callbackUrl: '/' })}
@@ -88,35 +87,4 @@ export default function LoginForm() {
 			</Button>
 		</form>
 	)
-}
-
-function validateForm(
-	setFormFields: Dispatch<SetStateAction<FormField[]>>,
-	formData: FormData
-) {
-	// client-side validation
-	const validationResult = loginUserSchema.safeParse({
-		email: formData.get('email'),
-		password: formData.get('password')
-	})
-
-	// clear previous errors
-	setFormFields(prevFields =>
-		prevFields.map(field => ({ ...field, errors: [] }))
-	)
-
-	// display new errors, if there are any
-	if (!validationResult.success) {
-		const formattedErrors = validationResult.error.format()
-
-		setFormFields(prevFields =>
-			prevFields.map(field => ({
-				...field,
-				// @ts-ignore
-				errors: formattedErrors[field.name]?._errors || []
-			}))
-		)
-		return
-	}
-	return validationResult
 }

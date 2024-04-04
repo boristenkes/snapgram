@@ -6,10 +6,8 @@ export type FormField = InputHTMLAttributes<HTMLInputElement> & {
 	name: string
 	label?: string
 	description?: string
-	errors?: string[]
-	textarea?: boolean
+	errors?: string | string[]
 	labelProps?: React.LabelHTMLAttributes<HTMLLabelElement>
-	textareaProps?: React.TextareaHTMLAttributes<HTMLTextAreaElement>
 }
 
 export type SessionType = Session & {

@@ -93,7 +93,7 @@ export default async function Profile({ user, currentUser }: ProfileProps) {
 						/>
 					</div>
 
-					<pre className='text-base w-paragraph font-inherit hidden | large:block'>
+					<pre className='text-base w-paragraph font-inherit hidden | small:block'>
 						{user?.bio || (
 							<span className='text-neutral-500 italic'>No bio</span>
 						)}

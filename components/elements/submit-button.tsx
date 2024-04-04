@@ -25,7 +25,7 @@ export default function SubmitButton({
 			className={className}
 			{...rest}
 		>
-			{pending ? pendingContent || children : children}
+			{disabled || pending ? pendingContent || children : children}
 		</Button>
 	)
 }
