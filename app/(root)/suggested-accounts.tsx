@@ -1,15 +1,20 @@
 import FollowButton from '@/components/follow-button'
 import Avatar from '@/components/avatar'
-import { fetchSuggestedAccounts } from '@/lib/actions/user.actions'
+import { fetchUsers } from '@/lib/actions/user.actions'
 import { getCurrentUser } from '@/lib/session'
-import { UserProfile } from '@/lib/types'
 import Link from 'next/link'
+import ErrorMessage from '@/components/error-message'
 
 export default async function SuggestedAccounts() {
 	const { user: currentUser } = await getCurrentUser()
-	const suggestedAccounts: UserProfile[] = JSON.parse(
-		(await fetchSuggestedAccounts(currentUser)) as string
+	const response = await fetchUsers(
+		{ _id: { $ne: currentUser._id } },
+		'image username name'
 	)
+
+	if (!response.success) return <ErrorMessage message={response.message} />
+
+	const suggestedAccounts = response.users
 
 	return (
 		<div className='py-8 space-y-4'>

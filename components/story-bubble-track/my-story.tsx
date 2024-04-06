@@ -2,7 +2,7 @@ import Link from 'next/link'
 import Avatar from '../avatar'
 import Image from 'next/image'
 import { UserProfile } from '@/lib/types'
-import { fetchActiveStories } from '@/lib/actions/story.actions'
+import { fetchStories } from '@/lib/actions/story.actions'
 import ErrorMessage from '../error-message'
 import StoryBubble from '../story-bubble'
 
@@ -11,13 +11,18 @@ export default async function MyStory({
 }: {
 	currentUser: UserProfile
 }) {
-	const response = await fetchActiveStories(currentUser._id)
+	const response = await fetchStories({
+		author: currentUser._id,
+		createdAt: {
+			$gte: new Date(new Date().getTime() - 24 * 60 * 60 * 1000) // is posted within last 24h
+		}
+	})
 
 	if (!response.success) {
 		return <ErrorMessage message={response.message} />
 	}
 
-	const { activeStories } = response
+	const { stories: activeStories } = response
 
 	return !!activeStories?.length ? (
 		<StoryBubble

@@ -1,9 +1,6 @@
 import { UserProfile } from '@/lib/types'
-import PostList from '@/components/post-list'
 import ProfileHeader from './profile-header'
-import { fetchUserPosts } from '@/lib/actions/post.actions'
-import ErrorMessage from '../error-message'
-import { Suspense } from 'react'
+import ProfilePosts from './profile-posts'
 
 type ProfileProps = {
 	user: UserProfile
@@ -12,13 +9,6 @@ type ProfileProps = {
 
 export default async function Profile({ user, currentUser }: ProfileProps) {
 	const isCurrentUser = user?._id === currentUser?._id
-	const response = await fetchUserPosts(user._id)
-
-	if (!response.success) {
-		return <ErrorMessage message={response.message} />
-	}
-
-	const { posts } = response
 
 	return (
 		<main className='w-[min(65.5rem,100%-2rem)] my-10 mx-auto px-4 | large:my-20 large:px-16'>
@@ -29,7 +19,11 @@ export default async function Profile({ user, currentUser }: ProfileProps) {
 
 			{/* <Highlights /> */}
 
-			<PostList posts={posts} />
+			<ProfilePosts
+				isCurrentUser={isCurrentUser}
+				userId={user._id.toString()}
+				username={user.username!}
+			/>
 		</main>
 	)
 }

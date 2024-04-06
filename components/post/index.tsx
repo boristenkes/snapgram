@@ -11,6 +11,7 @@ export default function Post({ post }: { post: PostType }) {
 					alt={post.altText}
 					width={330}
 					height={315}
+					className='w-full h-full object-cover'
 				/>
 				{post.content.length > 1 && (
 					<Image

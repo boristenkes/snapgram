@@ -8,6 +8,7 @@ const highlightSchema = new mongoose.Schema({
 	thumbnail: String
 })
 
-const Highlight = mongoose.model('Highlight', highlightSchema)
+const Highlight =
+	mongoose.models.Highlight || mongoose.model('Highlight', highlightSchema)
 
 export default Highlight

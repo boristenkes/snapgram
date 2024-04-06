@@ -1,6 +1,6 @@
 import ErrorMessage from '@/components/error-message'
 import Profile from '@/components/profile'
-import { fetchAllUsers, getUserProfile } from '@/lib/actions/user.actions'
+import { fetchUser, fetchUsers } from '@/lib/actions/user.actions'
 import { getCurrentUser } from '@/lib/session'
 
 type ProfilePageProps = {
@@ -12,9 +12,11 @@ type ProfilePageProps = {
 export const revalidate = 3600 // 1h
 
 export async function generateStaticParams() {
-	const users = await fetchAllUsers({ select: 'username' })
+	const response = await fetchUsers({ username: { $exists: true } }, 'username')
 
-	return users?.map(user => ({
+	if (!response.success) return []
+
+	return response.users.map(user => ({
 		username: user.username
 	}))
 }
@@ -40,7 +42,10 @@ export default async function ProfilePage({
 			/>
 		)
 
-	const response = await getUserProfile({ username })
+	const response = await fetchUser(
+		{ username },
+		'image name username postsCount followersCount followingCount bio posts private verified'
+	)
 
 	if (!response.success) {
 		return <ErrorMessage message={response.message} />

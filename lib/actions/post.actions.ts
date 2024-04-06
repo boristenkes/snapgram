@@ -7,7 +7,7 @@ import { getCurrentUser } from '../session'
 import Post from '../models/post.model'
 import { revalidatePath } from 'next/cache'
 import User from '../models/user.model'
-import { type Post as PostType } from '../types'
+import { UserProfile, type Post as PostType } from '../types'
 
 let isCleanedUp = false
 
@@ -76,21 +76,60 @@ export async function createPost({
 	}
 }
 
-type FetchAllStoriesProps = {
-	select: string
-}
+type FetchPost =
+	| { success: true; post: PostType }
+	| { success: false; message: string }
 
-export async function fetchAllPosts({ select = '' }: FetchAllStoriesProps) {
+export async function fetchPost(
+	conditions: Record<string, string>,
+	fields?: string,
+	populate?: string
+): Promise<FetchPost> {
 	try {
 		await connectMongoDB()
 
-		const posts = await Post.find().select(select)
+		let query = Post.findOne(conditions, fields)
 
-		if (!posts) throw new Error('Failed to fetch all stories')
+		if (populate?.length) {
+			query = query.populate(populate)
+		}
 
-		return { success: true, posts }
+		const post = await query.exec()
+
+		if (!post) throw new Error('Failed to fetch post')
+
+		return { success: true, post: JSON.parse(JSON.stringify(post)) }
 	} catch (error: any) {
-		console.log('Error in `fetchAllPosts`:', error)
+		console.error('`fetchPost`:', error)
+		return { success: false, message: error.message }
+	}
+}
+
+type FetchPosts =
+	| { success: true; posts: PostType[] }
+	| { success: false; message: string }
+
+export async function fetchPosts(
+	conditions: Record<any, any>,
+	fields?: string,
+	populate?: string
+): Promise<FetchPosts> {
+	try {
+		await connectMongoDB()
+
+		let query = Post.find(conditions, fields)
+
+		if (populate?.length) {
+			query.populate(populate)
+		}
+
+		const posts = await query.exec()
+
+		if (!posts) throw new Error('Failed to fetch posts')
+
+		return { success: true, posts: JSON.parse(JSON.stringify(posts)) }
+	} catch (error: any) {
+		console.log('`fetchPosts`:', error)
 		return { success: false, message: error.message }
 	}
 }
@@ -123,7 +162,7 @@ export async function fetchPostsForUser(
 
 		if (!posts) throw new Error('Failed to fetch posts. Please try again later')
 
-		return { success: true, posts }
+		return { success: true, posts: JSON.parse(JSON.stringify(posts)) }
 	} catch (error: any) {
 		console.log('Error in `fetchPostsForUser`:', error)
 		return { success: false, message: error.message }
@@ -145,28 +184,9 @@ export async function fetchTopPostsByUser(userId: string) {
 
 		if (!posts) throw new Error('Failed to fetch posts')
 
-		return { success: true, posts }
+		return { success: true, posts: JSON.parse(JSON.stringify(posts)) }
 	} catch (error: any) {
 		console.log('Error in `fetchTopPostsByUser`:', error)
-		return { success: false, message: error.message }
-	}
-}
-
-type FetchUserPosts =
-	| { success: true; posts: PostType[] }
-	| { success: false; message: string }
-
-export async function fetchUserPosts(userId: string): Promise<FetchUserPosts> {
-	try {
-		await connectMongoDB()
-
-		const posts = await Post.find({ author: userId })
-
-		if (!posts) throw new Error('Failed to fetch posts.')
-
-		return { success: true, posts }
-	} catch (error: any) {
-		console.log('Error in `fetchUserPosts`:', error)
 		return { success: false, message: error.message }
 	}
 }

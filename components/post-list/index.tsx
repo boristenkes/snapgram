@@ -9,7 +9,10 @@ export default function PostList({ posts }: PostListProps) {
 	return (
 		<div className='grid grid-cols-3 mt-14 gap-2 w-full'>
 			{posts.map(post => (
-				<Post post={post} />
+				<Post
+					key={post._id.toString()}
+					post={post}
+				/>
 			))}
 		</div>
 	)

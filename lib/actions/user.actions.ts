@@ -10,8 +10,6 @@ import { getCurrentUser } from '../session'
 import { UserProfile } from '../types'
 import { FilterQuery } from 'mongoose'
 
-// TODO: Serialize return data with JSON.stringify(data)
-
 const uploadthingApi = new UTApi()
 
 const bcrypt = require('bcrypt')
@@ -81,48 +79,62 @@ export async function onboard(
 	}
 }
 
+type FetchUser =
+	| { success: true; user: UserProfile }
+	| { success: false; message: string }
+
 export async function fetchUser(
-	userId: string,
-	props?: Parameters<typeof User.findById>[0]
-) {
-	if (!userId) return
-
+	conditions: Record<string, string>,
+	fields?: string,
+	populate?: string
+): Promise<FetchUser> {
 	try {
 		await connectMongoDB()
 
-		const user = await User.findById(userId, props)
+		let query = User.findOne(conditions, fields)
 
-		return JSON.stringify(user)
-	} catch (error) {
-		console.error('User not found in `fetchUser()`:', error)
-	}
-}
+		if (populate?.length) {
+			query = query.populate(populate)
+		}
 
-export async function getUserProfile({ username }: { username: string }) {
-	try {
-		await connectMongoDB()
+		const user = await query.exec()
 
-		const user = await User.findOne({ username }).select(
-			'image name username postsCount followersCount followingCount bio posts private verified'
-		)
+		if (!user) throw new Error('Failed to fetch user')
 
-		return { success: true, user }
+		return { success: true, user: JSON.parse(JSON.stringify(user)) }
 	} catch (error: any) {
-		console.error('User not found in `getUserProfile()`:', error)
+		console.error('`fetchUser`:', error)
 		return { success: false, message: error.message }
 	}
 }
 
-type fetchAllUsersProps = {
-	select?: string | string[]
-}
+type FetchUsers =
+	| { success: true; users: UserProfile[] }
+	| { success: false; message: string }
 
-export async function fetchAllUsers({ select = '' }: fetchAllUsersProps = {}) {
-	await connectMongoDB()
+export async function fetchUsers(
+	conditions: Record<any, any>,
+	fields?: string,
+	populate?: string
+): Promise<FetchUsers> {
+	try {
+		await connectMongoDB()
 
-	const users = await User.find().select(select)
+		let query = User.find(conditions, fields)
 
-	return users
+		if (populate?.length) {
+			query.populate(populate)
+		}
+
+		const users = await query.exec()
+
+		if (!users) throw new Error('Failed to fetch users')
+
+		return { success: true, users: JSON.parse(JSON.stringify(users)) }
+	} catch (error: any) {
+		console.log('`fetchUsers`:', error)
+		return { success: false, message: error.message }
+	}
 }
 
 type FormObj = Record<string, FormDataEntryValue | string>
@@ -322,22 +334,6 @@ export async function searchUsers(searchTerm: string) {
 		return JSON.stringify(searchResults)
 	} catch (error: any) {
 		console.log('Error searching users:', error)
-	}
-}
-
-export async function fetchSuggestedAccounts(currentUser: UserProfile) {
-	if (!currentUser) return
-
-	try {
-		await connectMongoDB()
-
-		const users = await User.find({
-			_id: { $ne: currentUser._id } // exclude current user
-		}).select('image username name')
-
-		return JSON.stringify(users)
-	} catch (error) {
-		console.log('Error fetching suggested accounts:', error)
 	}
 }
 

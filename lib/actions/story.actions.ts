@@ -86,18 +86,60 @@ export async function createStory({
 	}
 }
 
-export async function fetchStory(storyId: string) {
-	try {
-		if (!storyId) throw new Error('Story ID not provided')
+type FetchStory =
+	| { success: true; story: StoryType }
+	| { success: false; message: string }
 
+export async function fetchStory(
+	conditions: Record<string, string>,
+	fields?: string,
+	populate?: string
+): Promise<FetchStory> {
+	try {
 		await connectMongoDB()
 
-		const story = await Story.findById(storyId)
+		let query = Story.findOne(conditions, fields)
 
-		if (!story) throw new Error('Story not found')
+		if (populate?.length) {
+			query = query.populate(populate)
+		}
 
-		return { success: true, story }
+		const story = await query.exec()
+
+		if (!story) throw new Error('Failed to fetch story')
+
+		return { success: true, story: JSON.parse(JSON.stringify(story)) }
 	} catch (error: any) {
+		console.error('`fetchStory`:', error)
+		return { success: false, message: error.message }
+	}
+}
+
+type FetchStories =
+	| { success: true; stories: StoryType[] }
+	| { success: false; message: string }
+
+export async function fetchStories(
+	conditions: Record<any, any>,
+	fields?: string,
+	populate?: string
+): Promise<FetchStories> {
+	try {
+		await connectMongoDB()
+
+		let query = Story.find(conditions, fields)
+
+		if (populate?.length) {
+			query.populate(populate)
+		}
+
+		const stories = await query.exec()
+
+		if (!stories) throw new Error('Failed to fetch stories')
+
+		return { success: true, stories: JSON.parse(JSON.stringify(stories)) }
+	} catch (error: any) {
+		console.log('`fetchStories`:', error)
 		return { success: false, message: error.message }
 	}
 }
@@ -139,60 +181,6 @@ export async function fetchStoriesForToday(
 		return { success: true, stories: grouped }
 	} catch (error: any) {
 		console.log('Error in `fetchStoriesForToday`:', error)
-		return { success: false, message: error.message }
-	}
-}
-
-type FetchActiveStories =
-	| { success: true; activeStories: StoryType[] }
-	| { success: false; message: string }
-
-export async function fetchActiveStories(
-	userId: string
-): Promise<FetchActiveStories> {
-	try {
-		await connectMongoDB()
-
-		const activeStories = await Story.find({
-			author: userId,
-			...isPostedWithinLast24h
-		})
-
-		return { success: true, activeStories }
-	} catch (error: any) {
-		console.log('Error in `fetchActiveStories`:', error)
-		return { success: false, message: error.message }
-	}
-}
-
-type FetchAllStoriesProps = {
-	select?: string
-}
-
-export async function fetchAllStories({ select = '' }: FetchAllStoriesProps) {
-	try {
-		await connectMongoDB()
-
-		const stories = await Story.find().select(select)
-
-		if (!stories) throw new Error('Failed to fetch stories')
-
-		return { success: true, stories }
-	} catch (error: any) {
-		console.log('Error in `fetchAllStories`:', error)
-		return { success: false, message: error.message }
-	}
-}
-
-export async function fetchUserStories(userId: string) {
-	try {
-		await connectMongoDB()
-
-		const stories = await Story.find<StoryType>({ author: userId })
-
-		return { success: true, stories }
-	} catch (error: any) {
-		console.log('Error in `fetchUserStories`:', error)
 		return { success: false, message: error.message }
 	}
 }
