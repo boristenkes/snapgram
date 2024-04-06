@@ -1,5 +1,6 @@
 import Image from 'next/image'
 import ErrorMessage from '../error-message'
+import { imageTypes, videoTypes } from '@/constants'
 
 type PostContentProps = {
 	src: string
@@ -8,9 +9,6 @@ type PostContentProps = {
 	height: number
 	className?: string
 }
-
-const imageTypes = ['jpeg', 'jpg', 'png', 'webp']
-const videoTypes = ['mp4', 'webm', 'ogg']
 
 export default function PostContent({
 	src,

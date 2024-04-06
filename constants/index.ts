@@ -1,6 +1,6 @@
 import { deepFreeze } from '@/lib/utils'
 
-const sidebarLinks = [
+export const sidebarLinks = [
 	{
 		title: 'Home',
 		path: '/',
@@ -61,7 +61,7 @@ const sidebarLinks = [
 
 deepFreeze(sidebarLinks)
 
-const topbarLinks = [
+export const topbarLinks = [
 	{
 		title: 'Create Post',
 		path: '/post/new',
@@ -91,7 +91,7 @@ const topbarLinks = [
 
 deepFreeze(topbarLinks)
 
-const bottombarLinks = [
+export const bottombarLinks = [
 	{
 		title: 'Home',
 		path: '/',
@@ -128,4 +128,5 @@ const bottombarLinks = [
 
 deepFreeze(bottombarLinks)
 
-export { sidebarLinks, topbarLinks, bottombarLinks }
+export const imageTypes = ['jpeg', 'jpg', 'png', 'webp']
+export const videoTypes = ['mp4', 'webm', 'ogg']

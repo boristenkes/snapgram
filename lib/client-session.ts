@@ -4,5 +4,7 @@ import { useSession } from 'next-auth/react'
 
 export default function clientSession() {
 	const session = useSession()
-	return { session, user: session.data?.user }
+	// @ts-ignore
+	const { user } = session.data
+	return { session, user }
 }

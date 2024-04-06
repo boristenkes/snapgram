@@ -3,6 +3,7 @@
 import { id } from '@/lib/utils'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
+import PostContent from '../post-content'
 
 type PreviewsProps = {
 	files: File[]
@@ -13,6 +14,7 @@ export type Preview = {
 	id: string
 	url: string
 	alt: string
+	type: string
 }
 
 export default function Previews({ files, initialPreviews }: PreviewsProps) {
@@ -37,7 +39,8 @@ export default function Previews({ files, initialPreviews }: PreviewsProps) {
 					return {
 						id: id(),
 						url: result,
-						alt: file.name
+						alt: file.name,
+						type: file.type
 					}
 				})
 			)
@@ -56,13 +59,22 @@ export default function Previews({ files, initialPreviews }: PreviewsProps) {
 						key={preview.id}
 						className='relative isolate flex-none'
 					>
-						<Image
-							src={preview.url}
-							alt={preview.alt}
-							width={80}
-							height={80}
-							className='rounded-lg overflow-hidden border p-px aspect-square object-cover'
-						/>
+						{preview.url.includes('image/') ? (
+							<Image
+								src={preview.url}
+								alt={preview.alt}
+								width={80}
+								height={80}
+								className='rounded-lg overflow-hidden border p-px aspect-square object-cover'
+							/>
+						) : (
+							<video
+								src={preview.url}
+								width={80}
+								height={80}
+								className='rounded-lg overflow-hidden border p-px aspect-square object-cover'
+							/>
+						)}
 					</li>
 				))}
 			</ul>

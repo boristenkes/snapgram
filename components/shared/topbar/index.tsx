@@ -23,7 +23,7 @@ export default function Topbar() {
 	}, [pathname])
 
 	return (
-		<header className='sticky top-0 z-40 w-screen | md:hidden'>
+		<header className='sticky top-0 z-40 w-full | md:hidden'>
 			<div className='flex justify-between items-center py-3 px-4 bg-neutral-800 border-b-2 border-b-neutral-700'>
 				<Link href='/'>
 					<Image
