@@ -1,7 +1,7 @@
 import { fetchPostsForUser } from '@/lib/actions/post.actions'
 import { getCurrentUser } from '@/lib/session'
 import ErrorMessage from '../error-message'
-import FeedPost from './feed-post'
+import Post from '@/components/post'
 
 export default async function Feed() {
 	const { user: currentUser } = await getCurrentUser()
@@ -11,13 +11,11 @@ export default async function Feed() {
 
 	if (!response.success) return <ErrorMessage message={response.message} />
 
-	const { posts } = response
-
 	return (
 		<ul className='mx-auto mb-10 space-y-10 w-[min(37.5rem,100%-2rem)]'>
-			{posts?.map(post => (
+			{response.posts?.map(post => (
 				<li key={post._id}>
-					<FeedPost post={post} />
+					<Post post={post} />
 				</li>
 			))}
 		</ul>

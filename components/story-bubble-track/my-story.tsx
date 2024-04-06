@@ -1,16 +1,12 @@
 import Link from 'next/link'
 import Avatar from '../avatar'
 import Image from 'next/image'
-import { UserProfile } from '@/lib/types'
+import { User } from '@/lib/types'
 import { fetchStories } from '@/lib/actions/story.actions'
 import ErrorMessage from '../error-message'
 import StoryBubble from '../story-bubble'
 
-export default async function MyStory({
-	currentUser
-}: {
-	currentUser: UserProfile
-}) {
+export default async function MyStory({ currentUser }: { currentUser: User }) {
 	const response = await fetchStories({
 		author: currentUser._id,
 		createdAt: {

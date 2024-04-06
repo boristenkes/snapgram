@@ -1,6 +1,6 @@
 import Avatar from '@/components/avatar'
 import ErrorMessage from '@/components/error-message'
-import Post from '@/components/post'
+import PostCard from '@/components/post-card'
 import { fetchTopPostsByUser } from '@/lib/actions/post.actions'
 import { getCurrentUser } from '@/lib/session'
 import { cn } from '@/lib/utils'
@@ -12,7 +12,6 @@ export default async function TopPosts({
 }) {
 	const { user: currentUser } = await getCurrentUser()
 	const response = await fetchTopPostsByUser(currentUser._id)
-	const posts = response.posts ?? []
 
 	return (
 		<aside
@@ -38,9 +37,9 @@ export default async function TopPosts({
 					<ErrorMessage message={response.message} />
 				) : (
 					<ul className='space-y-6'>
-						{posts.map(post => (
-							<li key={post._id}>
-								<Post post={post} />
+						{response.posts.map(post => (
+							<li key={post._id.toString()}>
+								<PostCard post={post} />
 							</li>
 						))}
 					</ul>

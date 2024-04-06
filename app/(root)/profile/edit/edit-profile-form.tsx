@@ -12,9 +12,9 @@ import ErrorMessage from '@/components/error-message'
 import Dropzone from '@/components/dropzone'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
-import { UserProfile } from '@/lib/types'
+import { User } from '@/lib/types'
 
-export default function EditProfileForm({ profile }: { profile: UserProfile }) {
+export default function EditProfileForm({ profile }: { profile: User }) {
 	const currentUser = profile
 	const {
 		register,

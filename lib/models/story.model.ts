@@ -1,7 +1,7 @@
 import mongoose from 'mongoose'
-import { Story } from '../types'
+import { Story as StoryType } from '../types'
 
-const storySchema = new mongoose.Schema<Story>(
+const storySchema = new mongoose.Schema<StoryType>(
 	{
 		author: {
 			type: mongoose.SchemaTypes.ObjectId,

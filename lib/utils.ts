@@ -60,11 +60,8 @@ export function validateImage(
 	return { success: !errors.length, errors }
 }
 
-export function removeDuplicates(
-	array: any[] | undefined,
-	id?: string | number
-) {
-	if (!array) return
+export function removeDuplicates<T>(array: T[], id?: string | number): T[] {
+	if (!array) return []
 
 	if (typeof array[0] !== 'object') {
 		return Array.from(new Set([...array]))
@@ -73,7 +70,8 @@ export function removeDuplicates(
 	if (!id) throw new Error('id is required when array contains objects')
 
 	return array.filter(
-		(item, index, self) => index === self.findIndex(t => t[id] === item[id])
+		(item, index, self) =>
+			index === self.findIndex(t => (t as any)[id] === (item as any)[id])
 	)
 }
 

@@ -24,21 +24,15 @@ export const newStorySchema = z.object({
 	mentions: z
 		.array(mentionSchema)
 		.optional()
-		.transform(
-			tags =>
-				removeDuplicates(tags?.map(tag => tag.trim().toLowerCase())) as
-					| string[]
-					| undefined
+		.transform(tags =>
+			removeDuplicates(tags?.map(tag => tag.trim().toLowerCase()) as string[])
 		),
 	tags: z
 		.array(tagSchema)
 		.max(30, 'You can only specify 30 tags')
 		.optional()
-		.transform(
-			tags =>
-				removeDuplicates(tags?.map(tag => tag.trim().toLowerCase())) as
-					| string[]
-					| undefined
+		.transform(tags =>
+			removeDuplicates(tags?.map(tag => tag.trim().toLowerCase()) as string[])
 		),
 	altText: z
 		.string()

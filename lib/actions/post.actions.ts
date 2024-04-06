@@ -7,7 +7,7 @@ import { getCurrentUser } from '../session'
 import Post from '../models/post.model'
 import { revalidatePath } from 'next/cache'
 import User from '../models/user.model'
-import { UserProfile, type Post as PostType } from '../types'
+import { type Post as PostType } from '../types'
 
 let isCleanedUp = false
 
@@ -139,10 +139,14 @@ type FetchPostsForUserOptions = {
 	populateAuthor?: boolean
 }
 
+type FetchPostsForUser =
+	| { success: true; posts: PostType[] }
+	| { success: false; message: string }
+
 export async function fetchPostsForUser(
 	following?: string[],
 	{ select = '', populateAuthor = false }: FetchPostsForUserOptions = {}
-) {
+): Promise<FetchPostsForUser> {
 	try {
 		if (!following) throw new Error('`following` not provided')
 
@@ -169,7 +173,13 @@ export async function fetchPostsForUser(
 	}
 }
 
-export async function fetchTopPostsByUser(userId: string) {
+type FetchTopPostsByUser =
+	| { success: true; posts: PostType[] }
+	| { success: false; message: string }
+
+export async function fetchTopPostsByUser(
+	userId: string
+): Promise<FetchTopPostsByUser> {
 	try {
 		if (!userId) throw new Error('User ID not provided')
 

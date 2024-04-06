@@ -6,7 +6,7 @@ import {
 	unsendFollowRequest
 } from '@/lib/actions/user.actions'
 import { useMemo } from 'react'
-import { UserProfile } from '@/lib/types'
+import { TODO, User } from '@/lib/types'
 import Loader from './loader'
 import SubmitButton from './elements/submit-button'
 
@@ -70,12 +70,9 @@ export default function FollowButton({
 	)
 }
 
-function determineButtonData(
-	currentUser: UserProfile,
-	targetUser: UserProfile
-): ButtonData {
+function determineButtonData(currentUser: User, targetUser: User): ButtonData {
 	const isCurrentUserFollower = currentUser?.following?.includes(
-		targetUser?._id
+		targetUser?._id as TODO
 	)
 
 	if (isCurrentUserFollower) {
@@ -90,7 +87,7 @@ function determineButtonData(
 
 	if (targetUser.private) {
 		const isFollowRequestSent = targetUser.followRequests?.includes(
-			currentUser?._id
+			currentUser?._id as TODO
 		)
 
 		if (isFollowRequestSent) {

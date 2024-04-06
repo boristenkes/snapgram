@@ -3,6 +3,7 @@ import { fetchStoriesForToday } from '@/lib/actions/story.actions'
 import ErrorMessage from '../error-message'
 import MyStory from './my-story'
 import StoryBubble from '../story-bubble'
+import { User } from '@/lib/types'
 
 export default async function StoryBubbleTrack() {
 	const { user: currentUser } = await getCurrentUser()
@@ -25,7 +26,7 @@ export default async function StoryBubbleTrack() {
 				{response.stories?.map(story => (
 					<StoryBubble
 						key={story._id}
-						author={story.author}
+						author={story.author as User}
 						storyId={story._id.toString()}
 					/>
 				))}

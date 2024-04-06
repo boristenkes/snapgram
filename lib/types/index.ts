@@ -1,6 +1,7 @@
-import mongoose from 'mongoose'
 import { Session } from 'next-auth'
 import { InputHTMLAttributes } from 'react'
+
+export type TODO = any
 
 export type FormField = InputHTMLAttributes<HTMLInputElement> & {
 	name: string
@@ -11,7 +12,7 @@ export type FormField = InputHTMLAttributes<HTMLInputElement> & {
 }
 
 export type SessionType = Session & {
-	user: UserProfile & {
+	user: User & {
 		id: string
 		name: string
 		username: string
@@ -20,67 +21,68 @@ export type SessionType = Session & {
 	}
 }
 
-export type UserProfile = { _id: string } & Partial<{
+export type User = {
+	_id: string
 	name: string
 	username: string
 	email: string
 	image: string
 	bio: string
-	followRequests: string[]
+	followRequests: User[] | string[]
 	followRequestsCount: number
-	followers: string[]
+	followers: User[] | string[]
 	followersCount: number
-	following: string[]
+	following: User[] | string[]
 	followingCount: number
 	highlights: string[]
-	likedPosts: string[]
-	posts: Post[]
+	likedPosts: Post[] | string[]
+	posts: Post[] | string[]
 	postsCount: number
 	private: boolean
-	savedPosts: string[]
-	seenStories: string[]
-	stories: Story[]
+	savedPosts: Post[] | string[]
+	seenStories: Story[] | string[]
+	stories: Story[] | string[]
 	verified: boolean
 	onboarded: boolean
-}>
+}
 
 export type Story = {
 	_id: string
-	author: UserProfile
+	author: User | string
 	content: string
 	alt?: string
-	mentions: UserProfile[]
+	mentions: User[] | string[]
 	tags: string
-	views: UserProfile[]
+	views: User[] | string[]
 	createdAt: Date
 	updatedAt: Date
 }
 
 export type Post = {
-	_id: mongoose.Schema.Types.ObjectId
-	author: UserProfile
+	_id: string
+	author: User
 	caption: string
 	tags: string[]
 	type: 'photo' | 'video' | 'gallery' | 'reel'
 	content: string[]
 	altText: string
-	likes: UserProfile[]
+	likes: User[] | string[]
 	likeCount: number
-	comments: Comment[]
+	comments: Comment[] | string[]
 	commentCount: number
-	shares: UserProfile[]
+	shares: User[] | string[]
 	shareCount: number
-	taggedUsers: UserProfile[]
+	taggedUsers: User[] | string[]
 	taggedUsersCount: number
 	createdAt: string
 	updatedAt: string
 }
 
 export type Comment = {
-	author: UserProfile
+	author: User | string
 	postId: string
 	content: string
-	replies: Comment[]
-	likes: UserProfile[]
+	replies: Comment[] | string[]
+	likes: User[]
 	likeCount: number
 }

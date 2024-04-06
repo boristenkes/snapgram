@@ -7,7 +7,7 @@ import { UTApi } from 'uploadthing/server'
 import { validateImage } from '../utils'
 import { revalidatePath } from 'next/cache'
 import { getCurrentUser } from '../session'
-import { UserProfile } from '../types'
+import { User as UserType } from '../types'
 import { FilterQuery } from 'mongoose'
 
 const uploadthingApi = new UTApi()
@@ -80,7 +80,7 @@ export async function onboard(
 }
 
 type FetchUser =
-	| { success: true; user: UserProfile }
+	| { success: true; user: UserType }
 	| { success: false; message: string }
 
 export async function fetchUser(
@@ -109,7 +109,7 @@ export async function fetchUser(
 }
 
 type FetchUsers =
-	| { success: true; users: UserProfile[] }
+	| { success: true; users: UserType[] }
 	| { success: false; message: string }
 
 export async function fetchUsers(
@@ -353,7 +353,7 @@ export async function handleOnboardingBackButtonClick({
 	}
 }
 
-export async function deleteUser(filters: FilterQuery<UserProfile>) {
+export async function deleteUser(filters: FilterQuery<UserType>) {
 	try {
 		await connectMongoDB()
 

@@ -1,10 +1,10 @@
-import { UserProfile } from '@/lib/types'
+import { User } from '@/lib/types'
 import ProfileHeader from './profile-header'
 import ProfilePosts from './profile-posts'
 
 type ProfileProps = {
-	user: UserProfile
-	currentUser: UserProfile
+	user: User
+	currentUser: User
 }
 
 export default async function Profile({ user, currentUser }: ProfileProps) {

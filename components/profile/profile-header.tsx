@@ -1,12 +1,12 @@
 import { getCurrentUser } from '@/lib/session'
 import Avatar from '../avatar'
-import { UserProfile } from '@/lib/types'
+import { User } from '@/lib/types'
 import Image from 'next/image'
 import { Button } from '../elements'
 import FollowButton from '../follow-button'
 
 type ProfileHeaderProps = {
-	user: UserProfile
+	user: User
 	isCurrentUser: boolean
 }
 

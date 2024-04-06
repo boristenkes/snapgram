@@ -3,11 +3,11 @@ import { cn } from '@/lib/utils'
 import Link from 'next/link'
 import ErrorMessage from './error-message'
 import Avatar from './avatar'
-import { UserProfile } from '@/lib/types'
+import { User } from '@/lib/types'
 
 type StoryBubbleProps = {
 	storyId: string
-	author: UserProfile
+	author: User
 }
 
 export default async function StoryBubble({
