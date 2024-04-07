@@ -1,3 +1,4 @@
+import Unavailable from '@/components/unavailable'
 import Image from 'next/image'
 
 type ShareButtonProps = {
@@ -12,19 +13,21 @@ export default function ShareButton({
 	shareCount
 }: ShareButtonProps) {
 	return (
-		<form>
-			<button
-				type='submit'
-				className='flex items-center gap-2'
-			>
-				<Image
-					src='/assets/icons/share.svg'
-					alt='Share'
-					width={20}
-					height={20}
-				/>
-				{shareCount}
-			</button>
-		</form>
+		<Unavailable>
+			<form>
+				<button
+					type='submit'
+					className='flex items-center gap-2'
+				>
+					<Image
+						src='/assets/icons/share.svg'
+						alt='Share'
+						width={20}
+						height={20}
+					/>
+					{shareCount}
+				</button>
+			</form>
+		</Unavailable>
 	)
 }

@@ -4,6 +4,7 @@ import Link from 'next/link'
 import ErrorMessage from './error-message'
 import Avatar from './avatar'
 import { User } from '@/lib/types'
+import Unavailable from './unavailable'
 
 type StoryBubbleProps = {
 	storyId: string
@@ -23,23 +24,25 @@ export default async function StoryBubble({
 
 	return (
 		<li className='relative flex-none text-center'>
-			<Link href={`/stories/${author._id}`}>
-				<div
-					className={cn('rounded-full p-[3px] w-fit mx-auto', {
-						'story-unseen': !isSeen,
-						'story-seen': isSeen
-					})}
-				>
-					<Avatar
-						url={author.image}
-						alt={`${author.username}'s story`}
-						width={62}
-						height={62}
-						className='p-0.5 mx-auto'
-					/>
-				</div>
-				{author.username}
-			</Link>
+			<Unavailable>
+				<Link href={`/stories/${author._id}`}>
+					<div
+						className={cn('rounded-full p-[3px] w-fit mx-auto', {
+							'story-unseen': !isSeen,
+							'story-seen': isSeen
+						})}
+					>
+						<Avatar
+							url={author.image}
+							alt={`${author.username}'s story`}
+							width={62}
+							height={62}
+							className='p-0.5 mx-auto'
+						/>
+					</div>
+					{author.username}
+				</Link>
+			</Unavailable>
 		</li>
 	)
 }

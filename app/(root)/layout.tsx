@@ -1,4 +1,5 @@
 import { Topbar, Sidebar, Bottombar } from '@/components/shared'
+import { TooltipProvider } from '@/components/ui/tooltip'
 import { getCurrentUser } from '@/lib/session'
 import { redirect } from 'next/navigation'
 
@@ -16,13 +17,13 @@ export default async function RootLayout({
 	}
 
 	return (
-		<>
+		<TooltipProvider>
 			<Topbar />
 			<div className='flex'>
 				<Sidebar />
 				<div className='flex-1'>{children}</div>
 			</div>
 			<Bottombar />
-		</>
+		</TooltipProvider>
 	)
 }

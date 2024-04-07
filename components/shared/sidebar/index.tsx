@@ -3,8 +3,9 @@ import Avatar from '@/components/avatar'
 import SidebarLink from '@/components/shared/sidebar/sidebar-link'
 import LogoutButton from './logout-button'
 import Link from 'next/link'
-import { sidebarLinks } from '@/constants'
+import { sidebarLinks, unavailableRoutes } from '@/constants'
 import { getCurrentUser } from '@/lib/session'
+import Unavailable from '@/components/unavailable'
 
 export default async function Sidebar() {
 	const { user } = await getCurrentUser()
@@ -62,12 +63,18 @@ export default async function Sidebar() {
 				</Link>
 				<nav className='h-full'>
 					<ul className='h-full flex flex-col gap-2 overflow-y-auto no-scrollbar'>
-						{sidebarLinks.map(link => (
-							<SidebarLink
-								key={link.path}
-								{...link}
-							/>
-						))}
+						{sidebarLinks.map(link =>
+							unavailableRoutes.includes(link.title.toLowerCase()) ? (
+								<Unavailable key={link.path}>
+									<SidebarLink {...link} />
+								</Unavailable>
+							) : (
+								<SidebarLink
+									key={link.path}
+									{...link}
+								/>
+							)
+						)}
 
 						<li className='mt-auto relative'>
 							<LogoutButton
@@ -84,14 +91,16 @@ export default async function Sidebar() {
 								<span className='hidden xl:block'>Logout</span>
 							</LogoutButton>
 						</li>
-						<SidebarLink
-							path='/settings'
-							icon={{
-								active: '/assets/icons/settings-neutral.svg',
-								default: '/assets/icons/settings-primary.svg'
-							}}
-							title='Settings'
-						/>
+						<Unavailable>
+							<SidebarLink
+								path='/settings'
+								icon={{
+									active: '/assets/icons/settings-neutral.svg',
+									default: '/assets/icons/settings-primary.svg'
+								}}
+								title='Settings'
+							/>
+						</Unavailable>
 					</ul>
 				</nav>
 			</div>

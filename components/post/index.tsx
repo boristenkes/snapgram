@@ -15,6 +15,7 @@ import {
 	CarouselPrevious
 } from '@/components/ui/carousel'
 import PostContent from '@/components/post-content'
+import Unavailable from '../unavailable'
 
 export default async function Post({ post }: { post: PostType }) {
 	const { user: currentUser } = await getCurrentUser()
@@ -43,14 +44,16 @@ export default async function Post({ post }: { post: PostType }) {
 				</Link>
 
 				{isCurrentUserAuthor && (
-					<Link href={`/post/edit/${post._id}`}>
-						<Image
-							src='/assets/icons/edit.svg'
-							alt='Edit'
-							width={20}
-							height={20}
-						/>
-					</Link>
+					<Unavailable tooltip>
+						<Link href={`/post/edit/${post._id}`}>
+							<Image
+								src='/assets/icons/edit.svg'
+								alt='Edit'
+								width={20}
+								height={20}
+							/>
+						</Link>
+					</Unavailable>
 				)}
 			</div>
 
@@ -112,18 +115,20 @@ export default async function Post({ post }: { post: PostType }) {
 						isLiked={!!currentUser.likedPosts?.includes(post._id.toString())}
 					/>
 
-					<Link
-						href={`/post/${post._id}`}
-						className='flex items-center gap-2'
-					>
-						<Image
-							src='/assets/icons/comment.svg'
-							alt='Comments'
-							width={20}
-							height={20}
-						/>
-						{post.commentCount}
-					</Link>
+					<Unavailable tooltip>
+						<Link
+							href={`/post/${post._id}`}
+							className='flex items-center gap-2'
+						>
+							<Image
+								src='/assets/icons/comment.svg'
+								alt='Comments'
+								width={20}
+								height={20}
+							/>
+							{post.commentCount}
+						</Link>
+					</Unavailable>
 
 					<ShareButton
 						currentUserId={currentUser._id}
