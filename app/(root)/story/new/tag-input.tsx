@@ -57,7 +57,7 @@ export default function TagInput({ tags, setTags }: TagInputProps) {
 								height={22}
 								aria-hidden
 							/>
-							{tag}
+							#{tag}
 						</button>
 					))}
 

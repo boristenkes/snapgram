@@ -26,22 +26,6 @@ export const sidebarLinks = [
 		}
 	},
 	{
-		title: 'Saved',
-		path: '/saved',
-		icon: {
-			default: '/assets/icons/save-primary.svg',
-			active: '/assets/icons/save-neutral.svg'
-		}
-	},
-	{
-		title: 'Reels',
-		path: '/reels',
-		icon: {
-			default: '/assets/icons/reel-primary.svg',
-			active: '/assets/icons/reel-neutral.svg'
-		}
-	},
-	{
 		title: 'Chats',
 		path: '/chats',
 		icon: {
@@ -98,14 +82,6 @@ export const bottombarLinks = [
 		icon: {
 			default: '/assets/icons/home-primary.svg',
 			active: '/assets/icons/home-neutral.svg'
-		}
-	},
-	{
-		title: 'Saved',
-		path: '/saved',
-		icon: {
-			default: '/assets/icons/save-primary.svg',
-			active: '/assets/icons/save-neutral.svg'
 		}
 	},
 	{

@@ -8,10 +8,11 @@ type PostListProps = {
 export default function PostList({ posts }: PostListProps) {
 	return (
 		<div className='grid grid-cols-3 mt-14 gap-2 w-full'>
-			{posts.map(post => (
+			{posts.map((post, index) => (
 				<PostCard
 					key={post._id.toString()}
 					post={post}
+					priority={index < 2}
 				/>
 			))}
 		</div>

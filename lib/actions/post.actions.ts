@@ -7,7 +7,8 @@ import { getCurrentUser } from '../session'
 import Post from '../models/post.model'
 import { revalidatePath } from 'next/cache'
 import User from '../models/user.model'
-import { type Post as PostType } from '../types'
+import { TODO, type Post as PostType } from '../types'
+import { SortOrder, SortValues } from 'mongoose'
 
 let isCleanedUp = false
 
@@ -59,7 +60,7 @@ export async function createPost({
 
 		await connectMongoDB()
 
-		const newPost = await Post.create({
+		await Post.create({
 			author: currentUser._id,
 			content: contentUrls,
 			caption,
@@ -80,15 +81,19 @@ type FetchPost =
 	| { success: true; post: PostType }
 	| { success: false; message: string }
 
+type FetchPostOptions = {
+	select?: string
+	populate?: string
+}
+
 export async function fetchPost(
 	conditions: Record<string, string>,
-	fields?: string,
-	populate?: string
+	{ select, populate }: FetchPostOptions = {}
 ): Promise<FetchPost> {
 	try {
 		await connectMongoDB()
 
-		let query = Post.findOne(conditions, fields)
+		let query = Post.findOne(conditions, select)
 
 		if (populate?.length) {
 			query = query.populate(populate)
@@ -109,19 +114,25 @@ type FetchPosts =
 	| { success: true; posts: PostType[] }
 	| { success: false; message: string }
 
+type FetchPostsOptions = FetchPostOptions & {
+	sort?: Record<string, SortOrder>
+	limit?: number
+}
+
 export async function fetchPosts(
-	conditions: Record<any, any>,
-	fields?: string,
-	populate?: string
+	conditions?: Record<any, any>,
+	{ select, populate, sort, limit }: FetchPostsOptions = {}
 ): Promise<FetchPosts> {
 	try {
 		await connectMongoDB()
 
-		let query = Post.find(conditions, fields)
+		let query = Post.find(conditions as TODO, select)
 
-		if (populate?.length) {
-			query.populate(populate)
-		}
+		if (populate?.length) query.populate(populate)
+
+		if (sort) query.sort(sort)
+
+		if (typeof limit === 'number') query.limit(limit)
 
 		const posts = await query.exec()
 
@@ -197,6 +208,63 @@ export async function fetchTopPostsByUser(
 		return { success: true, posts: JSON.parse(JSON.stringify(posts)) }
 	} catch (error: any) {
 		console.log('Error in `fetchTopPostsByUser`:', error)
+		return { success: false, message: error.message }
+	}
+}
+
+export type FetchPopularHashtags =
+	| { success: true; hashtags: string[] }
+	| { success: false; message: string }
+
+export async function fetchPopularHashtags(): Promise<FetchPopularHashtags> {
+	try {
+		const popularHashtags = await Post.aggregate([
+			{ $unwind: '$tags' }, // Split tags array into separate documents
+			{ $group: { _id: '$tags', count: { $sum: 1 } } }, // Group by tag and count occurrences
+			{ $sort: { count: -1 } }, // Sort by count in descending order
+			{ $limit: 4 } // Limit to the top 4 hashtags
+		])
+
+		const hashtags = popularHashtags.map(hashtag => hashtag._id)
+
+		return { success: true, hashtags }
+	} catch (error: any) {
+		console.error('`fetchPopularHashtags`:', error)
+		return { success: false, message: error.message }
+	}
+}
+
+export type SearchPosts =
+	| { success: true; posts: PostType[] }
+	| { success: false; message: string }
+
+export async function searchPosts(searchTerm: string): Promise<SearchPosts> {
+	try {
+		await connectMongoDB()
+
+		const regex = new RegExp(searchTerm, 'i')
+
+		// Find the users based on name or username
+		const users = await User.find({
+			$or: [{ name: { $regex: regex } }, { username: { $regex: regex } }]
+		})
+			.select('_id')
+			.exec()
+			.then(users => users.map(user => user._id))
+
+		// Use $or operator to match any of the fields (caption, tags), and author with found user IDs
+		const searchResults = await Post.find({
+			$or: [
+				{ caption: { $regex: regex } },
+				{ tags: { $in: [regex] } }, // assuming tags is an array of strings
+				{ author: { $in: users } }
+			]
+		}).populate('author')
+
+		// Return the search results
+		return { success: true, posts: JSON.parse(JSON.stringify(searchResults)) }
+	} catch (error: any) {
+		console.error('`searchPosts`:', error)
 		return { success: false, message: error.message }
 	}
 }

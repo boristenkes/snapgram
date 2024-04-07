@@ -1,6 +1,7 @@
 import Avatar from '@/components/avatar'
 import ErrorMessage from '@/components/error-message'
 import PostCard from '@/components/post-card'
+import PostList from '@/components/post-list'
 import { fetchTopPostsByUser } from '@/lib/actions/post.actions'
 import { getCurrentUser } from '@/lib/session'
 import { cn } from '@/lib/utils'
@@ -16,7 +17,7 @@ export default async function TopPosts({
 	return (
 		<aside
 			className={cn(
-				'sticky top-0 right-0 max-h-screen h-full overflow-y-auto custom-scrollbar py-20 px-11 border-l-2 border-l-neutral-700',
+				'sticky top-0 right-0 max-h-screen h-full max-w-96 overflow-y-auto custom-scrollbar py-20 px-11 border-l-2 border-l-neutral-700',
 				className
 			)}
 		>

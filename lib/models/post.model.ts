@@ -7,11 +7,6 @@ const postSchema = new mongoose.Schema(
 		caption: String,
 		tags: [String],
 		mentions: [{ type: ObjectId, ref: 'User' }],
-		// type: {
-		// 	type: String,
-		// 	enum: ['photo', 'video', 'gallery', 'reel'],
-		// 	required: true
-		// },
 		content: [{ type: String, required: true }],
 		altText: { type: String, default: '' },
 
