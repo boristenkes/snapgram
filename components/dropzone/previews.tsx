@@ -3,7 +3,6 @@
 import { id } from '@/lib/utils'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
-import PostContent from '../post-content'
 
 type PreviewsProps = {
 	files: File[]

@@ -40,13 +40,9 @@ export default function ExplorePage() {
 					<ErrorMessage message={searchResponse.message} />
 				)}
 
-				{!searchResponse?.pending &&
-					searchResponse.success &&
-					(searchResponse.posts.length ? (
-						<PostList posts={searchResponse.posts} />
-					) : (
-						<p className='grid place-items-center py-10'>No results found</p>
-					))}
+				{!searchResponse?.pending && searchResponse.success && (
+					<PostList posts={searchResponse.posts} />
+				)}
 			</main>
 		</div>
 	)

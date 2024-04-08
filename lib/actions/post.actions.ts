@@ -8,7 +8,7 @@ import Post from '../models/post.model'
 import { revalidatePath } from 'next/cache'
 import User from '../models/user.model'
 import { TODO, type Post as PostType } from '../types'
-import { SortOrder, SortValues } from 'mongoose'
+import { SortOrder } from 'mongoose'
 
 let isCleanedUp = false
 
@@ -83,7 +83,7 @@ type FetchPost =
 
 type FetchPostOptions = {
 	select?: string
-	populate?: string
+	populate?: [string, string]
 }
 
 export async function fetchPost(
@@ -96,7 +96,7 @@ export async function fetchPost(
 		let query = Post.findOne(conditions, select)
 
 		if (populate?.length) {
-			query = query.populate(populate)
+			query = query.populate(populate[0], populate[1])
 		}
 
 		const post = await query.exec()
@@ -128,7 +128,7 @@ export async function fetchPosts(
 
 		let query = Post.find(conditions as TODO, select)
 
-		if (populate?.length) query.populate(populate)
+		if (populate?.length) query.populate(populate[0], populate[1])
 
 		if (sort) query.sort(sort)
 
@@ -141,45 +141,6 @@ export async function fetchPosts(
 		return { success: true, posts: JSON.parse(JSON.stringify(posts)) }
 	} catch (error: any) {
 		console.log('`fetchPosts`:', error)
-		return { success: false, message: error.message }
-	}
-}
-
-type FetchPostsForUserOptions = {
-	select?: string
-	populateAuthor?: boolean
-}
-
-type FetchPostsForUser =
-	| { success: true; posts: PostType[] }
-	| { success: false; message: string }
-
-export async function fetchPostsForUser(
-	following?: string[],
-	{ select = '', populateAuthor = false }: FetchPostsForUserOptions = {}
-): Promise<FetchPostsForUser> {
-	try {
-		if (!following) throw new Error('`following` not provided')
-
-		const { user: currentUser } = await getCurrentUser()
-
-		await connectMongoDB()
-
-		let query = Post.find({
-			$or: [{ author: { $in: following } }, { author: currentUser._id }]
-		})
-			.select(select)
-			.sort({ createdAt: -1 })
-
-		if (populateAuthor) query = query.populate('author', 'image name username')
-
-		const posts = await query
-
-		if (!posts) throw new Error('Failed to fetch posts. Please try again later')
-
-		return { success: true, posts: JSON.parse(JSON.stringify(posts)) }
-	} catch (error: any) {
-		console.log('Error in `fetchPostsForUser`:', error)
 		return { success: false, message: error.message }
 	}
 }

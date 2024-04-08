@@ -3,7 +3,7 @@ import BottombarLink from './bottombar-link'
 
 export default function Bottombar() {
 	return (
-		<header className='sticky bottom-0 z-40 bg-neutral-700/80 backdrop-blur-3xl rounded-t-2xl | md:hidden'>
+		<header className='fixed bottom-0 inset-x-0 self-end z-40 bg-neutral-700/80 backdrop-blur-3xl rounded-t-2xl | md:hidden'>
 			<nav>
 				<ul className='flex justify-around py-3'>
 					{bottombarLinks.map(link => (

@@ -1,55 +1,52 @@
-import Image from 'next/image'
-import ErrorMessage from '../error-message'
-import { imageTypes, videoTypes } from '@/constants'
+import { cn } from '@/lib/utils'
+import ContentViewer from '../content-viewer'
+import {
+	Carousel,
+	CarouselContent,
+	CarouselItem,
+	CarouselNext,
+	CarouselPrevious
+} from '../ui/carousel'
 
 type PostContentProps = {
-	src: string
+	content: string[]
 	alt?: string
-	width: number
-	height: number
 	className?: string
 }
 
 export default function PostContent({
-	src,
-	alt = '',
-	width,
-	height,
-	className,
-	...props
+	content,
+	alt,
+	className
 }: PostContentProps) {
-	const contentType = src.split('.').at(-1) as string
-	const isImage = imageTypes.includes(contentType)
-	const isVideo = videoTypes.includes(contentType)
-
-	// TODO: Find library for video component.
-
-	return isImage ? (
-		<Image
-			src={src}
+	return content.length === 1 ? (
+		<ContentViewer
+			src={content[0]}
 			alt={alt}
-			width={width}
-			height={height}
-			className={className}
-			{...props}
+			width={542}
+			height={520}
+			className={cn('aspect-square object-cover', className)}
 		/>
-	) : isVideo ? (
-		<video
-			width={width}
-			height={height}
-			className={className}
-			controls
-			autoPlay
-			muted
-			{...props}
-		>
-			<source
-				src={src}
-				type={`video/${contentType}`}
-			/>
-			Your browser does not support video tag.
-		</video>
 	) : (
-		<ErrorMessage message={`Invalid content type (${contentType}): ${src}`} />
+		<Carousel className={cn('max-h-[32.5rem]', className)}>
+			<CarouselContent>
+				{content.map(contentUrl => (
+					<CarouselItem
+						key={contentUrl}
+						className='p-0'
+					>
+						<ContentViewer
+							src={contentUrl}
+							alt={alt}
+							width={542}
+							height={520}
+							className='aspect-square object-cover'
+						/>
+					</CarouselItem>
+				))}
+			</CarouselContent>
+			<CarouselPrevious className='left-4 bg-neutral-700 border-neutral-700' />
+			<CarouselNext className='right-4 bg-neutral-700 border-neutral-700' />
+		</Carousel>
 	)
 }
