@@ -17,9 +17,7 @@ export default function PostList({ posts }: PostListProps) {
 					/>
 				))
 			) : (
-				<p className='text-neutral-500 italic'>
-					No posts to display. Try again later.
-				</p>
+				<p className='text-neutral-500 italic'>No posts to display.</p>
 			)}
 		</div>
 	)

@@ -6,19 +6,14 @@ import { useDebounce, useUpdateEffect } from '@/hooks'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import PopularTags from './popular-tags'
 
-type ExploreHeaderProps = {
-	searchTerm: string
-}
-
-export default function ExploreHeader({ searchTerm }: ExploreHeaderProps) {
+export default function ExploreHeader({ searchTerm }: { searchTerm: string }) {
 	const router = useRouter()
 	const [search, setSearch] = useState(searchTerm ?? '')
 	const { debouncedValue, isPending } = useDebounce(search)
 
 	useUpdateEffect(() => {
-		router.replace(`/explore?search=${search}`)
+		router.replace(search.length ? `/explore?search=${search}` : '/explore')
 	}, [debouncedValue])
 
 	useEffect(() => setSearch(searchTerm), [searchTerm])
@@ -49,8 +44,6 @@ export default function ExploreHeader({ searchTerm }: ExploreHeaderProps) {
 					<Loader className='mx-auto my-2 absolute top-2 right-10' />
 				)}
 			</div>
-
-			<PopularTags />
 		</header>
 	)
 }

@@ -24,7 +24,9 @@ export default async function Layout({
 	return (
 		<html lang='en'>
 			<SessionProvider session={session}>
-				<body className={`${inter.className} bg-neutral-900 text-neutral-100`}>
+				<body
+					className={`${inter.className} bg-neutral-900 text-neutral-100 min-h-screen`}
+				>
 					<NextSSRPlugin routerConfig={extractRouterConfig(ourFileRouter)} />
 					{children}
 					<Toaster />
