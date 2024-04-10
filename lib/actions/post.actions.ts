@@ -10,18 +10,6 @@ import User from '../models/user.model'
 import { TODO, type Post as PostType } from '../types'
 import { SortOrder } from 'mongoose'
 
-let isCleanedUp = false
-
-const cleanUp = async () => {
-	if (isCleanedUp) return
-
-	const posts = await Post.find()
-	await Promise.all(posts.map(post => deletePost(post._id.toString())))
-	isCleanedUp = true
-	console.log('cleaned 👍')
-}
-// cleanUp()
-
 const uploadthingApi = new UTApi()
 
 type CreatePostProps = {
@@ -289,13 +277,24 @@ export async function togglePostSave({
 	}
 }
 
-export async function deletePost(postId: string) {
+type DeletePost = { success: boolean; message: string }
+
+export async function deletePost(
+	currentUserId: string,
+	postId: string
+): Promise<DeletePost> {
 	try {
+		if (!currentUserId || !postId)
+			throw new Error('You are unauthorized to delete this post')
+
 		await connectMongoDB()
 
-		const post = await Post.findById(postId)
+		const post = await Post.findById(postId).select('author content')
 
 		if (!post) throw new Error("Couldn't find post. Please try again later")
+
+		if (post.author.toString() !== currentUserId)
+			throw new Error('You are unauthorized to delete this post')
 
 		// content url example: https://utfs.io/f/eeb195b1-95de-4160-8b44-167ca3c3beec-9o58rl.png
 		const uploadthingKeys = post.content.map((url: string) =>
@@ -317,6 +316,8 @@ export async function deletePost(postId: string) {
 		})
 
 		if (errorMessage.length) throw new Error(errorMessage)
+
+		revalidatePath('/')
 
 		return { success: true, message: 'Successfully deleted post' }
 	} catch (error: any) {

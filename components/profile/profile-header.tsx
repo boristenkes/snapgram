@@ -97,11 +97,11 @@ export default async function ProfileHeader({
 						/>
 					</div>
 
-					<pre className='text-base w-paragraph font-inherit hidden | small:block'>
-						{user?.bio || (
-							<span className='text-neutral-500 italic'>No bio</span>
-						)}
-					</pre>
+					{!!user?.bio.length && (
+						<pre className='text-base w-paragraph font-inherit hidden | small:block'>
+							{user?.bio}
+						</pre>
+					)}
 				</div>
 			</div>
 
@@ -122,9 +122,11 @@ export default async function ProfileHeader({
 
 				<p className='text-neutral-500 text-sm'>@{user?.username}</p>
 
-				<pre className='text-sm w-paragraph font-inherit mt-1'>
-					{user?.bio || <span className='text-neutral-500 italic'>No bio</span>}
-				</pre>
+				{!!user?.bio.length && (
+					<pre className='text-sm w-paragraph font-inherit mt-1'>
+						{user?.bio}
+					</pre>
+				)}
 
 				<div className='my-3'>
 					{isCurrentUser ? (

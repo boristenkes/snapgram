@@ -18,10 +18,11 @@ export default function ShareButton({
 				<button
 					type='submit'
 					className='flex items-center gap-2'
+					aria-label='Share post'
 				>
 					<Image
 						src='/assets/icons/share.svg'
-						alt='Share'
+						alt=''
 						width={20}
 						height={20}
 					/>

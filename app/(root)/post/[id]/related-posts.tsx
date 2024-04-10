@@ -18,8 +18,14 @@ export default async function RelatedPosts({
 	})
 
 	return (
-		<section className='my-14 border-t border-neutral-600'>
-			<h2 className='font-bold text-2xl my-14 sm:text-3xl'>
+		<section
+			aria-labelledby='related-posts-title'
+			className='my-14 border-t border-neutral-600'
+		>
+			<h2
+				id='related-posts-title'
+				className='font-bold text-2xl my-14 sm:text-3xl'
+			>
 				More posts from {author.name}
 			</h2>
 

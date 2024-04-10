@@ -23,10 +23,10 @@ const Input = forwardRef<
 			<input
 				className={cn(
 					'block bg-neutral-600 p-3 rounded-lg w-full disabled:brightness-50',
-					className,
 					{
 						'border border-semantic-danger outline-semantic-danger':
-							errors?.length
+							errors?.length,
+						className: !!label
 					}
 				)}
 				id={name}

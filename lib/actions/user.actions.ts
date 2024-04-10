@@ -8,7 +8,7 @@ import { validateImage } from '../utils'
 import { revalidatePath } from 'next/cache'
 import { getCurrentUser } from '../session'
 import { User as UserType } from '../types'
-import { FilterQuery } from 'mongoose'
+import { FilterQuery, SortOrder } from 'mongoose'
 
 const uploadthingApi = new UTApi()
 
@@ -83,18 +83,22 @@ type FetchUser =
 	| { success: true; user: UserType }
 	| { success: false; message: string }
 
+type FetchUserOptions = {
+	select?: string
+	populate?: [string] | [string, string]
+}
+
 export async function fetchUser(
 	conditions: Record<string, string>,
-	fields?: string,
-	populate?: string
+	{ select, populate }: FetchUserOptions = {}
 ): Promise<FetchUser> {
 	try {
 		await connectMongoDB()
 
-		let query = User.findOne(conditions, fields)
+		let query = User.findOne(conditions, select)
 
 		if (populate?.length) {
-			query = query.populate(populate)
+			query = query.populate(populate[0], populate[1])
 		}
 
 		const user = await query.exec()
@@ -112,19 +116,27 @@ type FetchUsers =
 	| { success: true; users: UserType[] }
 	| { success: false; message: string }
 
+type FetchUsersOptions = FetchUserOptions & {
+	sort?: Record<string, SortOrder>
+	limit?: number
+}
+
 export async function fetchUsers(
 	conditions: Record<any, any>,
-	fields?: string,
-	populate?: string
+	{ select, populate, sort, limit }: FetchUsersOptions = {}
 ): Promise<FetchUsers> {
 	try {
 		await connectMongoDB()
 
-		let query = User.find(conditions, fields)
+		let query = User.find(conditions, select)
 
 		if (populate?.length) {
-			query.populate(populate)
+			query.populate(populate[0], populate[1])
 		}
+
+		if (sort) query.sort(sort)
+
+		if (typeof limit === 'number') query.limit(limit)
 
 		const users = await query.exec()
 

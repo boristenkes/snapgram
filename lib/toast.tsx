@@ -13,9 +13,8 @@ export default function toast(
 	{ type = 'success', iconUrl, iconAlt, style }: ToastProps = {}
 ) {
 	const src =
-		iconUrl ?? type === 'success'
-			? '/assets/icons/check.svg'
-			: '/assets/icons/error.svg'
+		iconUrl ??
+		(type === 'success' ? '/assets/icons/check.svg' : '/assets/icons/error.svg')
 
 	return hotToast(message, {
 		icon: (

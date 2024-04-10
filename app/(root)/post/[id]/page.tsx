@@ -1,5 +1,5 @@
 import Avatar from '@/components/avatar'
-import { fetchPost } from '@/lib/actions/post.actions'
+import { fetchPost, fetchPosts } from '@/lib/actions/post.actions'
 import { getCurrentUser } from '@/lib/session'
 import { format } from 'date-fns'
 import Image from 'next/image'
@@ -11,6 +11,17 @@ import CommentInput from '@/components/post/comment-input'
 import RelatedPosts from './related-posts'
 import PostActionButtons from '@/components/post-action-buttons'
 import PostContent from '@/components/post-content'
+import Tag from '@/components/tag'
+
+export const revalidate = 3600
+
+export async function generateStaticParams() {
+	const response = await fetchPosts()
+
+	if (!response.success) return []
+
+	return response.posts.map(post => ({ id: post._id }))
+}
 
 export default async function PostPage({
 	params: { id }
@@ -59,7 +70,7 @@ export default async function PostPage({
 							</Link>
 
 							{isCurrentUserAuthor && (
-								<div className='flex gap-3'>
+								<div className='flex items-start gap-3'>
 									<Link href={`/post/edit/${post._id}`}>
 										<Image
 											src='/assets/icons/edit.svg'
@@ -76,13 +87,13 @@ export default async function PostPage({
 							)}
 						</div>
 
-						{(post.caption || post.tags.length) && (
-							<pre className='font-inherit pb-8 border-b border-neutral-600'>
+						{(post.caption || !!post.tags.length) && (
+							<pre className='font-inherit pb-6 border-b border-neutral-600'>
 								{post.caption}{' '}
 								{post.tags.map(tag => (
 									<Fragment key={tag}>
 										<Link
-											href={`#${tag}`}
+											href={`/explore?search=${tag}`}
 											className='text-neutral-500 font-semibold'
 										>
 											#{tag}
@@ -92,12 +103,12 @@ export default async function PostPage({
 							</pre>
 						)}
 
+						<div className='flex-1'>{/* <Comments /> */}</div>
+
 						<PostActionButtons
 							currentUser={currentUser}
 							post={post}
 						/>
-
-						<div className='flex-1'>{/* <Comments /> */}</div>
 
 						<CommentInput />
 					</div>
@@ -125,7 +136,7 @@ export default async function PostPage({
 					</Link>
 
 					{isCurrentUserAuthor && (
-						<div className='flex gap-3'>
+						<div className='flex items-start gap-3'>
 							<Link href={`/post/edit/${post._id}`}>
 								<Image
 									src='/assets/icons/edit.svg'
@@ -142,17 +153,12 @@ export default async function PostPage({
 					)}
 				</div>
 
-				{(post.caption || post.tags.length) && (
+				{(post.caption || !!post.tags.length) && (
 					<pre className='font-inherit mb-8'>
 						{post.caption}{' '}
 						{post.tags.map(tag => (
 							<Fragment key={tag}>
-								<Link
-									href={`#${tag}`}
-									className='text-neutral-500 font-semibold'
-								>
-									#{tag}
-								</Link>{' '}
+								<Tag tag={tag} />{' '}
 							</Fragment>
 						))}
 					</pre>

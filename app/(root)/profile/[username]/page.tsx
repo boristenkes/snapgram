@@ -12,7 +12,10 @@ type ProfilePageProps = {
 export const revalidate = 3600 // 1h
 
 export async function generateStaticParams() {
-	const response = await fetchUsers({ username: { $exists: true } }, 'username')
+	const response = await fetchUsers(
+		{ username: { $exists: true } },
+		{ select: 'username' }
+	)
 
 	if (!response.success) return []
 
@@ -44,7 +47,10 @@ export default async function ProfilePage({
 
 	const response = await fetchUser(
 		{ username },
-		'image name username postsCount followersCount followingCount bio posts private verified'
+		{
+			select:
+				'image name username postsCount followersCount followingCount bio posts private verified'
+		}
 	)
 
 	if (!response.success) {

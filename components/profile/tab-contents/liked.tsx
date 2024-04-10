@@ -4,7 +4,10 @@ import { fetchUser } from '@/lib/actions/user.actions'
 import { Post } from '@/lib/types'
 
 export default async function Liked({ userId }: { userId: string }) {
-	const response = await fetchUser({ _id: userId }, 'likedPosts', 'likedPosts')
+	const response = await fetchUser(
+		{ _id: userId },
+		{ select: 'likedPosts', populate: ['likedPosts'] }
+	)
 
 	if (!response.success) return <ErrorMessage message={response.message} />
 

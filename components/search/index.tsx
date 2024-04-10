@@ -21,7 +21,7 @@ export default function Search({ ...rest }: SearchProps) {
 	)
 
 	return (
-		<div className='flex gap-4 bg-neutral-700 p-3 rounded-2xl relative'>
+		<div className='flex gap-4 bg-neutral-700 p-3 rounded-2xl relative border-2 border-transparent has-[input:focus]:border-neutral-100'>
 			<Image
 				src='/assets/icons/search.svg'
 				alt=''

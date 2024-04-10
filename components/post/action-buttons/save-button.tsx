@@ -38,6 +38,7 @@ export default function SaveButton({
 			<button
 				type='submit'
 				className='flex items-center gap-2'
+				aria-label={optimisticSaved ? 'Unsave post' : 'Save post'}
 			>
 				<Image
 					src={
@@ -45,7 +46,7 @@ export default function SaveButton({
 							? '/assets/icons/save-active.svg'
 							: '/assets/icons/save-primary.svg'
 					}
-					alt={optimisticSaved ? 'Dissave Post' : 'Save Post'}
+					alt=''
 					width={20}
 					height={20}
 					className='w-5 h-5'

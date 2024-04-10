@@ -49,6 +49,7 @@ export default function LikeButton({
 			<button
 				type='submit'
 				className='flex items-center gap-2'
+				aria-label={optimisticLikes.liked ? 'Dislike post' : 'Like post'}
 			>
 				<Image
 					src={
@@ -56,7 +57,7 @@ export default function LikeButton({
 							? '/assets/icons/like-active.svg'
 							: '/assets/icons/like.svg'
 					}
-					alt={optimisticLikes.liked ? 'Dislike Post' : 'Like Post'}
+					alt=''
 					width={20}
 					height={20}
 					className='w-5 h-5'

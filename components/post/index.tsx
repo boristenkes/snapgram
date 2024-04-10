@@ -9,6 +9,8 @@ import { format } from 'date-fns'
 import Unavailable from '../unavailable'
 import PostActionButtons from '@/components/post-action-buttons'
 import PostContent from '../post-content'
+import Tag from '@/components/tag'
+import { Button } from '../ui/button'
 
 export default async function Post({ post }: { post: PostType }) {
 	const { user: currentUser } = await getCurrentUser()
@@ -37,7 +39,11 @@ export default async function Post({ post }: { post: PostType }) {
 				</Link>
 
 				{isCurrentUserAuthor && (
-					<Unavailable tooltip>
+					<Button
+						asChild
+						size='icon'
+						variant='ghost'
+					>
 						<Link href={`/post/edit/${post._id}`}>
 							<Image
 								src='/assets/icons/edit.svg'
@@ -46,21 +52,16 @@ export default async function Post({ post }: { post: PostType }) {
 								height={20}
 							/>
 						</Link>
-					</Unavailable>
+					</Button>
 				)}
 			</div>
 
-			{(post.caption || post.tags.length) && (
+			{(post.caption || !!post.tags.length) && (
 				<pre className='font-inherit mb-8'>
 					{post.caption}{' '}
 					{post.tags.map(tag => (
 						<Fragment key={tag}>
-							<Link
-								href={`#${tag}`}
-								className='text-neutral-500 font-semibold'
-							>
-								#{tag}
-							</Link>{' '}
+							<Tag tag={tag} />{' '}
 						</Fragment>
 					))}
 				</pre>

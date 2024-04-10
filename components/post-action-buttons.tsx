@@ -11,26 +11,12 @@ import Link from 'next/link'
 type PostActionButtonsProps = {
 	currentUser: User
 	post: Post
-	// currentUserId: string
-	// postId: string
-	// isLiked: boolean
-	// isSaved: boolean
-	// likeCount: number
-	// commentCount: number
-	// shareCount: number
 }
 
 export default function PostActionButtons({
 	currentUser,
 	post
-}: // currentUserId,
-// postId,
-// isLiked,
-// isSaved,
-// likeCount,
-// commentCount,
-// shareCount
-PostActionButtonsProps) {
+}: PostActionButtonsProps) {
 	return (
 		<div className='flex items-center justify-between my-6'>
 			<div className='flex items-center gap-7'>
@@ -45,10 +31,11 @@ PostActionButtonsProps) {
 					<Link
 						href={`/post/${post._id}`}
 						className='flex items-center gap-2'
+						aria-label='View post comments'
 					>
 						<Image
 							src='/assets/icons/comment.svg'
-							alt='Comments'
+							alt=''
 							width={20}
 							height={20}
 						/>

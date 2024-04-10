@@ -4,7 +4,10 @@ import { fetchUser } from '@/lib/actions/user.actions'
 import { Post } from '@/lib/types'
 
 export default async function Saved({ userId }: { userId: string }) {
-	const response = await fetchUser({ _id: userId }, 'savedPosts', 'savedPosts')
+	const response = await fetchUser(
+		{ _id: userId },
+		{ select: 'savedPosts', populate: ['savedPosts'] }
+	)
 
 	if (!response.success) return <ErrorMessage message={response.message} />
 
