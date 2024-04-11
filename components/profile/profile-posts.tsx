@@ -43,13 +43,14 @@ export default async function ProfilePosts({
 	const tabs = isCurrentUser ? authorTabs : initialTabs
 
 	return (
-		<div className='mt-16'>
+		<div className='mt-16 w-full'>
 			<Tabs defaultValue='posts'>
 				<TabsList>
 					{tabs.map(tab => (
 						<TabsTrigger
 							key={tab.title}
 							value={tab.title}
+							className='flex items-center gap-2'
 						>
 							<Image
 								src={tab.icon}
@@ -57,7 +58,9 @@ export default async function ProfilePosts({
 								width={20}
 								height={20}
 							/>
-							<span className='capitalize ml-2'>{tab.title}</span>
+							<span className='capitalize sr-only sm:not-sr-only'>
+								{tab.title}
+							</span>
 						</TabsTrigger>
 					))}
 				</TabsList>

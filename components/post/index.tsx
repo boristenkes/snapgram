@@ -6,7 +6,6 @@ import Image from 'next/image'
 import CommentInput from './comment-input'
 import { Fragment } from 'react'
 import { format } from 'date-fns'
-import Unavailable from '../unavailable'
 import PostActionButtons from '@/components/post-action-buttons'
 import PostContent from '../post-content'
 import Tag from '@/components/tag'
@@ -19,7 +18,7 @@ export default async function Post({ post }: { post: PostType }) {
 	const formattedDate = format(post.createdAt, "d MMMM 'at' hh:mm a")
 
 	return (
-		<article className='bg-[#09090A] w-[min(37.5rem,100%-2rem)] py-9 px-7 mx-auto rounded-2xl border-2 border-neutral-700'>
+		<article className='bg-[#09090A] w-[min(37.5rem,100%-2rem)] py-5 px-4 sm:py-9 sm:px-7 mx-auto rounded-2xl border-2 border-neutral-700'>
 			<div className='flex justify-between items-start mb-5'>
 				<Link
 					href={`/profile/${post.author.username}`}
@@ -57,7 +56,7 @@ export default async function Post({ post }: { post: PostType }) {
 			</div>
 
 			{(post.caption || !!post.tags.length) && (
-				<pre className='font-inherit mb-8'>
+				<pre className='font-inherit mb-8 text-wrap'>
 					{post.caption}{' '}
 					{post.tags.map(tag => (
 						<Fragment key={tag}>

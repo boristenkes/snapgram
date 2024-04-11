@@ -1,3 +1,4 @@
+import { type SearchParams } from '@/lib/types'
 import ExploreHeader from './explore-header'
 import PopularTags from './popular-tags'
 import SearchResults from './search-results'
@@ -5,7 +6,7 @@ import SearchResults from './search-results'
 export default async function ExplorePage({
 	searchParams
 }: {
-	searchParams: Record<string, string | string[] | undefined>
+	searchParams: SearchParams
 }) {
 	const searchTerm = (searchParams.search as string) ?? ''
 

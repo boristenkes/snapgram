@@ -21,7 +21,7 @@ export default async function Profile({ user, currentUser }: ProfileProps) {
 
 			<ProfilePosts
 				isCurrentUser={isCurrentUser}
-				userId={user._id.toString()}
+				userId={user._id}
 				username={user.username!}
 			/>
 		</main>

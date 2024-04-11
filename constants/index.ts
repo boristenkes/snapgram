@@ -106,5 +106,3 @@ deepFreeze(bottombarLinks)
 
 export const imageTypes = ['jpeg', 'jpg', 'png', 'webp']
 export const videoTypes = ['mp4', 'webm', 'ogg']
-
-export const unavailableRoutes = ['notifications', 'chats', 'settings']

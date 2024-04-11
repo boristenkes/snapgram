@@ -86,3 +86,5 @@ export type Comment = {
 	likes: User[]
 	likeCount: number
 }
+
+export type SearchParams = Record<string, string | string[] | undefined>

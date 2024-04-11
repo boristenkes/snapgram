@@ -88,7 +88,7 @@ export default async function PostPage({
 						</div>
 
 						{(post.caption || !!post.tags.length) && (
-							<pre className='font-inherit pb-6 border-b border-neutral-600'>
+							<pre className='font-inherit mb-8 pb-6 border-b border-neutral-600 text-wrap'>
 								{post.caption}{' '}
 								{post.tags.map(tag => (
 									<Fragment key={tag}>
@@ -127,7 +127,6 @@ export default async function PostPage({
 							alt={post.author.name}
 							width={50}
 							height={50}
-							className='border'
 						/>
 						<div>
 							<strong>{post.author.name}</strong>
@@ -154,7 +153,7 @@ export default async function PostPage({
 				</div>
 
 				{(post.caption || !!post.tags.length) && (
-					<pre className='font-inherit mb-8'>
+					<pre className='font-inherit mb-8 text-wrap'>
 						{post.caption}{' '}
 						{post.tags.map(tag => (
 							<Fragment key={tag}>

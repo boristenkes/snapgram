@@ -39,7 +39,7 @@ export default function SidebarLink({
 					height={24}
 					className='w-6 h-6'
 				/>
-				<span className='hidden xl:block'>{title}</span>
+				<span className='sr-only xl:not-sr-only'>{title}</span>
 			</Link>
 		</li>
 	)

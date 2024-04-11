@@ -3,7 +3,6 @@ import {
 	SaveButton,
 	ShareButton
 } from '@/components/post/action-buttons'
-import Unavailable from '@/components/unavailable'
 import { Post, User } from '@/lib/types'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -27,21 +26,19 @@ export default function PostActionButtons({
 					isLiked={(currentUser.likedPosts as string[]).includes(post._id)}
 				/>
 
-				<Unavailable tooltip>
-					<Link
-						href={`/post/${post._id}`}
-						className='flex items-center gap-2'
-						aria-label='View post comments'
-					>
-						<Image
-							src='/assets/icons/comment.svg'
-							alt=''
-							width={20}
-							height={20}
-						/>
-						{post.commentCount}
-					</Link>
-				</Unavailable>
+				<Link
+					href={`/post/${post._id}`}
+					className='flex items-center gap-2'
+					aria-label='View post comments'
+				>
+					<Image
+						src='/assets/icons/comment.svg'
+						alt=''
+						width={20}
+						height={20}
+					/>
+					{post.commentCount}
+				</Link>
 
 				<ShareButton
 					currentUserId={currentUser._id}
