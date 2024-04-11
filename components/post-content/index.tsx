@@ -40,7 +40,7 @@ export default function PostContent({
 							alt={alt}
 							width={542}
 							height={520}
-							className='aspect-square object-cover'
+							className='aspect-square object-cover w-full'
 						/>
 					</CarouselItem>
 				))}

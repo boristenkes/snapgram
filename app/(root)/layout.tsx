@@ -4,9 +4,11 @@ import { getCurrentUser } from '@/lib/session'
 import { redirect } from 'next/navigation'
 
 export default async function RootLayout({
-	children
+	children,
+	dialog
 }: {
 	children: React.ReactNode
+	dialog: React.ReactNode
 }) {
 	const session = await getCurrentUser()
 
@@ -23,6 +25,7 @@ export default async function RootLayout({
 				<Sidebar />
 				<div className='flex-1'>{children}</div>
 			</div>
+			<div>{dialog}</div>
 			<Bottombar />
 		</TooltipProvider>
 	)
