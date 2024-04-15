@@ -11,7 +11,7 @@ type PostCardProps = {
 export default function PostCard({ post, priority = false }: PostCardProps) {
 	return (
 		<Link
-			href={`/post/${post._id}`}
+			href={`/post/details/${post._id}`}
 			scroll={false}
 		>
 			<article className='relative rounded-lg overflow-hidden aspect-square transition-[filter] hover:brightness-110'>

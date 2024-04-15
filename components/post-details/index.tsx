@@ -2,7 +2,7 @@ import { Post } from '@/lib/types'
 import React, { Fragment } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
-import DeletePostButton from '@/app/(root)/post/[id]/delete-post-button'
+import DeletePostButton from '@/app/(root)/post/details/[id]/delete-post-button'
 import { getCurrentUser } from '@/lib/session'
 import { format } from 'date-fns'
 import Tag from '@/components/tag'
@@ -10,6 +10,7 @@ import CommentInput from '@/components/post/comment-input'
 import PostActionButtons from '@/components/post-action-buttons'
 import Avatar from '@/components/avatar'
 import PostContent from '@/components/post-content'
+import CommentList from '../comment-list'
 
 type PostDetailsProps = {
 	post: Post
@@ -23,8 +24,8 @@ export default async function PostDetails({ post }: PostDetailsProps) {
 	return (
 		<>
 			{/* Desktop */}
-			<main className='mb-12 rounded-3xl bg-neutral-800 hidden sm:flex'>
-				<div className='rounded-lg overflow-hidden flex-1'>
+			<main className='mb-12 aspect-[16/8] rounded-3xl bg-neutral-800 hidden lg:flex'>
+				<div className='rounded-lg overflow-hidden flex-1 w-full h-full'>
 					<PostContent
 						content={post.content}
 						alt={post.altText}
@@ -83,20 +84,20 @@ export default async function PostDetails({ post }: PostDetailsProps) {
 							</pre>
 						)}
 
-						<div className='flex-1'>{/* <Comments /> */}</div>
+						<CommentList postId={post._id} />
 
 						<PostActionButtons
 							currentUser={currentUser}
 							post={post}
 						/>
 
-						<CommentInput />
+						<CommentInput postId={post._id} />
 					</div>
 				</div>
 			</main>
 
 			{/* Mobile */}
-			<main className='sm:hidden bg-neutral-800 rounded-3xl p-4'>
+			<main className='lg:hidden w-[min(35rem,100%-2rem)] mx-auto bg-neutral-800 rounded-3xl p-4'>
 				<div className='flex justify-between items-center'>
 					<Link
 						href={`/profile/${post.author.username}`}
@@ -115,7 +116,7 @@ export default async function PostDetails({ post }: PostDetailsProps) {
 					</Link>
 
 					{isCurrentUserAuthor && (
-						<div className='flex items-start gap-3'>
+						<div className='flex flex-none items-start gap-3'>
 							<Link href={`/post/edit/${post._id}`}>
 								<Image
 									src='/assets/icons/edit.svg'
@@ -154,7 +155,7 @@ export default async function PostDetails({ post }: PostDetailsProps) {
 					post={post}
 				/>
 
-				<CommentInput />
+				<CommentInput postId={post._id} />
 			</main>
 		</>
 	)

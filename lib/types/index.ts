@@ -79,12 +79,15 @@ export type Post = {
 }
 
 export type Comment = {
+	_id: string
 	author: User | string
 	postId: string
 	content: string
 	replies: Comment[] | string[]
 	likes: User[]
 	likeCount: number
+	isReply: boolean
+	createdAt: Date
 }
 
 export type SearchParams = Record<string, string | string[] | undefined>

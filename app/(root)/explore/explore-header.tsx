@@ -21,9 +21,9 @@ export default function ExploreHeader({ searchTerm }: { searchTerm: string }) {
 
 	return (
 		<header>
-			<h2 className='font-bold text-3xl text-center mb-8 sm:text-4xl'>
+			<h1 className='font-bold text-3xl text-center mb-8 sm:text-4xl'>
 				Explore Snapgram
-			</h2>
+			</h1>
 
 			<div className='flex items-center relative bg-neutral-600 rounded-2xl border-2 border-transparent has-[input:focus]:border-neutral-100 w-[min(41rem,100%-2rem)] mx-auto px-5'>
 				<Image
@@ -45,7 +45,12 @@ export default function ExploreHeader({ searchTerm }: { searchTerm: string }) {
 				)}
 
 				{!isPending && !!searchTerm.length && (
-					<Link href='/explore'>Clear</Link>
+					<Link
+						href='/explore'
+						replace
+					>
+						Clear
+					</Link>
 				)}
 			</div>
 		</header>

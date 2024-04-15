@@ -25,10 +25,10 @@ export default function PostContent({
 			alt={alt}
 			width={542}
 			height={520}
-			className={cn('aspect-square object-cover', className)}
+			className={cn('aspect-square object-cover w-full h-full', className)}
 		/>
 	) : (
-		<Carousel className={cn('max-h-[32.5rem]', className)}>
+		<Carousel className={className}>
 			<CarouselContent>
 				{content.map(contentUrl => (
 					<CarouselItem
@@ -40,7 +40,7 @@ export default function PostContent({
 							alt={alt}
 							width={542}
 							height={520}
-							className='aspect-square object-cover w-full'
+							className='aspect-square object-cover w-full h-full'
 						/>
 					</CarouselItem>
 				))}

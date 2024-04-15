@@ -15,6 +15,7 @@ export default function Tag({ tag, paramKey = 'search', className }: TagProps) {
 					[paramKey]: tag
 				}
 			}}
+			replace
 			className={cn('text-neutral-500 font-semibold', className)}
 		>
 			#{tag}

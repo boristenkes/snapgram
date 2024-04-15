@@ -5,8 +5,9 @@ import connectMongoDB from '../mongoose'
 import { UTApi } from 'uploadthing/server'
 import { getCurrentUser } from '../session'
 import Post from '../models/post.model'
-import { revalidatePath } from 'next/cache'
 import User from '../models/user.model'
+import Comment from '../models/comment.model'
+import { revalidatePath } from 'next/cache'
 import { TODO, type Post as PostType } from '../types'
 import { SortOrder } from 'mongoose'
 
@@ -48,14 +49,17 @@ export async function createPost({
 
 		await connectMongoDB()
 
-		await Post.create({
-			author: currentUser._id,
-			content: contentUrls,
-			caption,
-			altText,
-			mentions,
-			tags
-		})
+		await Promise.all([
+			Post.create({
+				author: currentUser._id,
+				content: contentUrls,
+				caption,
+				altText,
+				mentions,
+				tags
+			}),
+			User.findByIdAndUpdate(currentUser._id, { $inc: { postsCount: 1 } })
+		])
 
 		revalidatePath('/')
 		return { success: true, message: 'Successfully created post' }
@@ -307,7 +311,9 @@ export async function deletePost(
 				{ posts: postId, savedPosts: postId, likedPosts: postId },
 				{ $pull: { posts: postId, savedPosts: postId, likedPosts: postId } }
 			),
-			Post.findByIdAndDelete(postId)
+			User.findByIdAndUpdate(currentUserId, { $inc: { postsCount: -1 } }),
+			Post.findByIdAndDelete(postId),
+			Comment.deleteMany({ postId })
 		])
 
 		let errorMessage = ''

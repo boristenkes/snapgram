@@ -29,15 +29,17 @@ export default async function PostPage({
 	const { post } = response
 
 	return (
-		<div className='w-[min(62.5rem,100%-2rem)] mx-auto'>
-			<BackButton className='mt-20 mb-10' />
+		<>
+			<div className='w-[min(68.75rem,100%-2rem)] mx-auto'>
+				<BackButton className='my-5 sm:mt-20 sm:mb-10' />
 
-			<PostDetails post={post} />
+				<PostDetails post={post} />
 
-			<RelatedPosts
-				postId={post._id}
-				author={post.author}
-			/>
-		</div>
+				<RelatedPosts
+					postId={post._id}
+					author={post.author}
+				/>
+			</div>
+		</>
 	)
 }

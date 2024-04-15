@@ -77,7 +77,7 @@ export default async function Post({ post }: { post: PostType }) {
 				post={post}
 			/>
 
-			<CommentInput />
+			<CommentInput postId={post._id} />
 		</article>
 	)
 }

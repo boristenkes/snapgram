@@ -12,7 +12,7 @@ const postSchema = new mongoose.Schema(
 
 		likes: [{ type: ObjectId, ref: 'User' }],
 		likeCount: { type: Number, default: 0 },
-		comments: [{ type: ObjectId, ref: 'Comment' }],
+		// comments: [{ type: ObjectId, ref: 'Comment' }],
 		commentCount: { type: Number, default: 0 },
 		shares: [{ type: ObjectId, ref: 'User' }],
 		shareCount: { type: Number, default: 0 },
