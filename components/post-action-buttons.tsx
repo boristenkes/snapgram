@@ -1,11 +1,10 @@
 import {
+	CommentButton,
 	LikeButton,
 	SaveButton,
 	ShareButton
 } from '@/components/post/action-buttons'
 import { Post, User } from '@/lib/types'
-import Image from 'next/image'
-import Link from 'next/link'
 
 type PostActionButtonsProps = {
 	currentUser: User
@@ -26,19 +25,10 @@ export default function PostActionButtons({
 					isLiked={(currentUser.likedPosts as string[]).includes(post._id)}
 				/>
 
-				<Link
-					href={`/post/${post._id}`}
-					className='flex items-center gap-2'
-					aria-label='View post comments'
-				>
-					<Image
-						src='/assets/icons/comment.svg'
-						alt=''
-						width={20}
-						height={20}
-					/>
-					{post.commentCount}
-				</Link>
+				<CommentButton
+					postId={post._id}
+					commentCount={post.commentCount}
+				/>
 
 				<ShareButton
 					currentUserId={currentUser._id}

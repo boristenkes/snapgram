@@ -7,8 +7,15 @@ import toast from '@/lib/toast'
 import clientSession from '@/lib/client-session'
 import { useRef } from 'react'
 import { usePathname } from 'next/navigation'
+import { cn } from '@/lib/utils'
 
-export default function CommentInput({ postId }: { postId: string }) {
+export default function CommentInput({
+	postId,
+	className
+}: {
+	postId: string
+	className?: string
+}) {
 	const { user: currentUser } = clientSession()
 	const inputRef = useRef<HTMLInputElement>(null)
 	const pathname = usePathname()
@@ -35,7 +42,7 @@ export default function CommentInput({ postId }: { postId: string }) {
 	return (
 		<form
 			action={clientAction}
-			className='flex items-center gap-3'
+			className={cn('flex items-center gap-3', className)}
 		>
 			<Avatar
 				url={currentUser.image}

@@ -253,7 +253,7 @@ export async function follow(formData: FormData) {
 		await connectMongoDB()
 
 		const currentUser = await User.findById(currentUserId)
-		const isAlreadyFollower = currentUser?.followers?.includes(targetUserId)
+		const isAlreadyFollower = currentUser?.following?.includes(targetUserId)
 
 		if (isAlreadyFollower) return
 

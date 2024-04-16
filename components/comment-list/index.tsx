@@ -7,8 +7,15 @@ import LikeCommentButton from './like-comment-button'
 import { getCurrentUser } from '@/lib/session'
 import { formatDistanceToNowStrict } from 'date-fns'
 import Image from 'next/image'
+import { cn } from '@/lib/utils'
 
-export default async function CommentList({ postId }: { postId: string }) {
+export default async function CommentList({
+	postId,
+	className
+}: {
+	postId: string
+	className?: string
+}) {
 	const { user: currentUser } = await getCurrentUser()
 
 	const response = await fetchComments(
@@ -19,7 +26,18 @@ export default async function CommentList({ postId }: { postId: string }) {
 	if (!response.success) return <ErrorMessage message={response.message} />
 
 	return (
-		<ul className='flex flex-col flex-grow h-1 gap-6 overflow-y-auto custom-scrollbar'>
+		<ul
+			className={cn(
+				'flex flex-col flex-grow h-1 gap-6 overflow-y-auto custom-scrollbar',
+				className
+			)}
+		>
+			{!response.comments.length && (
+				<li className='text-neutral-500'>
+					This post doesn't have any comments
+				</li>
+			)}
+
 			{response.comments.map(comment => {
 				const author = comment.author as User
 

@@ -72,8 +72,7 @@ export type Post = {
 	commentCount: number
 	shares: User[] | string[]
 	shareCount: number
-	taggedUsers: User[] | string[]
-	taggedUsersCount: number
+	mentions: User[] | string[]
 	createdAt: string
 	updatedAt: string
 }
