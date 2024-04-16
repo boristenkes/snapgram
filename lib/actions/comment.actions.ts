@@ -40,7 +40,7 @@ export async function createComment({
 
 		revalidatePath(pathname)
 
-		return { success: true, message: 'Successfully commented comment' }
+		return { success: true, message: 'Successfully commented post' }
 	} catch (error: any) {
 		return { success: false, message: error.message }
 	}

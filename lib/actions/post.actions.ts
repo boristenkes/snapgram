@@ -69,6 +69,47 @@ export async function createPost({
 	}
 }
 
+type UpdatePostProps = {
+	authorId: string
+	postId: string
+	caption: string
+	altText: string
+	mentions: Mention[]
+	tags: string[]
+}
+
+export async function updatePost({
+	authorId,
+	postId,
+	caption,
+	altText,
+	mentions,
+	tags
+}: UpdatePostProps) {
+	try {
+		await connectMongoDB()
+
+		const { user: currentUser } = await getCurrentUser()
+
+		if (!currentUser) throw new Error('You must be logged in to edit this post')
+
+		if (currentUser._id !== authorId)
+			throw new Error('You are not authorized to edit this post')
+
+		await Post.findByIdAndUpdate(postId, {
+			caption,
+			altText,
+			mentions,
+			tags
+		})
+
+		return { success: true, message: 'Successfully edited post' }
+	} catch (error: any) {
+		console.log('`updatePost`:', error)
+		return { success: false, message: error.message }
+	}
+}
+
 type FetchPost =
 	| { success: true; post: PostType }
 	| { success: false; message: string }
