@@ -35,7 +35,7 @@ export default async function SuggestedAccounts() {
 							/>
 							<div className='flex-1 grid'>
 								<strong>{account.name}</strong>
-								<small className='text-neutral-500'>{account.username}</small>
+								<small className='text-neutral-500'>@{account.username}</small>
 							</div>
 						</Link>
 						<FollowButton

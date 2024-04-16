@@ -10,6 +10,8 @@ import PostActionButtons from '@/components/post-action-buttons'
 import PostContent from '../post-content'
 import Tag from '@/components/tag'
 import { Button } from '../ui/button'
+import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
+import MentionsViewer from '../mentions-viewer'
 
 export default async function Post({ post }: { post: PostType }) {
 	const { user: currentUser } = await getCurrentUser()
@@ -66,11 +68,14 @@ export default async function Post({ post }: { post: PostType }) {
 				</pre>
 			)}
 
-			<PostContent
-				content={post.content}
-				alt={post.altText}
-				className='rounded-2xl overflow-hidden'
-			/>
+			<div className='relative'>
+				<PostContent
+					content={post.content}
+					alt={post.altText}
+					className='rounded-2xl overflow-hidden'
+				/>
+				{!!post.mentions.length && <MentionsViewer postId={post._id} />}
+			</div>
 
 			<PostActionButtons
 				currentUser={currentUser}

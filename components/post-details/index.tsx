@@ -11,6 +11,7 @@ import PostActionButtons from '@/components/post-action-buttons'
 import Avatar from '@/components/avatar'
 import PostContent from '@/components/post-content'
 import CommentList from '../comment-list'
+import MentionsViewer from '../mentions-viewer'
 
 type PostDetailsProps = {
 	post: Post
@@ -25,11 +26,12 @@ export default async function PostDetails({ post }: PostDetailsProps) {
 		<>
 			{/* Desktop */}
 			<main className='mb-12 aspect-[16/8] rounded-3xl bg-neutral-800 hidden lg:flex'>
-				<div className='rounded-lg overflow-hidden flex-1 w-full h-full'>
+				<div className='relative rounded-lg overflow-hidden flex-1 w-full h-full'>
 					<PostContent
 						content={post.content}
 						alt={post.altText}
 					/>
+					{!!post.mentions.length && <MentionsViewer postId={post._id} />}
 				</div>
 
 				<div className='py-9 px-7 flex-1'>
@@ -144,11 +146,14 @@ export default async function PostDetails({ post }: PostDetailsProps) {
 					</pre>
 				)}
 
-				<PostContent
-					content={post.content}
-					alt={post.altText}
-					className='rounded-2xl overflow-hidden'
-				/>
+				<div className='relative'>
+					<PostContent
+						content={post.content}
+						alt={post.altText}
+						className='rounded-2xl overflow-hidden'
+					/>
+					{!!post.mentions.length && <MentionsViewer postId={post._id} />}
+				</div>
 
 				<PostActionButtons
 					currentUser={currentUser}
