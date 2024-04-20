@@ -52,7 +52,7 @@ type FetchComment =
 
 type FetchCommentOptions = {
 	select?: string
-	populate?: [string, string]
+	populate?: (string | Record<string, any>)[]
 }
 
 export async function fetchComment(
@@ -65,7 +65,13 @@ export async function fetchComment(
 		let query = Comment.findOne(conditions, select)
 
 		if (populate?.length) {
-			query = query.populate(populate[0], populate[1])
+			if (typeof populate[0] === 'string') {
+				// @ts-ignore
+				query.populate(...populate)
+			} else {
+				// @ts-ignore
+				query.populate(populate)
+			}
 		}
 
 		const comment = await query.exec()
@@ -97,7 +103,15 @@ export async function fetchComments(
 
 		let query = Comment.find(conditions as TODO, select)
 
-		if (populate?.length) query.populate(populate[0], populate[1])
+		if (populate?.length) {
+			if (typeof populate[0] === 'string') {
+				// @ts-ignore
+				query.populate(...populate)
+			} else {
+				// @ts-ignore
+				query.populate(populate)
+			}
+		}
 
 		if (sort) query.sort(sort)
 
@@ -147,3 +161,75 @@ export async function toggleCommentLike({
 		return { success: false, message: error.message }
 	}
 }
+
+type ReplyToCommentProps = {
+	postId: string
+	parentCommentId: string
+	author: string
+	content: string
+}
+
+export async function replyToComment({
+	postId,
+	parentCommentId,
+	author,
+	content
+}: ReplyToCommentProps) {
+	try {
+		await connectMongoDB()
+
+		const session = await getCurrentUser()
+
+		if (!session) throw new Error('You must be logged in to reply to comments')
+
+		const newComment = await Comment.create({
+			postId,
+			parentCommentId,
+			author,
+			content,
+			isReply: true
+		})
+
+		await newComment.populate('author', 'image username name')
+
+		await Comment.findByIdAndUpdate(parentCommentId, {
+			$push: { replies: newComment._id }
+		})
+
+		return { success: true, comment: JSON.parse(JSON.stringify(newComment)) }
+	} catch (error: any) {
+		console.error('`replyToComment`:', error)
+		return { success: false, message: error.message }
+	}
+}
+
+export async function countReplies(parentCommentId: string) {
+	await connectMongoDB()
+
+	const replyCount = Comment.countDocuments({ isReply: true, parentCommentId })
+
+	return replyCount ?? 0
+}
+
+export async function deleteComment(commentId: string) {
+	try {
+		await connectMongoDB()
+
+		await Comment.deleteMany({
+			$or: [{ _id: commentId }, { parentCommentId: commentId }]
+		})
+
+		return { success: true, message: 'Successfully deleted comment' }
+	} catch (error: any) {
+		console.log('`deleteComment`:', error)
+		return { success: false, message: error.message }
+	}
+}
+
+// ;(async () => {
+// 	await Promise.all([
+// 		Comment.deleteMany({ isReply: true }),
+// 		Comment.updateMany({}, { replies: [] })
+// 	])
+// 	console.log('deleted')
+// })()

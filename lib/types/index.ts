@@ -81,12 +81,17 @@ export type Comment = {
 	_id: string
 	author: User | string
 	postId: string
+	parentCommentId: string
 	content: string
 	replies: Comment[] | string[]
-	likes: User[]
+	likes: string[]
 	likeCount: number
 	isReply: boolean
 	createdAt: Date
+}
+
+export type OptimisticReply = Omit<Comment, '_id' | 'replies' | 'isReply'> & {
+	pending?: boolean
 }
 
 export type SearchParams = Record<string, string | string[] | undefined>

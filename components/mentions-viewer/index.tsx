@@ -18,7 +18,10 @@ export default async function MentionsViewer({ postId }: { postId: string }) {
 
 	return (
 		<Popover>
-			<PopoverTrigger className='absolute bottom-4 left-4 bg-neutral-800 p-2 aspect-square rounded-full'>
+			<PopoverTrigger
+				className='absolute bottom-4 left-4 bg-neutral-800 p-2 aspect-square rounded-full'
+				aria-label='View mentioned users'
+			>
 				<Image
 					src='/assets/icons/user.svg'
 					alt=''

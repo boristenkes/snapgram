@@ -9,6 +9,7 @@ const commentSchema = new mongoose.Schema(
 		likeCount: { type: Number, default: 0 },
 		replies: [{ type: ObjectId, ref: 'Comment' }],
 		content: { type: String, required: true, trim: true },
+		parentCommentId: { type: ObjectId, ref: 'Comment' },
 		isReply: { type: Boolean, default: false }
 	},
 	{

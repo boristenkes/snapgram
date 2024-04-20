@@ -27,8 +27,15 @@ export async function generateStaticParams() {
 export async function generateMetadata({
 	params: { username }
 }: ProfilePageProps) {
+	const response = await fetchUser({ username })
+
+	if (!response.success) return { title: 'Snapgram' }
+
+	const { user } = response
+
 	return {
-		title: `Snapgram | ${username}`
+		title: `${user.name} (@${user.username}) • Snapgram`,
+		description: user.bio
 	}
 }
 
