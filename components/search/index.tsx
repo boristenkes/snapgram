@@ -6,8 +6,13 @@ import { useState } from 'react'
 import Link from 'next/link'
 import Avatar from '../avatar'
 import { searchUsers } from '@/lib/actions/user.actions'
+import UserCard from '../user-card'
+import { User } from '@/lib/types'
+import { cn } from '@/lib/utils'
 
-export type SearchProps = React.InputHTMLAttributes<HTMLInputElement> & {}
+export type SearchProps = React.InputHTMLAttributes<HTMLInputElement> & {
+	wrapperClassName?: string
+}
 export type SearchResult = {
 	_id: string
 	name: string
@@ -15,13 +20,18 @@ export type SearchResult = {
 	image: string
 }
 
-export default function Search({ ...rest }: SearchProps) {
+export default function Search({ wrapperClassName, ...rest }: SearchProps) {
 	const [searchResults, setSearchResults] = useState<SearchResult[] | null>(
 		null
 	)
 
 	return (
-		<div className='flex gap-4 bg-neutral-700 p-3 rounded-2xl relative border-2 border-transparent has-[input:focus]:border-neutral-100'>
+		<div
+			className={cn(
+				'flex gap-4 bg-neutral-700 p-3 rounded-2xl relative border-2 border-transparent has-[input:focus]:border-neutral-100',
+				wrapperClassName
+			)}
+		>
 			<Image
 				src='/assets/icons/search.svg'
 				alt=''
@@ -36,23 +46,11 @@ export default function Search({ ...rest }: SearchProps) {
 					{...rest}
 				/>
 				{searchResults !== null && (
-					<ul className='absolute top-full left-0 w-full bg-neutral-700 mt-3 p-4 space-y-4 rounded-lg shadow-xl'>
+					<ul className='absolute top-full left-0 w-full bg-neutral-700 mt-3 p-2 rounded-lg shadow-xl'>
 						{!!searchResults?.length ? (
-							searchResults.map(item => (
+							(searchResults as User[]).map(item => (
 								<li key={item.username}>
-									<Link
-										href={`/profile/${item.username}`}
-										className='flex items-center gap-2'
-									>
-										<Avatar
-											url={item.image}
-											width={40}
-										/>
-										<div className='flex-1 grid'>
-											<strong>{item.name}</strong>
-											<small>{item.username}</small>
-										</div>
-									</Link>
+									<UserCard user={item} />
 								</li>
 							))
 						) : (

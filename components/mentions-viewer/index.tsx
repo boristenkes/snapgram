@@ -3,9 +3,8 @@ import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
 import Image from 'next/image'
 import { fetchPost } from '@/lib/actions/post.actions'
 import ErrorMessage from '../error-message'
-import Link from 'next/link'
-import Avatar from '../avatar'
 import { User } from '@/lib/types'
+import UserCard from '../user-card'
 
 export default async function MentionsViewer({ postId }: { postId: string }) {
 	const response = await fetchPost(
@@ -35,23 +34,8 @@ export default async function MentionsViewer({ postId }: { postId: string }) {
 				{response.success ? (
 					<ul>
 						{(response.post.mentions as User[]).map(user => (
-							<li
-								key={user.username}
-								className='flex items-center justify-between has-[:hover]:bg-neutral-600/50 rounded-md transition-colors duration-200'
-							>
-								<Link
-									href={`/profile/${user.username}`}
-									className='flex items-center gap-2 flex-1 p-2'
-								>
-									<Avatar
-										url={user.image}
-										width={40}
-									/>
-									<div className='flex-1 grid'>
-										<strong>{user.name}</strong>
-										<small className='text-neutral-500'>@{user.username}</small>
-									</div>
-								</Link>
+							<li key={user.username}>
+								<UserCard user={user} />
 							</li>
 						))}
 					</ul>

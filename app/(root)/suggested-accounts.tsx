@@ -4,6 +4,7 @@ import { fetchUsers } from '@/lib/actions/user.actions'
 import { getCurrentUser } from '@/lib/session'
 import Link from 'next/link'
 import ErrorMessage from '@/components/error-message'
+import UserCard from '@/components/user-card'
 
 export default async function SuggestedAccounts() {
 	const { user: currentUser } = await getCurrentUser()
@@ -25,23 +26,13 @@ export default async function SuggestedAccounts() {
 						key={account.username}
 						className='flex items-center justify-between has-[:hover]:bg-neutral-700/50 rounded-md transition-colors duration-200'
 					>
-						<Link
-							href={`/profile/${account.username}`}
-							className='flex items-center gap-2 flex-1 p-2'
-						>
-							<Avatar
-								url={account.image}
-								width={40}
-							/>
-							<div className='flex-1 grid'>
-								<strong>{account.name}</strong>
-								<small className='text-neutral-500'>@{account.username}</small>
-							</div>
-						</Link>
-						<FollowButton
-							currentUserStr={JSON.stringify(currentUser)}
-							targetUserStr={JSON.stringify(account)}
-							className='py-2 px-4 bg-transparent text-primary-500 border-none transition-colors hover:bg-primary-500/20'
+						<UserCard
+							user={account}
+							withFollowButton
+							followButtonProps={{
+								className:
+									'py-2 px-4 bg-transparent text-primary-500 border-none transition-colors hover:bg-primary-500/20'
+							}}
 						/>
 					</li>
 				))}

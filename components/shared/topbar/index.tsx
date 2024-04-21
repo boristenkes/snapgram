@@ -12,10 +12,12 @@ import { Button } from '@/components/elements'
 import { signOut } from 'next-auth/react'
 import { usePathname } from 'next/navigation'
 import TopbarLink from './topbar-link'
+import Searchbar from '@/components/search'
 
 export default function Topbar() {
 	const { user } = clientSession()
 	const [isMenuOpen, setMenuOpen] = useState(false)
+	const [searchExpanded, setSearchExpanded] = useState(false)
 	const pathname = usePathname()
 
 	useEffect(() => {
@@ -25,28 +27,52 @@ export default function Topbar() {
 	return (
 		<header className='sticky top-0 z-40 w-full | md:hidden'>
 			<div className='flex justify-between items-center py-3 px-4 bg-neutral-800 border-b-2 border-b-neutral-700'>
-				<Link href='/'>
-					<Image
-						src='/assets/logo-text.svg'
-						alt='Snapgram logo'
-						width={131}
-						height={28}
-						priority
+				{searchExpanded && (
+					<Searchbar
+						wrapperClassName='w-full'
+						placeholder='Search users...'
+						autoFocus
+						onBlur={() => setTimeout(() => setSearchExpanded(false), 0)}
 					/>
-				</Link>
-				<div className='flex items-center gap-3'>
-					<Link href={`/profile/${user?.username}`}>
-						<Avatar
-							url={user?.image}
-							alt={user?.name}
-							width={30}
-						/>
-					</Link>
-					<MenuButton
-						isOpen={isMenuOpen}
-						setOpen={setMenuOpen}
-					/>
-				</div>
+				)}
+
+				{!searchExpanded && (
+					<>
+						<Link href='/'>
+							<Image
+								src='/assets/logo-text.svg'
+								alt='Snapgram logo'
+								width={131}
+								height={28}
+								priority
+							/>
+						</Link>
+						<div className='flex items-center gap-3'>
+							<button
+								aria-label='Toggle search bar'
+								onClick={() => setSearchExpanded(true)}
+							>
+								<Image
+									src='/assets/icons/search.svg'
+									alt=''
+									width={24}
+									height={24}
+								/>
+							</button>
+							<Link href={`/profile/${user?.username}`}>
+								<Avatar
+									url={user?.image}
+									alt={user?.name}
+									width={30}
+								/>
+							</Link>
+							<MenuButton
+								isOpen={isMenuOpen}
+								setOpen={setMenuOpen}
+							/>
+						</div>
+					</>
+				)}
 			</div>
 			<div
 				className={cn(

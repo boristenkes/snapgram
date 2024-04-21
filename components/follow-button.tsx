@@ -10,7 +10,7 @@ import { TODO, User } from '@/lib/types'
 import Loader from './loader'
 import SubmitButton from './elements/submit-button'
 
-type FollowButtonProps = ButtonProps & {
+export type FollowButtonProps = ButtonProps & {
 	currentUserStr: string
 	targetUserStr: string
 	formProps?: React.FormHTMLAttributes<HTMLFormElement>

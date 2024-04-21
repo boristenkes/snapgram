@@ -1,6 +1,6 @@
 'use client'
 
-import { id } from '@/lib/utils'
+import { id, isImage } from '@/lib/utils'
 import Image from 'next/image'
 import { useEffect, useState } from 'react'
 
@@ -58,7 +58,7 @@ export default function Previews({ files, initialPreviews }: PreviewsProps) {
 						key={preview.id}
 						className='relative isolate flex-none'
 					>
-						{preview.url.includes('image/') ? (
+						{isImage(preview.url) ? (
 							<Image
 								src={preview.url}
 								alt={preview.alt}

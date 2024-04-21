@@ -1,3 +1,4 @@
+import { imageTypes } from '@/constants'
 import { type ClassValue, clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 
@@ -58,6 +59,16 @@ export function validateImage(
 		)
 
 	return { success: !errors.length, errors }
+}
+
+export function isImage(src: string) {
+	if (src.includes('image/')) return true
+
+	const extension = src.split('.').at(-1) as string
+
+	if (imageTypes.includes(extension)) return true
+
+	return false
 }
 
 export function removeDuplicates<T>(array: T[], id?: string | number): T[] {
