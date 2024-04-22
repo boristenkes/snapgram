@@ -372,6 +372,27 @@ export async function handleOnboardingBackButtonClick({
 	}
 }
 
+export async function switchAccountPrivate(
+	userId: string,
+	newIsPrivate: boolean
+) {
+	try {
+		await connectMongoDB()
+
+		await User.findByIdAndUpdate(userId, { private: newIsPrivate })
+
+		return {
+			success: true,
+			message: `Successfully set account to ${
+				newIsPrivate ? 'private' : 'public'
+			}`
+		}
+	} catch (error: any) {
+		console.log('`switchAccountPrivate`:', error)
+		return { success: false, message: error.message }
+	}
+}
+
 export async function deleteUser(filters: FilterQuery<UserType>) {
 	try {
 		await connectMongoDB()

@@ -1,8 +1,6 @@
-import { Button } from '@/components/ui/button'
-import { Label } from '@/components/ui/label'
-import { Switch } from '@/components/ui/switch'
 import DeleteAccountButton from './delete-account-button'
 import { getCurrentUser } from '@/lib/session'
+import PrivateAccountSwitch from './private-account-switch'
 
 export default async function SettingsPage() {
 	const { user: currentUser } = await getCurrentUser()
@@ -13,14 +11,16 @@ export default async function SettingsPage() {
 				Manage Your Account
 			</h1>
 
-			<div className='space-y-16'>
+			<div className='space-y-16 w-paragraph'>
 				<div className='space-y-2'>
 					<h2 className='text-lg lg:text-2xl'>Account privacy</h2>
+
 					<div className='w-full h-px bg-neutral-500 rounded-full' />
-					<div className='flex items-center space-x-2 py-2'>
-						<Switch id='private-account' />
-						<Label htmlFor='private-account'>Private account</Label>
-					</div>
+
+					<PrivateAccountSwitch
+						userId={currentUser._id}
+						defaultIsPrivate={currentUser.private}
+					/>
 
 					<p className='text-sm text-neutral-200 w-paragraph'>
 						When your account is public, your profile and posts can be seen by
@@ -34,7 +34,8 @@ export default async function SettingsPage() {
 				</div>
 
 				<div className='space-y-2'>
-					<h2 className='text-lg lg:text-2xl'>Danger zone</h2>
+					<h2 className='text-lg lg:text-2xl'>Delete your account</h2>
+
 					<div className='w-full h-px bg-neutral-500 rounded-full' />
 
 					<p className='text-sm text-neutral-200 w-paragraph'>

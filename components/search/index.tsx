@@ -3,8 +3,6 @@
 import Image from 'next/image'
 import SearchInput from './search-input'
 import { useState } from 'react'
-import Link from 'next/link'
-import Avatar from '../avatar'
 import { searchUsers } from '@/lib/actions/user.actions'
 import UserCard from '../user-card'
 import { User } from '@/lib/types'
