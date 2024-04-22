@@ -338,7 +338,7 @@ export async function deletePost(
 
 		if (!post) throw new Error("Couldn't find post. Please try again later")
 
-		if (post.author.toString() !== currentUserId)
+		if (post.author.toString() !== currentUserId.toString())
 			throw new Error('You are unauthorized to delete this post')
 
 		// content url example: https://utfs.io/f/eeb195b1-95de-4160-8b44-167ca3c3beec-9o58rl.png

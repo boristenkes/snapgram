@@ -215,6 +215,14 @@ export async function deleteComment(commentId: string) {
 	try {
 		await connectMongoDB()
 
+		const comment = await Comment.findById(commentId).select('postId')
+
+		const parentPost = await Post.findById(comment.postId)
+
+		parentPost.commentCount--
+
+		await parentPost.save()
+
 		await Comment.deleteMany({
 			$or: [{ _id: commentId }, { parentCommentId: commentId }]
 		})

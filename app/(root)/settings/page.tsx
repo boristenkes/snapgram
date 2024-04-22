@@ -1,3 +1,56 @@
-export default function SettingsPage() {
-	return <h1>Settings</h1>
+import { Button } from '@/components/ui/button'
+import { Label } from '@/components/ui/label'
+import { Switch } from '@/components/ui/switch'
+import DeleteAccountButton from './delete-account-button'
+import { getCurrentUser } from '@/lib/session'
+
+export default async function SettingsPage() {
+	const { user: currentUser } = await getCurrentUser()
+
+	return (
+		<main className='mx-4 lg:mx-16 my-10 lg:my-20'>
+			<h1 className='text-2xl lg:text-4xl font-bold flex items-center gap-2.5 mb-12'>
+				Manage Your Account
+			</h1>
+
+			<div className='space-y-16'>
+				<div className='space-y-2'>
+					<h2 className='text-lg lg:text-2xl'>Account privacy</h2>
+					<div className='w-full h-px bg-neutral-500 rounded-full' />
+					<div className='flex items-center space-x-2 py-2'>
+						<Switch id='private-account' />
+						<Label htmlFor='private-account'>Private account</Label>
+					</div>
+
+					<p className='text-sm text-neutral-200 w-paragraph'>
+						When your account is public, your profile and posts can be seen by
+						anyone
+					</p>
+					<p className='text-sm text-neutral-200 w-paragraph'>
+						When your account is private, only the followers you approve can see
+						what you share, including your photos or videos on hashtag and
+						location pages, and your followers and following lists.
+					</p>
+				</div>
+
+				<div className='space-y-2'>
+					<h2 className='text-lg lg:text-2xl'>Danger zone</h2>
+					<div className='w-full h-px bg-neutral-500 rounded-full' />
+
+					<p className='text-sm text-neutral-200 w-paragraph'>
+						By deleting your account, you are permanently deleting all your data
+						and data related to you from our servers. This will delete all your
+						posts, stories and remove you from other user's following lists
+					</p>
+
+					<div className='py-2'>
+						<DeleteAccountButton
+							currentUserId={currentUser._id}
+							currentUserUsername={currentUser.username}
+						/>
+					</div>
+				</div>
+			</div>
+		</main>
+	)
 }

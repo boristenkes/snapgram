@@ -15,9 +15,7 @@ const postSchema = new mongoose.Schema(
 		// comments: [{ type: ObjectId, ref: 'Comment' }],
 		commentCount: { type: Number, default: 0 },
 		shares: [{ type: ObjectId, ref: 'User' }],
-		shareCount: { type: Number, default: 0 },
-		taggedUsers: [{ type: ObjectId, ref: 'User' }],
-		taggedUsersCount: { type: Number, default: 0 }
+		shareCount: { type: Number, default: 0 }
 	},
 	{
 		timestamps: true

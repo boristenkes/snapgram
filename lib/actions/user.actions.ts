@@ -9,6 +9,13 @@ import { revalidatePath } from 'next/cache'
 import { getCurrentUser } from '../session'
 import { User as UserType } from '../types'
 import { FilterQuery, SortOrder } from 'mongoose'
+import Post from '../models/post.model'
+import Story from '../models/story.model'
+import Comment from '../models/comment.model'
+import { deletePost } from './post.actions'
+import { signOut } from 'next-auth/react'
+import { deleteStory } from './story.actions'
+import { deleteComment } from './comment.actions'
 
 const uploadthingApi = new UTApi()
 
@@ -369,15 +376,60 @@ export async function deleteUser(filters: FilterQuery<UserType>) {
 	try {
 		await connectMongoDB()
 
-		// TODO: Delete user's photo from uploadthing
-		throw new Error('First do this 👆')
+		const user = await User.findOne(filters)
+
+		if (!user) throw new Error('User not found')
+
+		const isPictureFromUploadthing = user.image?.includes('utfs.io/f/')
+
+		if (isPictureFromUploadthing) {
+			const oldImageKey = user.image?.substring(user.image?.indexOf('/f/') + 3)
+			await uploadthingApi.deleteFiles(oldImageKey)
+		}
+
+		// Define promises for each operation
+		const removeFromFollowers = User.updateMany(
+			{ following: user._id },
+			{ $pull: { following: user._id }, $inc: { followingCount: -1 } }
+		)
+
+		const removeFromFollowing = User.updateMany(
+			{ followers: user._id },
+			{ $pull: { followers: user._id }, $inc: { followersCount: -1 } }
+		)
+
+		const removeFromLikes = Post.updateMany(
+			{ likes: user._id },
+			{ $pull: { likes: user._id }, $inc: { likeCount: -1 } }
+		)
+
+		const removeFromPostMentions = Post.updateMany(
+			{ mentions: user._id },
+			{ $pull: { mentions: user._id } }
+		)
+
+		const [userPosts, userStories, userComments] = await Promise.all([
+			Post.find({ author: user._id }),
+			Story.find({ author: user._id }),
+			Comment.find({ author: user._id })
+		])
+
+		await Promise.all([
+			removeFromFollowers,
+			removeFromFollowing,
+			removeFromLikes,
+			removeFromPostMentions,
+			...userPosts.map(post => deletePost(user._id, post._id)),
+			...userStories.map(story => deleteStory(story._id.toString())),
+			...userComments.map(comment => deleteComment(comment._id))
+		])
 
 		const response = await User.deleteOne(filters)
 
 		if (response.deletedCount !== 1)
 			throw new Error('Failed to delete user. Please try again later.')
 
-		return { success: true }
+		return { success: true, message: 'Successfully deleted account' }
 	} catch (error: any) {
 		console.log('Error in `deleteUser`:', error)
 		return { success: false, message: error.message }
