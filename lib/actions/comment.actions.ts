@@ -9,6 +9,7 @@ import { SortOrder } from 'mongoose'
 import { TODO } from '../types'
 import User from '../models/user.model'
 import Post from '../models/post.model'
+import { sendNotification } from './notification.actions'
 
 type CreateCommentProps = {
 	content: string
@@ -34,9 +35,24 @@ export async function createComment({
 			author: currentUser._id
 		})
 
-		await Post.findByIdAndUpdate(newComment.postId, {
-			$inc: { commentCount: 1 }
-		})
+		const post = await Post.findById(newComment.postId).select(
+			'commentCount author'
+		)
+
+		post.commentCount++
+
+		await Promise.all([
+			post.save(),
+
+			sendNotification({
+				sender: currentUser._id,
+				recipient: post.author,
+				type: 'NEW_COMMENT',
+				// @ts-ignore
+				commentContent: content,
+				postId: postId
+			})
+		])
 
 		revalidatePath(pathname)
 

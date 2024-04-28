@@ -16,6 +16,7 @@ import { deletePost } from './post.actions'
 import { signOut } from 'next-auth/react'
 import { deleteStory } from './story.actions'
 import { deleteComment } from './comment.actions'
+import { deleteNotification, sendNotification } from './notification.actions'
 
 const uploadthingApi = new UTApi()
 
@@ -253,8 +254,9 @@ export async function updateUser({
 export async function follow(formData: FormData) {
 	if (!formData) return
 
-	const currentUserId = formData.get('currentUserId') as string
-	const targetUserId = formData.get('targetUserId') as string
+	const { currentUserId, targetUserId } = Object.fromEntries(
+		formData
+	) as Record<string, string>
 
 	try {
 		await connectMongoDB()
@@ -275,6 +277,12 @@ export async function follow(formData: FormData) {
 			})
 		])
 
+		await sendNotification({
+			type: 'NEW_FOLLOWER',
+			sender: currentUserId,
+			recipient: targetUserId
+		})
+
 		revalidatePath(`/profile/${targetUserId}`)
 	} catch (error: any) {
 		console.log('Error in `follow`:', error)
@@ -285,8 +293,9 @@ export async function follow(formData: FormData) {
 export async function unfollow(formData: FormData) {
 	if (!formData) return
 
-	const currentUserId = formData.get('currentUserId') as string
-	const targetUserId = formData.get('targetUserId') as string
+	const { currentUserId, targetUserId } = Object.fromEntries(
+		formData
+	) as Record<string, string>
 
 	try {
 		await connectMongoDB()
@@ -302,6 +311,12 @@ export async function unfollow(formData: FormData) {
 			})
 		])
 
+		await deleteNotification({
+			type: 'NEW_FOLLOWER',
+			sender: currentUserId,
+			recipient: targetUserId
+		})
+
 		revalidatePath(`/profile/${targetUserId}`)
 	} catch (error) {
 		console.log('Error in `unfollow`:', error)
@@ -312,19 +327,117 @@ export async function unfollow(formData: FormData) {
 export async function sendFollowRequest(formData: FormData) {
 	if (!formData) return
 
-	const currentUserId = formData.get('currentUserId') as string
-	const targetUserId = formData.get('targetUserId') as string
+	const { currentUserId, targetUserId } = Object.fromEntries(
+		formData
+	) as Record<string, string>
 
-	console.log({ action: 'sendFollowRequest' })
+	try {
+		await connectMongoDB()
+
+		const targetUser = await User.findById(targetUserId)
+
+		if (!targetUser.followRequests.includes(currentUserId))
+			targetUser.followRequests.push(currentUserId)
+
+		await Promise.all([
+			targetUser.save(),
+
+			sendNotification({
+				type: 'NEW_FOLLOW_REQUEST',
+				sender: currentUserId,
+				recipient: targetUserId
+			})
+		])
+
+		revalidatePath(`/profile/${targetUserId}`)
+
+		return { success: true }
+	} catch (error: any) {
+		console.log('`sendFollowRequest`:', error)
+		return { success: false, message: error.message }
+	}
 }
 
 export async function unsendFollowRequest(formData: FormData) {
 	if (!formData) return
 
-	const currentUserId = formData.get('currentUserId') as string
-	const targetUserId = formData.get('targetUserId') as string
+	const { currentUserId, targetUserId } = Object.fromEntries(
+		formData
+	) as Record<string, string>
 
-	console.log({ action: 'unsendFollowRequest' })
+	try {
+		await connectMongoDB()
+
+		await Promise.all([
+			User.findByIdAndUpdate(targetUserId, {
+				$pull: { followRequests: currentUserId }
+			}),
+
+			deleteNotification({
+				type: 'NEW_FOLLOW_REQUEST',
+				sender: currentUserId,
+				recipient: targetUserId
+			})
+		])
+
+		revalidatePath(`/profile/${targetUserId}`)
+
+		return { success: true }
+	} catch (error: any) {
+		console.log('`sendFollowRequest`:', error)
+		return { success: false, message: error.message }
+	}
+}
+
+export async function acceptFollower(senderId: string, recipientId: string) {
+	try {
+		await connectMongoDB()
+
+		const formData = new FormData()
+		formData.set('currentUserId', senderId)
+		formData.set('targetUserId', recipientId)
+
+		await Promise.all([
+			follow(formData),
+			deleteNotification({
+				type: 'NEW_FOLLOW_REQUEST',
+				sender: senderId,
+				recipient: recipientId
+			}),
+			User.findByIdAndUpdate(recipientId, {
+				$pull: { followRequests: senderId }
+			})
+		])
+
+		return { success: true }
+	} catch (error: any) {
+		console.log('`acceptFollower`:', error)
+		return { success: false, message: error.message }
+	}
+}
+
+export async function rejectFollower(senderId: string, recipientId: string) {
+	try {
+		await connectMongoDB()
+
+		await Promise.all([
+			User.findByIdAndUpdate(recipientId, {
+				$pull: { followRequests: senderId }
+			}),
+			deleteNotification({
+				type: 'NEW_FOLLOW_REQUEST',
+				sender: senderId,
+				recipient: recipientId
+			})
+		])
+
+		revalidatePath('/notifications')
+
+		return { success: true }
+	} catch (error: any) {
+		console.log('`rejectFollower`:', error)
+		return { success: false, message: error.message }
+	}
 }
 
 export async function searchUsers(searchTerm: string) {

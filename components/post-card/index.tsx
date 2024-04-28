@@ -1,7 +1,7 @@
 import { Post } from '@/lib/types'
 import Image from 'next/image'
 import Link from 'next/link'
-import { imageTypes } from '@/constants'
+import { isImage } from '@/lib/utils'
 
 type PostCardProps = {
 	post: Post
@@ -15,7 +15,7 @@ export default function PostCard({ post, priority = false }: PostCardProps) {
 			scroll={false}
 		>
 			<article className='relative rounded-lg overflow-hidden aspect-square transition-[filter] hover:brightness-110'>
-				{imageTypes.some(type => post.content[0].endsWith(type)) ? (
+				{isImage(post.content[0]) ? (
 					<Image
 						src={post.content[0]}
 						alt={post.altText}

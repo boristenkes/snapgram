@@ -8,8 +8,9 @@ import Post from '../models/post.model'
 import User from '../models/user.model'
 import Comment from '../models/comment.model'
 import { revalidatePath } from 'next/cache'
-import { TODO, type Post as PostType } from '../types'
+import { Notification, TODO, type Post as PostType } from '../types'
 import { SortOrder } from 'mongoose'
+import { deleteNotification, sendNotification } from './notification.actions'
 
 const uploadthingApi = new UTApi()
 
@@ -275,7 +276,11 @@ export async function togglePostLike({
 	try {
 		await connectMongoDB()
 
-		const currentUser = await User.findById(currentUserId)
+		const [currentUser, post] = await Promise.all([
+			User.findById(currentUserId),
+			Post.findById(postId).select('author caption')
+		])
+
 		const isLiked = currentUser.likedPosts.includes(postId)
 
 		await Promise.all([
@@ -292,6 +297,19 @@ export async function togglePostLike({
 					: { $push: { likes: currentUserId }, $inc: { likeCount: 1 } }
 			)
 		])
+
+		const notificationData = {
+			type: 'LIKED_POST',
+			sender: currentUserId,
+			recipient: post.author,
+			postId: post._id
+		} as Notification
+
+		if (!isLiked) {
+			await sendNotification(notificationData)
+		} else {
+			await deleteNotification(notificationData)
+		}
 
 		return { success: true }
 	} catch (error: any) {

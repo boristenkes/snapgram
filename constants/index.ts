@@ -106,3 +106,10 @@ deepFreeze(bottombarLinks)
 
 export const imageTypes = ['jpeg', 'jpg', 'png', 'webp']
 export const videoTypes = ['mp4', 'webm', 'ogg']
+
+export const notificationTypes = [
+	'LIKED_POST',
+	'NEW_COMMENT',
+	'NEW_FOLLOWER',
+	'NEW_FOLLOW_REQUEST'
+]

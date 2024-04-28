@@ -28,7 +28,7 @@ export type User = {
 	email: string
 	image: string
 	bio: string
-	followRequests: User[] | string[]
+	followRequests: (User | string)[]
 	followRequestsCount: number
 	followers: User[] | string[]
 	followersCount: number
@@ -95,3 +95,39 @@ export type OptimisticReply = Omit<Comment, '_id' | 'replies' | 'isReply'> & {
 }
 
 export type SearchParams = Record<string, string | string[] | undefined>
+
+type NotificationRoot = {
+	_id: string
+	type: string
+	sender: User | string
+	recipient: User | string
+	seen?: boolean
+	createdAt: Date | string
+}
+
+type LikedPostNotification = {
+	type: 'LIKED_POST'
+	postId: string
+}
+
+type NewCommentNotification = {
+	type: 'NEW_COMMENT'
+	commentContent: string
+	postId: string
+}
+
+type NewFollowerNotification = {
+	type: 'NEW_FOLLOWER'
+}
+
+type NewFollowRequestNotification = {
+	type: 'NEW_FOLLOW_REQUEST'
+}
+
+export type Notification = NotificationRoot &
+	(
+		| LikedPostNotification
+		| NewCommentNotification
+		| NewFollowerNotification
+		| NewFollowRequestNotification
+	)

@@ -1,8 +1,6 @@
 import FollowButton from '@/components/follow-button'
-import Avatar from '@/components/avatar'
 import { fetchUsers } from '@/lib/actions/user.actions'
 import { getCurrentUser } from '@/lib/session'
-import Link from 'next/link'
 import ErrorMessage from '@/components/error-message'
 import UserCard from '@/components/user-card'
 
@@ -26,14 +24,21 @@ export default async function SuggestedAccounts() {
 						key={account.username}
 						className='flex items-center justify-between has-[:hover]:bg-neutral-700/50 rounded-md transition-colors duration-200'
 					>
-						<UserCard
-							user={account}
-							withFollowButton
-							followButtonProps={{
-								className:
-									'py-2 px-4 bg-transparent text-primary-500 border-none transition-colors hover:bg-primary-500/20'
-							}}
-						/>
+						<div className='flex items-center justify-between w-full has-[:hover]:bg-neutral-600/50 rounded-md transition-colors duration-200'>
+							<UserCard
+								user={account}
+								withFollowButton
+								followButtonProps={{
+									className:
+										'py-2 px-4 bg-transparent text-primary-500 border-none transition-colors hover:bg-primary-500/20'
+								}}
+							/>
+							<FollowButton
+								currentUserStr={JSON.stringify(currentUser)}
+								targetUserStr={JSON.stringify(account)}
+								className='py-2 px-4 bg-transparent text-primary-500 border-none transition-colors hover:bg-primary-500/20'
+							/>
+						</div>
 					</li>
 				))}
 			</ul>

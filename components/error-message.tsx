@@ -14,7 +14,7 @@ export default function ErrorMessage({
 		<p
 			role='alert'
 			className={cn(
-				'bg-semantic-danger/40 p-2 rounded-lg my-6 flex items-center gap-2',
+				'bg-semantic-danger/40 p-2 rounded-lg my-6 flex items-center gap-2 w-fit',
 				className
 			)}
 		>
