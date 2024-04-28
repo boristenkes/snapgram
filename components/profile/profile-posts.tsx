@@ -2,6 +2,10 @@ import Image from 'next/image'
 import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
 import { Posts, Tagged, Saved } from './tab-contents'
 import Liked from './tab-contents/liked'
+import { fetchUser } from '@/lib/actions/user.actions'
+import ErrorMessage from '../error-message'
+import { getCurrentUser } from '@/lib/session'
+import PrivateAccountLock from './private-account-lock'
 
 type ProfilePosts = {
 	isCurrentUser: boolean
@@ -24,6 +28,7 @@ const initialTabs: Tab[] = [
 		icon: '/assets/icons/tag.svg'
 	}
 ]
+
 const authorTabs: Tab[] = [
 	...initialTabs,
 	{
@@ -41,6 +46,16 @@ export default async function ProfilePosts({
 	userId
 }: ProfilePosts) {
 	const tabs = isCurrentUser ? authorTabs : initialTabs
+	const { user: currentUser } = await getCurrentUser()
+	const response = await fetchUser({ _id: userId }, { select: 'private name' })
+
+	if (!response?.success) return <ErrorMessage message={response?.message} />
+
+	const isPrivate = response.user.private
+	const isCurrentUserFollower = currentUser.following.includes(userId)
+
+	if (isPrivate && !isCurrentUserFollower && !isCurrentUser)
+		return <PrivateAccountLock userName={response.user.name} />
 
 	return (
 		<div className='mt-16 w-full'>

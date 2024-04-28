@@ -1,8 +1,9 @@
 import { fetchPost, fetchPosts } from '@/lib/actions/post.actions'
-import { notFound } from 'next/navigation'
+import { notFound, redirect } from 'next/navigation'
 import RelatedPosts from './related-posts'
 import PostDetails from '@/components/post-details'
 import BackButton from './back-button'
+import { getCurrentUser } from '@/lib/session'
 
 export const revalidate = 3600
 
@@ -19,12 +20,20 @@ export default async function PostPage({
 }: {
 	params: { id: string }
 }) {
+	const { user: currentUser } = await getCurrentUser()
 	const response = await fetchPost(
 		{ _id: id },
-		{ populate: ['author', 'image username name'] }
+		{ populate: ['author', 'image username name private'] }
 	)
 
 	if (!response.success) notFound()
+
+	const isPrivateAuthor = response.post.author.private
+	const isCurrentUserFollower = currentUser.following.includes(
+		response.post.author._id
+	)
+
+	if (isPrivateAuthor && !isCurrentUserFollower) redirect('/')
 
 	const { post } = response
 

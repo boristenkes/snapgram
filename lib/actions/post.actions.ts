@@ -238,25 +238,46 @@ export async function searchPosts(searchTerm: string): Promise<SearchPosts> {
 		await connectMongoDB()
 
 		const regex = new RegExp(searchTerm, 'i')
+		const { user: currentUser } = await getCurrentUser()
 
-		// Find the users based on name or username
+		/**
+		 * Find users that match searchTerm regex
+		 * AND
+		 * Are either:
+		 * - the currentUser
+		 * - followed by currentUser
+		 * - public
+		 */
 		const users = await User.find({
-			$or: [{ name: { $regex: regex } }, { username: { $regex: regex } }]
+			$and: [
+				{
+					$or: [{ name: { $regex: regex } }, { username: { $regex: regex } }]
+				},
+				{
+					$or: [
+						{ _id: currentUser._id },
+						{ _id: { $in: currentUser.following } },
+						{ private: false }
+					]
+				}
+			]
 		})
 			.select('_id')
 			.exec()
 			.then(users => users.map(user => user._id))
 
-		// Use $or operator to match any of the fields (caption, tags), and author with found user IDs
+		/**
+		 * Find posts that match searchTerm regex
+		 * AND
+		 * are authored by one of the users in `users`
+		 */
 		const searchResults = await Post.find({
-			$or: [
-				{ caption: { $regex: regex } },
-				{ tags: { $in: [regex] } }, // assuming tags is an array of strings
+			$and: [
+				{ $or: [{ caption: { $regex: regex } }, { tags: { $in: [regex] } }] },
 				{ author: { $in: users } }
 			]
 		}).populate('author')
 
-		// Return the search results
 		return { success: true, posts: JSON.parse(JSON.stringify(searchResults)) }
 	} catch (error: any) {
 		console.error('`searchPosts`:', error)
