@@ -1,4 +1,4 @@
-import { getCurrentUser } from '@/lib/session'
+import auth from '@/lib/auth'
 import Avatar from '../avatar'
 import { User } from '@/lib/types'
 import Image from 'next/image'
@@ -14,7 +14,7 @@ export default async function ProfileHeader({
 	user,
 	isCurrentUser
 }: ProfileHeaderProps) {
-	const { user: currentUser } = await getCurrentUser()
+	const { user: currentUser } = await auth()
 
 	return (
 		<>
@@ -170,9 +170,14 @@ export default async function ProfileHeader({
 }
 
 function UserStats({ label, count = 0 }: { label: string; count?: number }) {
+	const formatter = Intl.NumberFormat('en', {
+		notation: 'compact'
+	})
+	const formattedCount = formatter.format(count)
+
 	return (
 		<div className='grid | small:flex small:items-center small:gap-1.5'>
-			<span className='text-primary-500'>{count}</span>
+			<span className='text-primary-500'>{formattedCount}</span>
 			<span className='text-sm | small:text-base'>{label}</span>
 		</div>
 	)

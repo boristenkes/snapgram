@@ -1,11 +1,11 @@
 import FollowButton from '@/components/follow-button'
 import { fetchUsers } from '@/lib/actions/user.actions'
-import { getCurrentUser } from '@/lib/session'
+import auth from '@/lib/auth'
 import ErrorMessage from '@/components/error-message'
 import UserCard from '@/components/user-card'
 
 export default async function SuggestedAccounts() {
-	const { user: currentUser } = await getCurrentUser()
+	const { user: currentUser } = await auth()
 	const response = await fetchUsers(
 		{ _id: { $ne: currentUser._id } },
 		{ select: 'image username name' }

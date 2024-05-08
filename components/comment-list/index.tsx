@@ -1,6 +1,6 @@
 import { fetchComments } from '@/lib/actions/comment.actions'
 import ErrorMessage from '../error-message'
-import { getCurrentUser } from '@/lib/session'
+import auth from '@/lib/auth'
 import { cn } from '@/lib/utils'
 import Comment from './comment'
 
@@ -11,7 +11,7 @@ export default async function CommentList({
 	postId: string
 	className?: string
 }) {
-	const { user: currentUser } = await getCurrentUser()
+	const { user: currentUser } = await auth()
 
 	const response = await fetchComments(
 		{ postId, isReply: false },

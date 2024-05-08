@@ -6,17 +6,17 @@ import { createUserSchema, editProfileSchema } from '../zod/user.schema'
 import { UTApi } from 'uploadthing/server'
 import { validateImage } from '../utils'
 import { revalidatePath } from 'next/cache'
-import { getCurrentUser } from '../session'
+import auth from '../auth'
 import { User as UserType } from '../types'
 import { FilterQuery, SortOrder } from 'mongoose'
 import Post from '../models/post.model'
 import Story from '../models/story.model'
 import Comment from '../models/comment.model'
 import { deletePost } from './post.actions'
-import { signOut } from 'next-auth/react'
 import { deleteStory } from './story.actions'
 import { deleteComment } from './comment.actions'
 import { deleteNotification, sendNotification } from './notification.actions'
+import Notification from '../models/notification.model'
 
 const uploadthingApi = new UTApi()
 
@@ -446,7 +446,7 @@ export async function searchUsers(searchTerm: string) {
 	try {
 		await connectMongoDB()
 
-		const { user: currentUser } = await getCurrentUser()
+		const { user: currentUser } = await auth()
 
 		// searching users whose `name` or `username` includes `searchTerm`
 		const searchResults = await User.find({
@@ -542,6 +542,10 @@ export async function deleteUser(filters: FilterQuery<UserType>) {
 			{ $pull: { mentions: user._id } }
 		)
 
+		const deleteUserNotifications = Notification.deleteMany({
+			recipient: user._id
+		})
+
 		const [userPosts, userStories, userComments] = await Promise.all([
 			Post.find({ author: user._id }),
 			Story.find({ author: user._id }),
@@ -553,6 +557,7 @@ export async function deleteUser(filters: FilterQuery<UserType>) {
 			removeFromFollowing,
 			removeFromLikes,
 			removeFromPostMentions,
+			deleteUserNotifications,
 			...userPosts.map(post => deletePost(user._id, post._id)),
 			...userStories.map(story => deleteStory(story._id.toString())),
 			...userComments.map(comment => deleteComment(comment._id))

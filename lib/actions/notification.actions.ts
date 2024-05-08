@@ -1,9 +1,10 @@
 'use server'
 
-import { SortOrder } from 'mongoose'
+import { FilterQuery, SortOrder } from 'mongoose'
 import Notification from '../models/notification.model'
 import connectMongoDB from '../mongoose'
 import { Notification as NotificationType, TODO } from '../types'
+import User from '../models/user.model'
 
 type FetchNotification =
 	| { success: true; notification: NotificationType }
@@ -113,6 +114,25 @@ export async function markNotificationsAsSeen(recipiendId: string) {
 		return { success: true }
 	} catch (error: any) {
 		console.log('`markNotificationsAsSeen`:', error)
+		return { success: false, message: error.message }
+	}
+}
+
+type CountNotifications =
+	| { success: true; count: number }
+	| { success: false; message: string }
+
+export async function countNotifications(
+	filters: FilterQuery<NotificationType>
+): Promise<CountNotifications> {
+	try {
+		await connectMongoDB()
+
+		const count = await Notification.countDocuments(filters)
+
+		return { success: true, count }
+	} catch (error: any) {
+		console.log('`countNotifications`:', error)
 		return { success: false, message: error.message }
 	}
 }

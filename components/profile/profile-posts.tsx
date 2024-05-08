@@ -4,7 +4,7 @@ import { Posts, Tagged, Saved } from './tab-contents'
 import Liked from './tab-contents/liked'
 import { fetchUser } from '@/lib/actions/user.actions'
 import ErrorMessage from '../error-message'
-import { getCurrentUser } from '@/lib/session'
+import auth from '@/lib/auth'
 import PrivateAccountLock from './private-account-lock'
 
 type ProfilePosts = {
@@ -46,7 +46,7 @@ export default async function ProfilePosts({
 	userId
 }: ProfilePosts) {
 	const tabs = isCurrentUser ? authorTabs : initialTabs
-	const { user: currentUser } = await getCurrentUser()
+	const { user: currentUser } = await auth()
 	const response = await fetchUser({ _id: userId }, { select: 'private name' })
 
 	if (!response?.success) return <ErrorMessage message={response?.message} />

@@ -1,6 +1,7 @@
 import Image from 'next/image'
 import ErrorMessage from '../error-message'
 import { imageTypes, videoTypes } from '@/constants'
+import { isImage, isVideo } from '@/lib/utils'
 
 type PostContentProps = {
 	src: string
@@ -19,12 +20,10 @@ export default function ContentViewer({
 	...props
 }: PostContentProps) {
 	const contentType = src.split('.').at(-1) as string
-	const isImage = imageTypes.includes(contentType)
-	const isVideo = videoTypes.includes(contentType)
 
 	// TODO: Find library for video component.
 
-	return isImage ? (
+	return isImage(src) ? (
 		<Image
 			src={src}
 			alt={alt}
@@ -33,7 +32,7 @@ export default function ContentViewer({
 			className={className}
 			{...props}
 		/>
-	) : isVideo ? (
+	) : isVideo(src) ? (
 		<video
 			width={width}
 			height={height}

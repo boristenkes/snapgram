@@ -1,9 +1,9 @@
 import DeleteAccountButton from './delete-account-button'
-import { getCurrentUser } from '@/lib/session'
+import auth from '@/lib/auth'
 import PrivateAccountSwitch from './private-account-switch'
 
 export default async function SettingsPage() {
-	const { user: currentUser } = await getCurrentUser()
+	const { user: currentUser } = await auth()
 
 	return (
 		<main className='mx-4 lg:mx-16 my-10 lg:my-20'>
@@ -27,9 +27,9 @@ export default async function SettingsPage() {
 						anyone
 					</p>
 					<p className='text-sm text-neutral-200 w-paragraph'>
-						When your account is private, only the followers you approve can see
-						what you share, including your photos or videos on hashtag and
-						location pages, and your followers and following lists.
+						When your account is private, only your followers can see what you
+						share, including your photos, videos, stories and your followers and
+						following lists.
 					</p>
 				</div>
 

@@ -1,6 +1,6 @@
 import { Topbar, Sidebar, Bottombar } from '@/components/shared'
 import { TooltipProvider } from '@/components/ui/tooltip'
-import { getCurrentUser } from '@/lib/session'
+import auth from '@/lib/auth'
 import { redirect } from 'next/navigation'
 
 export default async function RootLayout({
@@ -10,7 +10,7 @@ export default async function RootLayout({
 	children: React.ReactNode
 	dialog: React.ReactNode
 }) {
-	const session = await getCurrentUser()
+	const session = await auth()
 
 	if (!session?.user) {
 		redirect('/login')

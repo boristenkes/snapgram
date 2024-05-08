@@ -18,7 +18,7 @@ export default async function NewFollowRequestContent({
 	return (
 		<div className='flex items-center justify-between w-full'>
 			<div>
-				<p className='font-semibold text-lg'>
+				<p className='font-semibold text-sm sm:text-lg'>
 					{senderName} requested to follow you
 				</p>
 				<small className='text-neutral-500'>

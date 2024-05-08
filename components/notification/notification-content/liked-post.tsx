@@ -18,9 +18,11 @@ export default async function LikedPostContent({
 	const response = await fetchPost({ _id: postId }, { select: 'content' })
 
 	return (
-		<div className='flex items-center justify-between w-full'>
+		<div className='flex items-center justify-between gap-1 w-full'>
 			<div>
-				<p className='font-semibold text-lg'>{senderName} liked your post</p>
+				<p className='font-semibold text-sm sm:text-lg'>
+					{senderName} liked your post
+				</p>
 				<small className='text-neutral-500'>
 					{formatDistanceToNowStrict(new Date(createdAt), {
 						addSuffix: true
@@ -29,7 +31,10 @@ export default async function LikedPostContent({
 			</div>
 
 			{response.success && (
-				<Link href={`/post/details/${postId}`}>
+				<Link
+					href={`/post/details/${postId}`}
+					className='flex-none'
+				>
 					{isImage(response.post.content[0]) ? (
 						<Image
 							src={response.post.content[0]}

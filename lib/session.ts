@@ -1,9 +1,8 @@
-import { getServerSession, type NextAuthOptions } from 'next-auth'
+import { type NextAuthOptions } from 'next-auth'
 import GoogleProvider from 'next-auth/providers/google'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import User from '@/lib/models/user.model'
 import connectMongoDB from './mongoose'
-import { SessionType } from './types'
 const bcrypt = require('bcrypt')
 
 const authOptions: NextAuthOptions = {
@@ -101,12 +100,6 @@ const authOptions: NextAuthOptions = {
 			return session
 		}
 	}
-}
-
-export async function getCurrentUser() {
-	const session = (await getServerSession(authOptions)) as SessionType
-
-	return JSON.parse(JSON.stringify(session))
 }
 
 export default authOptions

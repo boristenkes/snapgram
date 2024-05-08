@@ -3,7 +3,7 @@ import { notFound, redirect } from 'next/navigation'
 import RelatedPosts from './related-posts'
 import PostDetails from '@/components/post-details'
 import BackButton from './back-button'
-import { getCurrentUser } from '@/lib/session'
+import auth from '@/lib/auth'
 
 export const revalidate = 3600
 
@@ -20,7 +20,7 @@ export default async function PostPage({
 }: {
 	params: { id: string }
 }) {
-	const { user: currentUser } = await getCurrentUser()
+	const { user: currentUser } = await auth()
 	const response = await fetchPost(
 		{ _id: id },
 		{ populate: ['author', 'image username name private'] }
@@ -32,8 +32,10 @@ export default async function PostPage({
 	const isCurrentUserFollower = currentUser.following.includes(
 		response.post.author._id
 	)
+	const isCurrentUserAuthor = currentUser._id === response.post.author._id
 
-	if (isPrivateAuthor && !isCurrentUserFollower) redirect('/')
+	if (isPrivateAuthor && !isCurrentUserFollower && !isCurrentUserAuthor)
+		redirect('/')
 
 	const { post } = response
 

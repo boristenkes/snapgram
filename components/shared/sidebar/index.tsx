@@ -4,10 +4,10 @@ import SidebarLink from '@/components/shared/sidebar/sidebar-link'
 import LogoutButton from './logout-button'
 import Link from 'next/link'
 import { sidebarLinks } from '@/constants'
-import { getCurrentUser } from '@/lib/session'
+import auth from '@/lib/auth'
 
 export default async function Sidebar() {
-	const { user } = await getCurrentUser()
+	const { user } = await auth()
 
 	return (
 		<aside className='h-screen w-full max-w-fit sticky top-0 left-0 z-40 bg-neutral-800 border-r-2 border-r-neutral-700 hidden | md:block xl:max-w-64'>
@@ -55,11 +55,13 @@ export default async function Sidebar() {
 								/>
 							)}
 						</p>
+
 						<p className='text-sm text-neutral-500 text-ellipsis overflow-hidden whitespace-nowrap max-w-36'>
 							@{user.username}
 						</p>
 					</div>
 				</Link>
+
 				<nav className='h-full'>
 					<ul className='h-full flex flex-col gap-2 overflow-y-auto no-scrollbar'>
 						{sidebarLinks.map(link => (

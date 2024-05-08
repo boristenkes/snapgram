@@ -23,7 +23,9 @@ export default async function NewFollowerContent({
 	return (
 		<div className='flex items-center justify-between w-full'>
 			<div>
-				<p className='font-semibold text-lg'>{senderName} followed you</p>
+				<p className='font-semibold text-sm sm:text-lg'>
+					{senderName} followed you
+				</p>
 				<small className='text-neutral-500'>
 					{formatDistanceToNowStrict(new Date(createdAt), {
 						addSuffix: true

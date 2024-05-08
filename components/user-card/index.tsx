@@ -1,8 +1,7 @@
 import { User } from '@/lib/types'
 import Avatar from '../avatar'
 import Link from 'next/link'
-import FollowButton, { type FollowButtonProps } from '../follow-button'
-import clientSession from '@/lib/client-session'
+import { type FollowButtonProps } from '../follow-button'
 
 type UserCardProps = {
 	user: User

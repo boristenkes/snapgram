@@ -4,11 +4,11 @@ import {
 	fetchNotifications,
 	markNotificationsAsSeen
 } from '@/lib/actions/notification.actions'
-import { getCurrentUser } from '@/lib/session'
+import auth from '@/lib/auth'
 import Image from 'next/image'
 
 export default async function NotificationsPage() {
-	const { user: currentUser } = await getCurrentUser()
+	const { user: currentUser } = await auth()
 
 	const response = await fetchNotifications(
 		{ recipient: currentUser._id },
@@ -22,13 +22,14 @@ export default async function NotificationsPage() {
 		await markNotificationsAsSeen(currentUser._id)
 
 	return (
-		<main className='my-20 flex-1 px-8'>
-			<h1 className='text-2xl lg:text-4xl font-bold flex items-center gap-2.5 mb-14'>
+		<main className='my-10 lg:my-20 flex-1 px-8'>
+			<h1 className='text-2xl lg:text-4xl font-bold flex items-center gap-2.5 mb-10 lg:mb-14'>
 				<Image
 					src='/assets/icons/notifications-neutral.svg'
 					alt=''
 					width={36}
 					height={36}
+					className='w-7 lg:w-9'
 				/>
 				Notifications
 			</h1>

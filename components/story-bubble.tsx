@@ -1,4 +1,4 @@
-import { getCurrentUser } from '@/lib/session'
+import auth from '@/lib/auth'
 import { cn } from '@/lib/utils'
 import Link from 'next/link'
 import ErrorMessage from './error-message'
@@ -14,7 +14,7 @@ export default async function StoryBubble({
 	storyId,
 	author
 }: StoryBubbleProps) {
-	const { user: currentUser } = await getCurrentUser()
+	const { user: currentUser } = await auth()
 
 	if (!currentUser)
 		return <ErrorMessage message='You must log in to view this story' />

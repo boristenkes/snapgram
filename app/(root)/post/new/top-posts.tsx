@@ -3,7 +3,7 @@ import ErrorMessage from '@/components/error-message'
 import PostCard from '@/components/post-card'
 import PostList from '@/components/post-list'
 import { fetchTopPostsByUser } from '@/lib/actions/post.actions'
-import { getCurrentUser } from '@/lib/session'
+import auth from '@/lib/auth'
 import { cn } from '@/lib/utils'
 
 export default async function TopPosts({
@@ -11,7 +11,7 @@ export default async function TopPosts({
 }: {
 	className?: string
 }) {
-	const { user: currentUser } = await getCurrentUser()
+	const { user: currentUser } = await auth()
 	const response = await fetchTopPostsByUser(currentUser._id)
 
 	return (

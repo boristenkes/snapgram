@@ -3,10 +3,10 @@
 import { Mention } from '@/app/(root)/story/new/mention-input'
 import connectMongoDB from '../mongoose'
 import { UTApi } from 'uploadthing/server'
-import { getCurrentUser } from '../session'
-import Post from '../models/post.model'
-import User from '../models/user.model'
-import Comment from '../models/comment.model'
+import auth from '@/lib/auth'
+import Post from '@/lib/models/post.model'
+import User from '@/lib/models/user.model'
+import Comment from '@/lib/models/comment.model'
 import { revalidatePath } from 'next/cache'
 import { Notification, TODO, type Post as PostType } from '../types'
 import { SortOrder } from 'mongoose'
@@ -37,7 +37,7 @@ export async function createPost({
 
 		if (!content) throw new Error('You must provide some content')
 
-		const { user: currentUser } = await getCurrentUser()
+		const { user: currentUser } = await auth()
 
 		if (!currentUser) throw new Error('You must be logged in to create post')
 
@@ -90,7 +90,7 @@ export async function updatePost({
 	try {
 		await connectMongoDB()
 
-		const { user: currentUser } = await getCurrentUser()
+		const { user: currentUser } = await auth()
 
 		if (!currentUser) throw new Error('You must be logged in to edit this post')
 
@@ -238,7 +238,7 @@ export async function searchPosts(searchTerm: string): Promise<SearchPosts> {
 		await connectMongoDB()
 
 		const regex = new RegExp(searchTerm, 'i')
-		const { user: currentUser } = await getCurrentUser()
+		const { user: currentUser } = await auth()
 
 		/**
 		 * Find users that match searchTerm regex

@@ -5,6 +5,7 @@ import Link from 'next/link'
 import { sidebarLinks } from '@/constants'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
+import UnreadNotificationCounter from '@/components/unread-notification-counter'
 
 type SidebarLinkProps = (typeof sidebarLinks)[0] & {
 	className?: string
@@ -25,7 +26,7 @@ export default function SidebarLink({
 			<Link
 				href={path}
 				className={cn(
-					'flex gap-4 text-lg p-4 w-full rounded-lg font-normal hover:bg-primary-500 hover:bg-opacity-10 transition-colors duration-200',
+					'flex gap-4 text-lg p-4 w-full rounded-lg font-normal hover:bg-primary-500 hover:bg-opacity-10 transition-colors duration-200 relative',
 					{
 						'bg-primary-500 hover:bg-opacity-100 font-bold': isActive
 					},
@@ -40,6 +41,8 @@ export default function SidebarLink({
 					className='w-6 h-6'
 				/>
 				<span className='sr-only xl:not-sr-only'>{title}</span>
+
+				{path === '/notifications' && <UnreadNotificationCounter />}
 			</Link>
 		</li>
 	)

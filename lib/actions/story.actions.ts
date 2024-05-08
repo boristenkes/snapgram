@@ -4,7 +4,7 @@ import connectMongoDB from '../mongoose'
 import { Story as StoryType } from '../types'
 import { UTApi } from 'uploadthing/server'
 import { Mention } from '@/app/(root)/story/new/mention-input'
-import { getCurrentUser } from '../session'
+import auth from '../auth'
 import User from '../models/user.model'
 import Story from '../models/story.model'
 import { revalidatePath } from 'next/cache'
@@ -50,7 +50,7 @@ export async function createStory({
 			throw new Error('You must provide some content')
 		}
 
-		const { user: currentUser } = await getCurrentUser()
+		const { user: currentUser } = await auth()
 
 		if (!currentUser) {
 			throw new Error('You must be logged in to create story')

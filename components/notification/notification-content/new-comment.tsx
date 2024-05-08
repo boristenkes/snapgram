@@ -20,9 +20,9 @@ export default async function NewCommentContent({
 	const response = await fetchPost({ _id: postId }, { select: 'content' })
 
 	return (
-		<div className='flex items-center justify-between w-full'>
+		<div className='flex items-center justify-between gap-1 w-full'>
 			<div>
-				<p className='font-semibold text-lg'>
+				<p className='font-semibold text-sm sm:text-lg'>
 					{senderName} commented on your post{' '}
 					<q>
 						{commentContent.slice(0, 50)}
@@ -37,7 +37,10 @@ export default async function NewCommentContent({
 			</div>
 
 			{response.success && (
-				<Link href={`/post/details/${postId}`}>
+				<Link
+					href={`/post/details/${postId}`}
+					className='flex-none'
+				>
 					{isImage(response.post.content[0]) ? (
 						<Image
 							src={response.post.content[0]}

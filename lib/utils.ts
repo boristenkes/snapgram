@@ -1,4 +1,4 @@
-import { imageTypes } from '@/constants'
+import { imageTypes, videoTypes } from '@/constants'
 import { type ClassValue, clsx } from 'clsx'
 import { twMerge } from 'tailwind-merge'
 
@@ -64,9 +64,19 @@ export function validateImage(
 export function isImage(src: string) {
 	if (src.includes('image/')) return true
 
-	const extension = src.split('.').at(-1) as string
+	const extension = src.split('.').at(-1)?.toLowerCase() as string
 
 	if (imageTypes.includes(extension)) return true
+
+	return false
+}
+
+export function isVideo(src: string) {
+	if (src.includes('video/')) return true
+
+	const extension = src.split('.').at(-1)?.toLowerCase() as string
+
+	if (videoTypes.includes(extension)) return true
 
 	return false
 }

@@ -1,7 +1,7 @@
 import ErrorMessage from '@/components/error-message'
 import Profile from '@/components/profile'
 import { fetchUser, fetchUsers } from '@/lib/actions/user.actions'
-import { getCurrentUser } from '@/lib/session'
+import auth from '@/lib/auth'
 
 type ProfilePageProps = {
 	params: {
@@ -42,7 +42,7 @@ export async function generateMetadata({
 export default async function ProfilePage({
 	params: { username }
 }: ProfilePageProps) {
-	const { user: currentUser } = await getCurrentUser()
+	const { user: currentUser } = await auth()
 
 	if (currentUser?.username === username)
 		return (
@@ -56,7 +56,7 @@ export default async function ProfilePage({
 		{ username },
 		{
 			select:
-				'image name username postsCount followersCount followingCount bio posts private verified'
+				'image name username postsCount followersCount followingCount bio posts private verified followRequests'
 		}
 	)
 

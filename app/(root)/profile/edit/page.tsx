@@ -1,9 +1,9 @@
 import EditProfileForm from './edit-profile-form'
-import { getCurrentUser } from '@/lib/session'
+import auth from '@/lib/auth'
 import Image from 'next/image'
 
 export default async function EditProfilePage() {
-	const { user: currentUser } = await getCurrentUser()
+	const { user: currentUser } = await auth()
 
 	return (
 		<main className='mx-4 lg:mx-16 my-10 lg:my-20'>

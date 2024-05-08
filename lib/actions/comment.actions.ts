@@ -4,7 +4,7 @@ import { revalidatePath } from 'next/cache'
 import Comment from '../models/comment.model'
 import { Comment as CommentType } from '../types'
 import connectMongoDB from '../mongoose'
-import { getCurrentUser } from '../session'
+import auth from '../auth'
 import { SortOrder } from 'mongoose'
 import { TODO } from '../types'
 import User from '../models/user.model'
@@ -25,7 +25,7 @@ export async function createComment({
 	try {
 		await connectMongoDB()
 
-		const { user: currentUser } = await getCurrentUser()
+		const { user: currentUser } = await auth()
 
 		if (!currentUser) throw new Error('You must be logged in to create comment')
 
@@ -194,7 +194,7 @@ export async function replyToComment({
 	try {
 		await connectMongoDB()
 
-		const session = await getCurrentUser()
+		const session = await auth()
 
 		if (!session) throw new Error('You must be logged in to reply to comments')
 

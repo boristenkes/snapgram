@@ -1,7 +1,7 @@
 import { Post as PostType } from '@/lib/types'
 import Link from 'next/link'
 import Avatar from '@/components/avatar'
-import { getCurrentUser } from '@/lib/session'
+import auth from '@/lib/auth'
 import Image from 'next/image'
 import CommentInput from './comment-input'
 import { Fragment } from 'react'
@@ -14,7 +14,7 @@ import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
 import MentionsViewer from '../mentions-viewer'
 
 export default async function Post({ post }: { post: PostType }) {
-	const { user: currentUser } = await getCurrentUser()
+	const { user: currentUser } = await auth()
 	const isCurrentUserAuthor =
 		post.author._id.toString() === currentUser._id.toString()
 	const formattedDate = format(post.createdAt, "d MMMM 'at' hh:mm a")

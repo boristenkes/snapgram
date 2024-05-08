@@ -1,11 +1,11 @@
-import { getCurrentUser } from '@/lib/session'
+import auth from '@/lib/auth'
 import { createUploadthing, type FileRouter } from 'uploadthing/next'
 
 const f = createUploadthing()
 
 const profilePicture = f({ image: { maxFileSize: '2MB', maxFileCount: 1 } })
 	.middleware(async ({ req }) => {
-		const { user } = await getCurrentUser()
+		const { user } = await auth()
 
 		if (!user) throw new Error('Unauthorized')
 
@@ -23,7 +23,7 @@ const storyContent = f({
 	video: { maxFileSize: '8MB' }
 })
 	.middleware(async ({ req }) => {
-		const { user } = await getCurrentUser()
+		const { user } = await auth()
 
 		if (!user) throw new Error('Unauthrized')
 
@@ -36,7 +36,7 @@ const postContent = f({
 	video: { maxFileSize: '8MB', maxFileCount: 10 }
 })
 	.middleware(async ({ req }) => {
-		const { user } = await getCurrentUser()
+		const { user } = await auth()
 
 		if (!user) throw new Error('Unauthrized')
 

@@ -3,7 +3,7 @@ import React, { Fragment } from 'react'
 import Link from 'next/link'
 import Image from 'next/image'
 import DeletePostButton from '@/app/(root)/post/details/[id]/delete-post-button'
-import { getCurrentUser } from '@/lib/session'
+import auth from '@/lib/auth'
 import { format } from 'date-fns'
 import Tag from '@/components/tag'
 import CommentInput from '@/components/post/comment-input'
@@ -18,7 +18,7 @@ type PostDetailsProps = {
 }
 
 export default async function PostDetails({ post }: PostDetailsProps) {
-	const { user: currentUser } = await getCurrentUser()
+	const { user: currentUser } = await auth()
 	const formattedDate = format(post.createdAt, "d MMMM 'at' hh:mm a")
 	const isCurrentUserAuthor = currentUser._id === post.author._id
 

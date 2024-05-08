@@ -8,17 +8,17 @@ import {
 	handleOnboardingBackButtonClick,
 	onboard
 } from '@/lib/actions/user.actions'
-import clientSession from '@/lib/client-session'
 import { OnboardingFields, onboardingSchema } from '@/lib/zod/user.schema'
 import { signOut } from 'next-auth/react'
 import Image from 'next/image'
-import { redirect, useRouter } from 'next/navigation'
+import { useRouter } from 'next/navigation'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import Textarea from '@/components/elements/textarea'
 import { zodResolver } from '@hookform/resolvers/zod'
+import useAuth from '@/hooks/use-auth'
 
 export default function OnboardingForm() {
-	const { user: currentUser } = clientSession()
+	const { user: currentUser } = useAuth()
 	const {
 		register,
 		handleSubmit,

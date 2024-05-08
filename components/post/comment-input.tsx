@@ -4,10 +4,10 @@ import Avatar from '../avatar'
 import Image from 'next/image'
 import { createComment } from '@/lib/actions/comment.actions'
 import toast from '@/lib/toast'
-import clientSession from '@/lib/client-session'
 import { useRef } from 'react'
 import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
+import useAuth from '@/hooks/use-auth'
 
 export default function CommentInput({
 	postId,
@@ -16,7 +16,7 @@ export default function CommentInput({
 	postId: string
 	className?: string
 }) {
-	const { user: currentUser } = clientSession()
+	const { user: currentUser } = useAuth()
 	const inputRef = useRef<HTMLInputElement>(null)
 	const pathname = usePathname()
 

@@ -1,10 +1,10 @@
-import { getCurrentUser } from '@/lib/session'
+import auth from '@/lib/auth'
 import Image from 'next/image'
 import { redirect } from 'next/navigation'
 import OnboardingForm from './onboarding-form'
 
 export default async function OnboardingPage() {
-	const session = await getCurrentUser()
+	const session = await auth()
 
 	if (!session) {
 		redirect('/login')

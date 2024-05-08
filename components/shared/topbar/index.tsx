@@ -4,7 +4,6 @@ import Image from 'next/image'
 import Link from 'next/link'
 import Avatar from '@/components/avatar'
 import MenuButton from './menu-button'
-import clientSession from '@/lib/client-session'
 import { useEffect, useState } from 'react'
 import { topbarLinks } from '@/constants'
 import { cn } from '@/lib/utils'
@@ -13,9 +12,10 @@ import { signOut } from 'next-auth/react'
 import { usePathname } from 'next/navigation'
 import TopbarLink from './topbar-link'
 import Searchbar from '@/components/search'
+import useAuth from '@/hooks/use-auth'
 
 export default function Topbar() {
-	const { user } = clientSession()
+	const { user } = useAuth()
 	const [isMenuOpen, setMenuOpen] = useState(false)
 	const [searchExpanded, setSearchExpanded] = useState(false)
 	const pathname = usePathname()

@@ -43,6 +43,7 @@ export default async function Notification({
 						url={sender.image}
 						alt={sender.name}
 						width={60}
+						className='w-12 lg:w-16'
 					/>
 				</Link>
 
