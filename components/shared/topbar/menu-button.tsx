@@ -14,6 +14,7 @@ export default function MenuButton({ isOpen, setOpen }: MenuButtonProps) {
 			variant='dark'
 			className='p-2'
 			onClick={() => setOpen(prev => !prev)}
+			aria-label={isOpen ? 'Close menu' : 'Open menu'}
 		>
 			<div className='grid gap-1 w-5 h-3.5'>
 				<div

@@ -7,7 +7,7 @@ import UserCard from '@/components/user-card'
 export default async function SuggestedAccounts() {
 	const { user: currentUser } = await auth()
 	const response = await fetchUsers(
-		{ _id: { $ne: currentUser._id } },
+		{ _id: { $ne: currentUser._id }, onboarded: true },
 		{ select: 'image username name' }
 	)
 
