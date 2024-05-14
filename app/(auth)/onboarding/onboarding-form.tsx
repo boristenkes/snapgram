@@ -32,7 +32,7 @@ export default function OnboardingForm() {
 	const onSubmit: SubmitHandler<OnboardingFields> = async data => {
 		const response = await onboard(currentUser._id, { ...data })
 
-		if (response?.success) {
+		if (!response.success) {
 			setError('root', { message: response.message })
 			return
 		}
