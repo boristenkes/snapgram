@@ -77,7 +77,7 @@ export async function onboard(
 			onboarded: true
 		})
 
-		if (response)
+		if (!response)
 			throw new Error('Failed to create user. Please try again later.')
 
 		return { success: true }
