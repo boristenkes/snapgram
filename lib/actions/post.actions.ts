@@ -50,7 +50,7 @@ export async function createPost({
 
 		await connectMongoDB()
 
-		await Promise.all([
+		const [newPost] = await Promise.all([
 			Post.create({
 				author: currentUser._id,
 				content: contentUrls,
@@ -61,6 +61,18 @@ export async function createPost({
 			}),
 			User.findByIdAndUpdate(currentUser._id, { $inc: { postsCount: 1 } })
 		])
+
+		const notifyMentionedUsers = mentions.map(mention =>
+			sendNotification({
+				recipient: mention._id,
+				sender: currentUser._id,
+				type: 'POST_MENTION',
+				// @ts-ignore TODO
+				postId: newPost._id
+			})
+		)
+
+		await Promise.all(notifyMentionedUsers)
 
 		revalidatePath('/')
 		return { success: true, message: 'Successfully created post' }

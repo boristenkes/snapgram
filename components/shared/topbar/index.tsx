@@ -4,7 +4,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import Avatar from '@/components/avatar'
 import MenuButton from './menu-button'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { topbarLinks } from '@/constants'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/elements'
@@ -16,6 +16,7 @@ import useAuth from '@/hooks/use-auth'
 
 export default function Topbar() {
 	const { user } = useAuth()
+	const currentUser = useMemo(() => user, [user])
 	const [isMenuOpen, setMenuOpen] = useState(false)
 	const [searchExpanded, setSearchExpanded] = useState(false)
 	const pathname = usePathname()
@@ -59,10 +60,10 @@ export default function Topbar() {
 									height={24}
 								/>
 							</button>
-							<Link href={`/profile/${user?.username}`}>
+							<Link href={`/profile/${currentUser?.username}`}>
 								<Avatar
-									url={user?.image}
-									alt={user?.name}
+									url={currentUser?.image}
+									alt={currentUser?.name}
 									width={30}
 								/>
 							</Link>

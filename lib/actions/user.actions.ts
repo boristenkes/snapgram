@@ -543,7 +543,7 @@ export async function deleteUser(filters: FilterQuery<UserType>) {
 		)
 
 		const deleteUserNotifications = Notification.deleteMany({
-			recipient: user._id
+			$or: [{ recipient: user._id }, { sender: user._id }]
 		})
 
 		const [userPosts, userStories, userComments] = await Promise.all([

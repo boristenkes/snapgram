@@ -25,7 +25,12 @@ export default function OnboardingForm() {
 		setError,
 		formState: { errors, isSubmitting }
 	} = useForm<OnboardingFields>({
-		resolver: zodResolver(onboardingSchema)
+		resolver: zodResolver(onboardingSchema),
+		defaultValues: {
+			name: currentUser.name ?? '',
+			username: currentUser.username ?? '',
+			bio: currentUser.bio ?? ''
+		}
 	})
 	const router = useRouter()
 

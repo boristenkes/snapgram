@@ -116,6 +116,12 @@ type NewCommentNotification = {
 	postId: string
 }
 
+type PostMentionNotification = {
+	type: 'POST_MENTION'
+	commentContent: string
+	postId: string
+}
+
 type NewFollowerNotification = {
 	type: 'NEW_FOLLOWER'
 }
@@ -128,6 +134,7 @@ export type Notification = NotificationRoot &
 	(
 		| LikedPostNotification
 		| NewCommentNotification
+		| PostMentionNotification
 		| NewFollowerNotification
 		| NewFollowRequestNotification
 	)

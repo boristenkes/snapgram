@@ -110,6 +110,7 @@ export const videoTypes = ['mp4', 'webm', 'ogg']
 export const notificationTypes = [
 	'LIKED_POST',
 	'NEW_COMMENT',
+	'POST_MENTION',
 	'NEW_FOLLOWER',
 	'NEW_FOLLOW_REQUEST'
 ]

@@ -6,10 +6,12 @@ import LikedPostContent from './notification-content/liked-post'
 import NewCommentContent from './notification-content/new-comment'
 import NewFollowerContent from './notification-content/new-follower'
 import NewFollowRequestContent from './notification-content/new-follow-request'
+import PostMentionContent from './notification-content/post-mention'
 
 const notificationIcons = {
 	LIKED_POST: '/assets/icons/like.svg',
 	NEW_COMMENT: '/assets/icons/comment.svg',
+	POST_MENTION: '/assets/icons/user-2.svg',
 	NEW_FOLLOWER: '/assets/icons/user-2.svg',
 	NEW_FOLLOW_REQUEST: '/assets/icons/user-2.svg'
 }
@@ -67,13 +69,19 @@ export default async function Notification({
 						senderId={sender._id}
 						recipientId={notification.recipient as string}
 					/>
+				) : notification.type === 'NEW_FOLLOW_REQUEST' ? (
+					<NewFollowRequestContent
+						senderName={senderName}
+						createdAt={notification.createdAt}
+						senderId={sender._id}
+						recipientId={notification.recipient as string}
+					/>
 				) : (
-					notification.type === 'NEW_FOLLOW_REQUEST' && (
-						<NewFollowRequestContent
+					notification.type === 'POST_MENTION' && (
+						<PostMentionContent
 							senderName={senderName}
 							createdAt={notification.createdAt}
-							senderId={sender._id}
-							recipientId={notification.recipient as string}
+							postId={notification.postId}
 						/>
 					)
 				)}

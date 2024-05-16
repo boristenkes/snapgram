@@ -85,10 +85,10 @@ export async function fetchNotifications(
 export async function sendNotification(
 	notificationData: Omit<NotificationType, 'createdAt' | '_id'>
 ) {
-	if (
+	const isSameUser =
 		notificationData.recipient.toString() === notificationData.sender.toString()
-	)
-		return
+
+	if (isSameUser) return
 
 	try {
 		await connectMongoDB()
