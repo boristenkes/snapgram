@@ -1,11 +1,13 @@
 import ErrorMessage from '@/components/error-message'
 import Notification from '@/components/notification'
+import NotificationListSkeleton from '@/components/skeletons/notification-list'
 import {
 	fetchNotifications,
 	markNotificationsAsSeen
 } from '@/lib/actions/notification.actions'
 import auth from '@/lib/auth'
 import Image from 'next/image'
+import { Suspense } from 'react'
 
 export default async function NotificationsPage() {
 	const { user: currentUser } = await auth()
@@ -36,13 +38,15 @@ export default async function NotificationsPage() {
 
 			{response.success ? (
 				response.notifications.length ? (
-					<ul className='space-y-4'>
-						{response.notifications.map(notification => (
-							<li key={notification._id}>
-								<Notification notification={notification} />
-							</li>
-						))}
-					</ul>
+					<Suspense fallback={<NotificationListSkeleton />}>
+						<ul className='space-y-4'>
+							{response.notifications.map(notification => (
+								<li key={notification._id}>
+									<Notification notification={notification} />
+								</li>
+							))}
+						</ul>
+					</Suspense>
 				) : (
 					<p className='text-neutral-500 italic'>
 						You don't have any notifications

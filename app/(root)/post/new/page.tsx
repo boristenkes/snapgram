@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import NewPostForm from './new-post-form'
-import TopPosts from './top-posts'
+import RightSidebar from './right-sidebar'
 
 export default function NewPostPage() {
 	return (
@@ -19,7 +19,7 @@ export default function NewPostPage() {
 				<NewPostForm />
 			</main>
 
-			<TopPosts className='hidden lg:block' />
+			<RightSidebar className='hidden lg:block' />
 		</div>
 	)
 }
