@@ -2,6 +2,7 @@ import ErrorMessage from '@/components/error-message'
 import Profile from '@/components/profile'
 import { fetchUser, fetchUsers } from '@/lib/actions/user.actions'
 import auth from '@/lib/auth'
+import { delay } from '@/lib/utils'
 
 type ProfilePageProps = {
 	params: {
@@ -42,6 +43,7 @@ export async function generateMetadata({
 export default async function ProfilePage({
 	params: { username }
 }: ProfilePageProps) {
+	await delay(3000)
 	const { user: currentUser } = await auth()
 
 	if (currentUser?.username === username)

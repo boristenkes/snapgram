@@ -5,7 +5,7 @@ import RightSidebar from './right-sidebar'
 export default function NewPostPage() {
 	return (
 		<div className='flex'>
-			<main className='my-20 mx-auto flex-1 max-w-xl w-full px-8'>
+			<main className='my-10 lg:my-20 mx-auto flex-1 max-w-xl w-full px-8'>
 				<h1 className='text-2xl lg:text-4xl font-bold flex items-center gap-2.5 mb-8'>
 					<Image
 						src='/assets/icons/create-post-neutral.svg'

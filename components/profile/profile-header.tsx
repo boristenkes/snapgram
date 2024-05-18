@@ -28,7 +28,7 @@ export default async function ProfileHeader({
 					}
 					width={150}
 					height={150}
-					className='w-20 h-20 | large:w-40 large:h-40'
+					className='size-20 | large:size-40'
 					priority
 				/>
 
