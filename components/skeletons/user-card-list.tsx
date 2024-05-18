@@ -11,10 +11,21 @@ export default function UserCardListSkeleton({
 		<div className='space-y-2'>
 			{Array.from({ length: cardCount }, (_, index) => index).map(
 				(_, index) => (
-					<Skeleton
+					<div
 						key={index}
-						className='h-[52px] w-full rounded-md'
-					/>
+						className='flex items-center justify-between flex-1 p-2'
+					>
+						<div className='flex items-center gap-2'>
+							<Skeleton className='size-10 rounded-full' />
+
+							<div className='flex-1 space-y-1'>
+								<Skeleton className='w-24 h-5 rounded-lg' />
+								<Skeleton className='w-16 h-3 rounded-lg' />
+							</div>
+						</div>
+
+						<Skeleton className='w-20 h-7 rounded-lg' />
+					</div>
 				)
 			)}
 		</div>

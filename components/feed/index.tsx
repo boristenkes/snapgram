@@ -5,9 +5,11 @@ import Post from '@/components/post'
 import SuggestedAccounts from '@/app/(root)/suggested-accounts'
 import { Suspense } from 'react'
 import UserCardListSkeleton from '../skeletons/user-card-list'
+import { delay } from '@/lib/utils'
 
 export default async function Feed() {
 	const { user: currentUser } = await auth()
+	await delay(10000)
 	const response = await fetchPosts(
 		{
 			$or: [
