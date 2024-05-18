@@ -1,6 +1,8 @@
 import { User } from '@/lib/types'
 import ProfileHeader from './profile-header'
 import ProfilePosts from './profile-posts'
+import { Suspense } from 'react'
+import PostListSkeleton from '../skeletons/post-list'
 
 type ProfileProps = {
 	user: User

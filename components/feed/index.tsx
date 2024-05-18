@@ -2,6 +2,9 @@ import { fetchPosts } from '@/lib/actions/post.actions'
 import auth from '@/lib/auth'
 import ErrorMessage from '../error-message'
 import Post from '@/components/post'
+import SuggestedAccounts from '@/app/(root)/suggested-accounts'
+import { Suspense } from 'react'
+import UserCardListSkeleton from '../skeletons/user-card-list'
 
 export default async function Feed() {
 	const { user: currentUser } = await auth()
@@ -22,9 +25,21 @@ export default async function Feed() {
 
 	if (!response.posts.length)
 		return (
-			<h1 className='text-center text-2xl font-semibold'>
-				Follow someone to see their posts
-			</h1>
+			<div>
+				<h1 className='text-center text-2xl font-semibold'>
+					Follow someone to see their posts
+				</h1>
+
+				<div className='container lg:hidden'>
+					<div className='py-8 space-y-4'>
+						<h2 className='text-xl font-semibold'>Suggested Accounts</h2>
+
+						<Suspense fallback={<UserCardListSkeleton />}>
+							<SuggestedAccounts />
+						</Suspense>
+					</div>
+				</div>
+			</div>
 		)
 
 	return (

@@ -6,6 +6,8 @@ import { fetchUser } from '@/lib/actions/user.actions'
 import ErrorMessage from '../error-message'
 import auth from '@/lib/auth'
 import PrivateAccountLock from './private-account-lock'
+import { Suspense } from 'react'
+import PostListSkeleton from '../skeletons/post-list'
 
 type ProfilePosts = {
 	isCurrentUser: boolean
@@ -80,25 +82,27 @@ export default async function ProfilePosts({
 					))}
 				</TabsList>
 
-				<TabsContent value='posts'>
-					<Posts userId={userId} />
-				</TabsContent>
+				<Suspense fallback={<PostListSkeleton />}>
+					<TabsContent value='posts'>
+						<Posts userId={userId} />
+					</TabsContent>
 
-				<TabsContent value='tagged'>
-					<Tagged userId={userId} />
-				</TabsContent>
+					<TabsContent value='tagged'>
+						<Tagged userId={userId} />
+					</TabsContent>
 
-				{isCurrentUser && (
-					<>
-						<TabsContent value='saved'>
-							<Saved userId={userId} />
-						</TabsContent>
+					{isCurrentUser && (
+						<>
+							<TabsContent value='saved'>
+								<Saved userId={userId} />
+							</TabsContent>
 
-						<TabsContent value='liked'>
-							<Liked userId={userId} />
-						</TabsContent>
-					</>
-				)}
+							<TabsContent value='liked'>
+								<Liked userId={userId} />
+							</TabsContent>
+						</>
+					)}
+				</Suspense>
 			</Tabs>
 		</div>
 	)

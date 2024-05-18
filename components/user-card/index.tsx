@@ -1,16 +1,10 @@
 import { User } from '@/lib/types'
 import Avatar from '../avatar'
 import Link from 'next/link'
-import { type FollowButtonProps } from '../follow-button'
 
 type UserCardProps = {
 	user: User
 	type?: 'list' | 'grid'
-	withFollowButton?: boolean
-	followButtonProps?: Omit<
-		FollowButtonProps,
-		'currentUserStr' | 'targetUserStr'
-	>
 }
 
 export default function UserCard({ user, type = 'list' }: UserCardProps) {

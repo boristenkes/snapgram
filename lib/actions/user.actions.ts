@@ -4,7 +4,7 @@ import connectMongoDB from '../mongoose'
 import User from '../models/user.model'
 import { createUserSchema, editProfileSchema } from '../zod/user.schema'
 import { UTApi } from 'uploadthing/server'
-import { validateImage } from '../utils'
+import { delay, validateImage } from '../utils'
 import { revalidatePath } from 'next/cache'
 import auth from '../auth'
 import { User as UserType } from '../types'
@@ -133,6 +133,8 @@ export async function fetchUsers(
 	conditions: Record<any, any>,
 	{ select, populate, sort, limit }: FetchUsersOptions = {}
 ): Promise<FetchUsers> {
+	await delay(2000)
+
 	try {
 		await connectMongoDB()
 

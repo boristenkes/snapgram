@@ -10,7 +10,6 @@ import PostActionButtons from '@/components/post-action-buttons'
 import PostContent from '../post-content'
 import Tag from '@/components/tag'
 import { Button } from '../ui/button'
-import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
 import MentionsViewer from '../mentions-viewer'
 
 export default async function Post({ post }: { post: PostType }) {

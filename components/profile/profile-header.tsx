@@ -31,6 +31,7 @@ export default async function ProfileHeader({
 					className='w-20 h-20 | large:w-40 large:h-40'
 					priority
 				/>
+
 				<div className='flex-1'>
 					<div className='hidden items-center gap-12 mb-2 | small:flex'>
 						<h1 className='text-xl font-semibold flex items-center gap-2.5 text-nowrap | large:text-4xl'>
@@ -70,7 +71,7 @@ export default async function ProfileHeader({
 								<Button
 									size='xs'
 									variant='light'
-									href={`/chat/${user?._id}`}
+									// href={`/chat/${user?._id}`}
 								>
 									Message
 								</Button>
@@ -156,7 +157,7 @@ export default async function ProfileHeader({
 							<Button
 								size='xs'
 								variant='light'
-								href={`/chat/${user?._id}`}
+								// href={`/chat/${user?._id}`}
 								className='flex-1'
 							>
 								Message
