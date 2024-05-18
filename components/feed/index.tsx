@@ -9,7 +9,6 @@ import { delay } from '@/lib/utils'
 
 export default async function Feed() {
 	const { user: currentUser } = await auth()
-	await delay(10000)
 	const response = await fetchPosts(
 		{
 			$or: [
