@@ -1,3 +1,4 @@
+import ParagraphSkeleton from '@/components/skeletons/paragraph'
 import { Skeleton } from '@/components/ui/skeleton'
 
 export default function SettingsLoading() {
@@ -12,13 +13,12 @@ export default function SettingsLoading() {
 				<div className='space-y-2'>
 					<Skeleton className='max-w-[183px] w-full h-8 rounded-lg mb-12' />
 					<Skeleton className='max-w-[148px] w-full h-9 rounded-lg my-2' />
-					<Skeleton className='max-w-[612px] w-full h-5 rounded-lg ' />
-					<Skeleton className='max-w-[612px] h-10 rounded-lg' />
+					<ParagraphSkeleton />
 				</div>
 
 				<div className='space-y-2'>
 					<Skeleton className='max-w-48 w-full h-8 rounded-lg mb-12' />
-					<Skeleton className='max-w-[612px] w-full h-[60px] rounded-lg' />
+					<ParagraphSkeleton />
 					<Skeleton className='w-[166px] h-9 rounded-lg my-2' />
 				</div>
 			</div>

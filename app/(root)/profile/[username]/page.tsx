@@ -2,7 +2,6 @@ import ErrorMessage from '@/components/error-message'
 import Profile from '@/components/profile'
 import { fetchUser, fetchUsers } from '@/lib/actions/user.actions'
 import auth from '@/lib/auth'
-import { delay } from '@/lib/utils'
 
 type ProfilePageProps = {
 	params: {

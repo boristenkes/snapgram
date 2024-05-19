@@ -11,7 +11,8 @@ import { revalidatePath } from 'next/cache'
 import { Notification, TODO, type Post as PostType } from '../types'
 import { SortOrder } from 'mongoose'
 import { deleteNotification, sendNotification } from './notification.actions'
-import { delay } from '../utils'
+import { isImage } from '../utils'
+import sharp from 'sharp'
 
 const uploadthingApi = new UTApi()
 
@@ -33,7 +34,7 @@ export async function createPost({
 }: CreatePostProps): Promise<CreatePost> {
 	try {
 		const caption = formData.get('caption')
-		const content = formData.getAll('content')
+		const content = formData.getAll('content').slice(0, 10) as File[]
 		const altText = formData.get('alt') ?? ''
 
 		if (!content) throw new Error('You must provide some content')
@@ -42,7 +43,23 @@ export async function createPost({
 
 		if (!currentUser) throw new Error('You must be logged in to create post')
 
-		const response = await uploadthingApi.uploadFiles(content.slice(0, 10))
+		const resizedFiles = await Promise.all(
+			content.map(async file => {
+				if (!isImage(file.name)) return file
+
+				const buffer = await file.arrayBuffer()
+
+				const resizedBuffer = await sharp(Buffer.from(buffer))
+					.resize(542, 520, { fit: 'cover', position: 'center' })
+					.toBuffer()
+
+				return new File([resizedBuffer], file.name, {
+					type: file.type
+				})
+			})
+		)
+
+		const response = await uploadthingApi.uploadFiles(resizedFiles)
 
 		if (response.some(item => item.error))
 			throw new Error('Failed to upload some of the images/videos')
@@ -254,40 +271,38 @@ export async function searchPosts(searchTerm: string): Promise<SearchPosts> {
 		const { user: currentUser } = await auth()
 
 		/**
-		 * Find users that match searchTerm regex
+		 * Find posts that match searchTerm regex
 		 * AND
-		 * Are either:
-		 * - the currentUser
-		 * - followed by currentUser
-		 * - public
+		 * are authored by users that match searchTerm regex
+		 * AND
+		 * the author is public or followed by the currentUser
 		 */
 		const users = await User.find({
+			$or: [{ name: { $regex: regex } }, { username: { $regex: regex } }]
+		})
+			.select('_id private')
+			.exec()
+
+		const userIDs = users.map(user => user._id)
+		const publicUsers = users
+			.filter(user => !user.private)
+			.map(user => user._id)
+
+		const searchResults = await Post.find({
 			$and: [
 				{
-					$or: [{ name: { $regex: regex } }, { username: { $regex: regex } }]
+					$or: [
+						{ caption: { $regex: regex } },
+						{ tags: { $elemMatch: { $regex: regex } } },
+						{ author: { $in: userIDs } }
+					]
 				},
 				{
 					$or: [
-						{ _id: currentUser._id },
-						{ _id: { $in: currentUser.following } },
-						{ private: false }
+						{ author: { $in: publicUsers } },
+						{ author: { $in: currentUser.following } }
 					]
 				}
-			]
-		})
-			.select('_id')
-			.exec()
-			.then(users => users.map(user => user._id))
-
-		/**
-		 * Find posts that match searchTerm regex
-		 * AND
-		 * are authored by one of the users in `users`
-		 */
-		const searchResults = await Post.find({
-			$and: [
-				{ $or: [{ caption: { $regex: regex } }, { tags: { $in: [regex] } }] },
-				{ author: { $in: users } }
 			]
 		}).populate('author')
 
