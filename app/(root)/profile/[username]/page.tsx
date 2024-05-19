@@ -43,7 +43,6 @@ export async function generateMetadata({
 export default async function ProfilePage({
 	params: { username }
 }: ProfilePageProps) {
-	await delay(3000)
 	const { user: currentUser } = await auth()
 
 	if (currentUser?.username === username)

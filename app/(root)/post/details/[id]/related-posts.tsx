@@ -17,23 +17,7 @@ export default async function RelatedPosts({
 		author: author._id
 	})
 
-	return (
-		<section
-			aria-labelledby='related-posts-title'
-			className='my-14 border-t border-neutral-600'
-		>
-			<h2
-				id='related-posts-title'
-				className='font-bold text-2xl my-14 sm:text-3xl'
-			>
-				More posts from {author.name}
-			</h2>
+	if (!response.success) return <ErrorMessage message={response.message} />
 
-			{response.success ? (
-				<PostList posts={response.posts} />
-			) : (
-				<ErrorMessage message={response.message} />
-			)}
-		</section>
-	)
+	return <PostList posts={response.posts} />
 }
