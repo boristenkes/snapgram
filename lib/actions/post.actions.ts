@@ -11,8 +11,8 @@ import { revalidatePath } from 'next/cache'
 import { Notification, TODO, type Post as PostType } from '../types'
 import { SortOrder } from 'mongoose'
 import { deleteNotification, sendNotification } from './notification.actions'
-import { isImage } from '../utils'
-import sharp from 'sharp'
+// import { isImage } from '../utils'
+// import sharp from 'sharp'
 
 const uploadthingApi = new UTApi()
 
@@ -43,23 +43,25 @@ export async function createPost({
 
 		if (!currentUser) throw new Error('You must be logged in to create post')
 
-		const resizedFiles = await Promise.all(
-			content.map(async file => {
-				if (!isImage(file.name)) return file
+		// const resizedFiles = await Promise.all(
+		// 	content.map(async file => {
+		// 		if (!isImage(file.name)) return file
 
-				const buffer = await file.arrayBuffer()
+		// 		const buffer = await file.arrayBuffer()
 
-				const resizedBuffer = await sharp(Buffer.from(buffer))
-					.resize(542, 520, { fit: 'cover', position: 'center' })
-					.toBuffer()
+		// 		const resizedBuffer = await sharp(Buffer.from(buffer))
+		// 			.resize(542, 520, { fit: 'cover', position: 'center' })
+		// 			.toBuffer()
 
-				return new File([resizedBuffer], file.name, {
-					type: file.type
-				})
-			})
-		)
+		// 		return new File([resizedBuffer], file.name, {
+		// 			type: file.type
+		// 		})
+		// 	})
+		// )
 
-		const response = await uploadthingApi.uploadFiles(resizedFiles)
+		// const response = await uploadthingApi.uploadFiles(resizedFiles)
+
+		const response = await uploadthingApi.uploadFiles(content)
 
 		if (response.some(item => item.error))
 			throw new Error('Failed to upload some of the images/videos')

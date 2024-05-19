@@ -17,7 +17,7 @@ import { deleteStory } from './story.actions'
 import { deleteComment } from './comment.actions'
 import { deleteNotification, sendNotification } from './notification.actions'
 import Notification from '../models/notification.model'
-import sharp from 'sharp'
+// import sharp from 'sharp'
 
 const uploadthingApi = new UTApi()
 
@@ -206,17 +206,19 @@ export async function updateUser({
 
 			if (!imageValidation.success) throw new Error('Invalid image')
 
-			const imageBuffer = await image.arrayBuffer()
+			// const imageBuffer = await image.arrayBuffer()
 
-			const resizedBuffer = await sharp(Buffer.from(imageBuffer))
-				.resize(160, 160, { fit: 'cover', position: 'center' })
-				.toBuffer()
+			// const resizedBuffer = await sharp(Buffer.from(imageBuffer))
+			// 	.resize(160, 160, { fit: 'cover', position: 'center' })
+			// 	.toBuffer()
 
-			const resizedImage = new File([resizedBuffer], image.name, {
-				type: image.type
-			})
+			// const resizedImage = new File([resizedBuffer], image.name, {
+			// 	type: image.type
+			// })
 
-			imageResponse = await uploadthingApi.uploadFiles(resizedImage)
+			// imageResponse = await uploadthingApi.uploadFiles(resizedImage)
+
+			imageResponse = await uploadthingApi.uploadFiles(image)
 
 			if (imageResponse?.error)
 				throw new Error('Image failed to upload:' + imageResponse.error.message)
