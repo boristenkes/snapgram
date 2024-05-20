@@ -3,15 +3,17 @@ import { Inter } from 'next/font/google'
 import './globals.css'
 import { Toaster } from 'react-hot-toast'
 import SessionProvider from '@/components/session-provider'
-import { getServerSession } from 'next-auth'
 import { NextSSRPlugin } from '@uploadthing/react/next-ssr-plugin'
 import { extractRouterConfig } from 'uploadthing/server'
 import { ourFileRouter } from './api/uploadthing/core'
+import auth from '@/lib/auth'
 
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-	title: 'Snapgram'
+	title: 'Snapgram',
+	description:
+		'Redesigned Instagram clone. Practice project built with Next.js v14 by @boristenkes on Github.'
 }
 
 export default async function Layout({
@@ -19,7 +21,7 @@ export default async function Layout({
 }: {
 	children: React.ReactNode
 }) {
-	const session = await getServerSession()
+	const session = await auth()
 	// TODO: create loading.tsx, error.tsx... page for each route (that needs it)
 	return (
 		<html lang='en'>

@@ -8,11 +8,16 @@ import Post from '@/lib/models/post.model'
 import User from '@/lib/models/user.model'
 import Comment from '@/lib/models/comment.model'
 import { revalidatePath } from 'next/cache'
-import { Notification, TODO, type Post as PostType } from '../types'
+import {
+	Notification as NotificationType,
+	TODO,
+	type Post as PostType
+} from '../types'
 import { SortOrder } from 'mongoose'
 import { deleteNotification, sendNotification } from './notification.actions'
 import { isImage } from '../utils'
 import sharp from 'sharp'
+import Notification from '../models/notification.model'
 
 const uploadthingApi = new UTApi()
 
@@ -354,7 +359,7 @@ export async function togglePostLike({
 			sender: currentUserId,
 			recipient: post.author,
 			postId: post._id
-		} as Notification
+		} as NotificationType
 
 		if (!isLiked) {
 			await sendNotification(notificationData)
@@ -423,7 +428,8 @@ export async function deletePost(
 			),
 			User.findByIdAndUpdate(currentUserId, { $inc: { postsCount: -1 } }),
 			Post.findByIdAndDelete(postId),
-			Comment.deleteMany({ postId })
+			Comment.deleteMany({ postId }),
+			Notification.deleteMany({ postId })
 		])
 
 		let errorMessage = ''

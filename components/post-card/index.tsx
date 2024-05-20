@@ -13,6 +13,7 @@ export default function PostCard({ post, priority = false }: PostCardProps) {
 		<Link
 			href={`/post/details/${post._id}`}
 			scroll={false}
+			aria-label='View post'
 		>
 			<article className='relative rounded-lg overflow-hidden aspect-square transition-[filter] hover:brightness-110'>
 				{isImage(post.content[0]) ? (
