@@ -26,7 +26,10 @@ export default function TagInput({ tags, setTags }: TagInputProps) {
 		}
 
 		setTags(prev =>
-			removeDuplicates([...prev, val.replaceAll('#', '').toLowerCase()])
+			removeDuplicates([
+				...prev,
+				val.replaceAll('#', '').trimEnd().toLowerCase()
+			])
 		)
 		setValue('')
 	}

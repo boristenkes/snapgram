@@ -277,37 +277,29 @@ export async function searchPosts(searchTerm: string): Promise<SearchPosts> {
 		const regex = new RegExp(searchTerm, 'i')
 		const { user: currentUser } = await auth()
 
-		/**
-		 * Find posts that match searchTerm regex
-		 * AND
-		 * are authored by users that match searchTerm regex
-		 * AND
-		 * the author is public or followed by the currentUser
-		 */
-		const users = await User.find({
-			$or: [{ name: { $regex: regex } }, { username: { $regex: regex } }]
-		})
-			.select('_id private')
-			.exec()
-
-		const userIDs = users.map(user => user._id)
-		const publicUsers = users
-			.filter(user => !user.private)
-			.map(user => user._id)
-
 		const searchResults = await Post.find({
 			$and: [
 				{
 					$or: [
 						{ caption: { $regex: regex } },
-						{ tags: { $elemMatch: { $regex: regex } } },
-						{ author: { $in: userIDs } }
+						{ tags: { $regex: regex } },
+						// Include the condition to check author by their name or username
+						{
+							author: await User.find({
+								$or: [
+									{ name: { $regex: regex } },
+									{ username: { $regex: regex } }
+								]
+							}).select('_id')
+						}
 					]
 				},
 				{
 					$or: [
-						{ author: { $in: publicUsers } },
-						{ author: { $in: currentUser.following } }
+						{ author: { $in: currentUser.following } }, // authors followed by the current user
+						{
+							author: { $in: await User.find({ private: false }).select('_id') }
+						} // public authors
 					]
 				}
 			]

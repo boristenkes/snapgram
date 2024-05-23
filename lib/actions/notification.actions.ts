@@ -3,8 +3,7 @@
 import { FilterQuery, SortOrder } from 'mongoose'
 import Notification from '../models/notification.model'
 import connectMongoDB from '../mongoose'
-import { Notification as NotificationType, TODO } from '../types'
-import User from '../models/user.model'
+import { Notification as NotificationType } from '../types'
 
 type FetchNotification =
 	| { success: true; notification: NotificationType }

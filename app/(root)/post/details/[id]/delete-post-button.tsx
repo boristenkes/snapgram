@@ -56,8 +56,8 @@ export default function DeletePostButton({
 				<Image
 					src='/assets/icons/trash.svg'
 					alt='Delete post'
-					width={20}
-					height={20}
+					width={21}
+					height={21}
 				/>
 			</AlertDialogTrigger>
 

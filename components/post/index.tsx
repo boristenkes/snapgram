@@ -9,8 +9,8 @@ import { format } from 'date-fns'
 import PostActionButtons from '@/components/post-action-buttons'
 import PostContent from '../post-content'
 import Tag from '@/components/tag'
-import { Button } from '../ui/button'
 import MentionsViewer from '../mentions-viewer'
+import DeletePostButton from '@/app/(root)/post/details/[id]/delete-post-button'
 
 export default async function Post({ post }: { post: PostType }) {
 	const { user: currentUser } = await auth()
@@ -39,11 +39,7 @@ export default async function Post({ post }: { post: PostType }) {
 				</Link>
 
 				{isCurrentUserAuthor && (
-					<Button
-						asChild
-						size='icon'
-						variant='ghost'
-					>
+					<div className='flex flex-none items-center gap-3'>
 						<Link href={`/post/edit/${post._id}`}>
 							<Image
 								src='/assets/icons/edit.svg'
@@ -52,7 +48,11 @@ export default async function Post({ post }: { post: PostType }) {
 								height={20}
 							/>
 						</Link>
-					</Button>
+						<DeletePostButton
+							currentUserId={currentUser._id}
+							targetPostId={post._id}
+						/>
+					</div>
 				)}
 			</div>
 
