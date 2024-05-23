@@ -4,6 +4,8 @@ import { User } from '@/lib/types'
 import Image from 'next/image'
 import { Button } from '../elements'
 import FollowButton from '../follow-button'
+import FollowersList from '../followers-list'
+import FollowingList from '../following-list'
 
 type ProfileHeaderProps = {
 	user: User
@@ -88,14 +90,26 @@ export default async function ProfileHeader({
 							label='Posts'
 							count={user?.postsCount}
 						/>
-						<UserStats
-							label='Followers'
-							count={user?.followersCount}
-						/>
-						<UserStats
-							label='Following'
-							count={user?.followingCount}
-						/>
+
+						<FollowersList
+							userId={user._id}
+							isUserPrivate={user.private}
+						>
+							<UserStats
+								label='Followers'
+								count={user?.followersCount}
+							/>
+						</FollowersList>
+
+						<FollowingList
+							userId={user._id}
+							isUserPrivate={user.private}
+						>
+							<UserStats
+								label='Following'
+								count={user?.followingCount}
+							/>
+						</FollowingList>
 					</div>
 
 					{!!user?.bio.length && (

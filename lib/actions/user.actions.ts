@@ -519,6 +519,30 @@ export async function switchAccountPrivate(
 	}
 }
 
+export async function removeFollower(userId: string, followerId: string) {
+	try {
+		await connectMongoDB()
+
+		const { user: currentUser } = await auth()
+
+		if (currentUser._id !== userId)
+			throw new Error(
+				'You are not authorized to remove followers from this account'
+			)
+
+		const formData = new FormData()
+		formData.set('currentUserId', followerId)
+		formData.set('targetUserId', userId)
+
+		await unfollow(formData)
+
+		return { success: true }
+	} catch (error: any) {
+		console.log('`removeFollower`:', error)
+		return { success: false, message: error.message }
+	}
+}
+
 export async function deleteUser(filters: FilterQuery<UserType>) {
 	try {
 		await connectMongoDB()
