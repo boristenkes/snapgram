@@ -4,7 +4,7 @@ import connectMongoDB from '../mongoose'
 import User from '../models/user.model'
 import { createUserSchema, editProfileSchema } from '../zod/user.schema'
 import { UTApi } from 'uploadthing/server'
-import { validateImage } from '../utils'
+import { id, validateImage } from '../utils'
 import { revalidatePath } from 'next/cache'
 import auth from '../auth'
 import { User as UserType } from '../types'
@@ -46,7 +46,11 @@ export async function createUser({ email, password }: Record<string, unknown>) {
 
 		const hashedPassword = await bcrypt.hash(password, 10)
 
-		const newUser = await User.create({ email, password: hashedPassword })
+		const newUser = await User.create({
+			email,
+			password: hashedPassword,
+			username: `user_${id()}` // temporary username
+		})
 
 		return { success: true, email: newUser.email, password: newUser.password }
 	} catch (error: any) {
