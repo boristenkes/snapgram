@@ -10,14 +10,14 @@ export default function AuthLayout({
 			<div className='flex-1 flex flex-col justify-center items-center'>
 				{children}
 			</div>
-			<div className='flex-1 w-full h-full hidden lg:block'>
+			<div className='flex-1 relative hidden lg:block'>
 				<Image
 					src='/assets/login-banner.png'
 					alt=''
-					width={720}
-					height={1024}
+					fill
 					priority
-					className='object-cover w-full h-full'
+					className='absolute inset-0 object-cover'
+					sizes='(min-width: 1024px) 50vw'
 				/>
 			</div>
 		</div>

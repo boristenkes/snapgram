@@ -22,12 +22,14 @@ import Image from 'next/image'
 type Props = {
 	userId: string
 	isUserPrivate: boolean
+	followersCount: number
 	children: React.ReactNode
 }
 
 export default function FollowersList({
 	userId,
 	isUserPrivate,
+	followersCount,
 	children
 }: Props) {
 	const { user: currentUser } = useAuth()
@@ -135,7 +137,11 @@ export default function FollowersList({
 
 					{data.error && <ErrorMessage message={data.error} />}
 
-					{data.loading && <UserCardListSkeleton cardCount={4} />}
+					{data.loading && (
+						<UserCardListSkeleton
+							cardCount={followersCount > 6 ? 6 : followersCount}
+						/>
+					)}
 
 					{!data.loading && !data.followers.length && (
 						<p className='text-neutral-500 italic'>

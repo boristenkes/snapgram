@@ -94,6 +94,7 @@ export default async function ProfileHeader({
 						<FollowersList
 							userId={user._id}
 							isUserPrivate={user.private}
+							followersCount={user.followersCount}
 						>
 							<UserStats
 								label='Followers'
@@ -104,6 +105,7 @@ export default async function ProfileHeader({
 						<FollowingList
 							userId={user._id}
 							isUserPrivate={user.private}
+							followingCount={user.followingCount}
 						>
 							<UserStats
 								label='Following'

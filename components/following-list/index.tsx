@@ -18,17 +18,18 @@ import { cn } from '@/lib/utils'
 import { Button } from '../ui/button'
 import useAuth from '@/hooks/use-auth'
 import Image from 'next/image'
-import FollowButton from '../follow-button'
 
 type Props = {
 	userId: string
 	isUserPrivate: boolean
+	followingCount: number
 	children: React.ReactNode
 }
 
 export default function FollowingList({
 	userId,
 	isUserPrivate,
+	followingCount,
 	children
 }: Props) {
 	const { user: currentUser } = useAuth()
@@ -140,7 +141,11 @@ export default function FollowingList({
 
 					{data.error && <ErrorMessage message={data.error} />}
 
-					{data.loading && <UserCardListSkeleton cardCount={4} />}
+					{data.loading && (
+						<UserCardListSkeleton
+							cardCount={followingCount > 6 ? 6 : followingCount}
+						/>
+					)}
 
 					{!data.loading && !data.following.length && (
 						<p className='text-neutral-500 italic'>

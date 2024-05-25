@@ -15,7 +15,7 @@ export default function PostCard({ post, priority = false }: PostCardProps) {
 			scroll={false}
 			aria-label='View post'
 		>
-			<article className='relative rounded-lg overflow-hidden aspect-square transition-[filter] hover:brightness-110'>
+			<article className='relative rounded-lg overflow-hidden aspect-square transition-[filter] hover:brightness-110 bg-neutral-800'>
 				{isImage(post.content[0]) ? (
 					<Image
 						src={post.content[0]}

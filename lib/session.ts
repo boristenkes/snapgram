@@ -84,7 +84,10 @@ const authOptions: NextAuthOptions = {
 			try {
 				await connectMongoDB()
 
-				const dbUser = await User.findOne({ email: session?.user?.email })
+				const dbUser = await User.findOne(
+					{ email: session?.user?.email },
+					'-password' // exclude password
+				)
 				const newSession = {
 					...session,
 					user: {
