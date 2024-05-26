@@ -12,6 +12,7 @@ import Avatar from '@/components/avatar'
 import PostContent from '@/components/post-content'
 import CommentList from '../comment-list'
 import MentionsViewer from '../mentions-viewer'
+import Caption from '../post-caption'
 
 type PostDetailsProps = {
 	post: Post
@@ -34,7 +35,7 @@ export default async function PostDetails({ post }: PostDetailsProps) {
 					{!!post.mentions.length && <MentionsViewer postId={post._id} />}
 				</div>
 
-				<div className='py-9 px-7 flex-1'>
+				<div className='pt-9 px-7 flex-1 overflow-y-auto custom-scrollbar'>
 					<div className='h-full flex flex-col'>
 						<div className='flex justify-between mb-5'>
 							<Link
@@ -70,21 +71,10 @@ export default async function PostDetails({ post }: PostDetailsProps) {
 							)}
 						</div>
 
-						{(post.caption || !!post.tags.length) && (
-							<pre className='font-inherit mb-8 pb-6 border-b border-neutral-600 text-wrap'>
-								{post.caption}{' '}
-								{post.tags.map(tag => (
-									<Fragment key={tag}>
-										<Link
-											href={`/explore?search=${tag}`}
-											className='text-neutral-500 font-semibold'
-										>
-											#{tag}
-										</Link>{' '}
-									</Fragment>
-								))}
-							</pre>
-						)}
+						<Caption
+							caption={post.caption}
+							tags={post.tags}
+						/>
 
 						<CommentList postId={post._id} />
 
@@ -93,7 +83,10 @@ export default async function PostDetails({ post }: PostDetailsProps) {
 							post={post}
 						/>
 
-						<CommentInput postId={post._id} />
+						<CommentInput
+							postId={post._id}
+							className='pb-9'
+						/>
 					</div>
 				</div>
 			</main>

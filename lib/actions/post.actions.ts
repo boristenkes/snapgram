@@ -38,7 +38,7 @@ export async function createPost({
 	tags
 }: CreatePostProps): Promise<CreatePost> {
 	try {
-		const caption = formData.get('caption')
+		const caption = (formData.get('caption') as string) ?? ''
 		const content = formData.getAll('content').slice(0, 10) as File[]
 		const altText = formData.get('alt') ?? ''
 
@@ -79,7 +79,7 @@ export async function createPost({
 			Post.create({
 				author: currentUser._id,
 				content: contentUrls,
-				caption,
+				caption: caption.trim(),
 				altText,
 				mentions,
 				tags

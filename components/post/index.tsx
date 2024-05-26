@@ -4,13 +4,12 @@ import Avatar from '@/components/avatar'
 import auth from '@/lib/auth'
 import Image from 'next/image'
 import CommentInput from './comment-input'
-import { Fragment } from 'react'
 import { format } from 'date-fns'
 import PostActionButtons from '@/components/post-action-buttons'
 import PostContent from '../post-content'
-import Tag from '@/components/tag'
 import MentionsViewer from '../mentions-viewer'
 import DeletePostButton from '@/app/(root)/post/details/[id]/delete-post-button'
+import Caption from '../post-caption'
 
 export default async function Post({ post }: { post: PostType }) {
 	const { user: currentUser } = await auth()
@@ -56,16 +55,10 @@ export default async function Post({ post }: { post: PostType }) {
 				)}
 			</div>
 
-			{(post.caption || !!post.tags.length) && (
-				<pre className='font-inherit mb-8 text-wrap'>
-					{post.caption}{' '}
-					{post.tags.map(tag => (
-						<Fragment key={tag}>
-							<Tag tag={tag} />{' '}
-						</Fragment>
-					))}
-				</pre>
-			)}
+			<Caption
+				caption={post.caption}
+				tags={post.tags}
+			/>
 
 			<div className='relative'>
 				<PostContent
