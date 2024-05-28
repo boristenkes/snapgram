@@ -1,6 +1,5 @@
 import Image from 'next/image'
 import ErrorMessage from '../error-message'
-import { imageTypes, videoTypes } from '@/constants'
 import { isImage, isVideo } from '@/lib/utils'
 
 type PostContentProps = {

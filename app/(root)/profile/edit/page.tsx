@@ -1,6 +1,13 @@
 import EditProfileForm from './edit-profile-form'
 import auth from '@/lib/auth'
+import { Metadata } from 'next'
 import Image from 'next/image'
+
+export const metadata: Metadata = {
+	title: 'Edit profile • Snapgram',
+	description:
+		'Customize your Snapgram profile. Update your profile picture, change your username, name, email, or bio.'
+}
 
 export default async function EditProfilePage() {
 	const { user: currentUser } = await auth()

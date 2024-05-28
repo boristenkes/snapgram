@@ -2,6 +2,15 @@ import DeleteAccountButton from './delete-account-button'
 import auth from '@/lib/auth'
 import PrivateAccountSwitch from './private-account-switch'
 
+export async function generateMetadata() {
+	const { user: currentUser } = await auth()
+
+	return {
+		title: 'Settings • Snapgram',
+		description: `Manage your account: ${currentUser.name} (@${currentUser.username})`
+	}
+}
+
 export default async function SettingsPage() {
 	const { user: currentUser } = await auth()
 

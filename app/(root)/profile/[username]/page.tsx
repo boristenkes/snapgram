@@ -35,7 +35,7 @@ export async function generateMetadata({
 
 	return {
 		title: `${user.name} (@${user.username}) • Snapgram`,
-		description: user.bio
+		description: `${user.followersCount} Followers, ${user.followingCount} Following, ${user.postsCount} Posts. See Snapgram posts from ${user.name} (@${user.username})`
 	}
 }
 

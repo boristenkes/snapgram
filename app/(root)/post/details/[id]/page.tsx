@@ -6,6 +6,7 @@ import BackButton from './back-button'
 import auth from '@/lib/auth'
 import { Suspense } from 'react'
 import PostListSkeleton from '@/components/skeletons/post-list'
+import { format } from 'date-fns'
 
 export const revalidate = 3600
 
@@ -15,6 +16,35 @@ export async function generateStaticParams() {
 	if (!response.success) return []
 
 	return response.posts.map(post => ({ id: post._id }))
+}
+
+export async function generateMetadata({
+	params: { id }
+}: {
+	params: { id: string }
+}) {
+	const response = await fetchPost(
+		{ _id: id },
+		{
+			select: 'author caption likeCount commentCount createdAt',
+			populate: ['author', 'username']
+		}
+	)
+
+	if (!response.success) return { title: response.message }
+
+	const { post } = response
+
+	const slicedCaption =
+		post.caption.length > 140
+			? `${post.caption.slice(0, 140)}...`
+			: post.caption
+	const title = `${slicedCaption || 'Post details'} • Snapgram`
+
+	const formattedDate = format(post.createdAt, 'MMMM d, yyyy')
+	const description = `${post.likeCount} likes, ${post.commentCount} comments. ${post.author.username} on ${formattedDate}`
+
+	return { title, description }
 }
 
 export default async function PostPage({

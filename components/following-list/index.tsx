@@ -33,15 +33,18 @@ export default function FollowingList({
 	children
 }: Props) {
 	const { user: currentUser } = useAuth()
+	const isCurrentUserFollower = (currentUser.following as string[]).includes(
+		userId
+	)
+	const isCurrentUser = currentUser._id === userId
 
-	// @ts-ignore
-	if (isUserPrivate && !currentUser.following.includes(userId)) return children
+	if (isUserPrivate && !isCurrentUserFollower && !isCurrentUser) return children
 
 	const [data, setData] = useState({
 		isOpen: false,
 		fetched: false,
 		error: '',
-		following: [] as (User & { unfollowing?: boolean })[],
+		following: [] as (User & { unfollowPending?: boolean })[],
 		loading: false
 	})
 
@@ -72,6 +75,7 @@ export default function FollowingList({
 		setData(prev => ({
 			...prev,
 			following: response.user.following as User[],
+			error: '',
 			fetched: true,
 			loading: false
 		}))
@@ -86,7 +90,7 @@ export default function FollowingList({
 				follower._id === followerId
 					? {
 							...follower,
-							unfollowing: true
+							unfollowPending: true
 					  }
 					: follower
 			)
@@ -159,7 +163,7 @@ export default function FollowingList({
 								<li
 									key={follower._id}
 									className={cn('flex items-center justify-between', {
-										'opacity-50': follower?.unfollowing
+										'opacity-50': follower?.unfollowPending
 									})}
 								>
 									<UserCard user={follower} />
@@ -169,9 +173,11 @@ export default function FollowingList({
 											size='sm'
 											variant='ghost'
 											onClick={() => handleUnfollowClick(follower._id)}
-											disabled={follower?.unfollowing}
+											disabled={follower?.unfollowPending}
 										>
-											{follower?.unfollowing ? 'Unfollowing...' : 'Unfollow'}
+											{follower?.unfollowPending
+												? 'Unfollowing...'
+												: 'Unfollow'}
 										</Button>
 									)}
 								</li>

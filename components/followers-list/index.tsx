@@ -33,15 +33,18 @@ export default function FollowersList({
 	children
 }: Props) {
 	const { user: currentUser } = useAuth()
+	const isCurrentUserFollower = (currentUser.following as string[]).includes(
+		userId
+	)
+	const isCurrentUser = currentUser._id === userId
 
-	// @ts-ignore
-	if (isUserPrivate && !currentUser.following.includes(userId)) return children
+	if (isUserPrivate && !isCurrentUserFollower && !isCurrentUser) return children
 
 	const [data, setData] = useState({
 		isOpen: false,
 		fetched: false,
 		error: '',
-		followers: [] as (User & { removing?: boolean })[],
+		followers: [] as (User & { removePending?: boolean })[],
 		loading: false
 	})
 
@@ -86,7 +89,7 @@ export default function FollowersList({
 				follower._id === followerId
 					? {
 							...follower,
-							removing: true
+							removePending: true
 					  }
 					: follower
 			)
@@ -155,7 +158,7 @@ export default function FollowersList({
 								<li
 									key={follower._id}
 									className={cn('flex items-center justify-between', {
-										'opacity-50': follower?.removing
+										'opacity-50': follower?.removePending
 									})}
 								>
 									<UserCard user={follower} />
@@ -165,9 +168,9 @@ export default function FollowersList({
 											size='sm'
 											variant='ghost'
 											onClick={() => handleRemoveFollowerClick(follower._id)}
-											disabled={follower?.removing}
+											disabled={follower?.removePending}
 										>
-											{follower?.removing ? 'Removing...' : 'Remove'}
+											{follower?.removePending ? 'Removing...' : 'Remove'}
 										</Button>
 									)}
 								</li>

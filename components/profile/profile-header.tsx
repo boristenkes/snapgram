@@ -115,7 +115,7 @@ export default async function ProfileHeader({
 					</div>
 
 					{!!user?.bio.length && (
-						<pre className='text-base w-paragraph font-inherit hidden | small:block'>
+						<pre className='text-base w-paragraph font-inherit text-wrap hidden | small:block'>
 							{user?.bio}
 						</pre>
 					)}

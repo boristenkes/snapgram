@@ -6,8 +6,15 @@ import {
 	markNotificationsAsSeen
 } from '@/lib/actions/notification.actions'
 import auth from '@/lib/auth'
+import { Metadata } from 'next'
 import Image from 'next/image'
 import { Suspense } from 'react'
+
+export const metadata: Metadata = {
+	title: 'Notifications • Snapgram',
+	description:
+		'Stay updated with the latest notifications on your account. View new likes, comments, mentions, and follower updates.'
+}
 
 export default async function NotificationsPage() {
 	const { user: currentUser } = await auth()

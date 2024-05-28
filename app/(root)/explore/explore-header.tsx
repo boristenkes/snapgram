@@ -14,7 +14,11 @@ export default function ExploreHeader({ searchTerm }: { searchTerm: string }) {
 	const { debouncedValue, isPending } = useDebounce(search)
 
 	useUpdateEffect(() => {
-		router.replace(search.length ? `/explore?search=${search}` : '/explore')
+		router.replace(
+			search.length
+				? `/explore?search=${encodeURIComponent(search)}`
+				: '/explore'
+		)
 	}, [debouncedValue])
 
 	useEffect(() => setSearch(searchTerm), [searchTerm])

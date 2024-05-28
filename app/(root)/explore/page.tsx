@@ -5,6 +5,13 @@ import SearchResults from './search-results'
 import { Suspense } from 'react'
 import PostListSkeleton from '@/components/skeletons/post-list'
 import PopularTagsSkeleton from '@/components/skeletons/popular-tags'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+	title: 'Explore • Snapgram',
+	description:
+		'Explore and discover new posts on Snapgram. Search through public content and find new accounts to follow.'
+}
 
 export default async function ExplorePage({
 	searchParams

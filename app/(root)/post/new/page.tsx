@@ -1,6 +1,13 @@
 import Image from 'next/image'
 import NewPostForm from './new-post-form'
 import RightSidebar from './right-sidebar'
+import { Metadata } from 'next'
+
+export const metadata: Metadata = {
+	title: 'Create New Post • Snapgram',
+	description:
+		'Create and share your thoughts, photos, and videos on Snapgram. Connect with friends and followers by posting new content.'
+}
 
 export default function NewPostPage() {
 	return (
