@@ -43,11 +43,13 @@ export default function CommentReplies({
 							>
 								<div className='flex items-start justify-between'>
 									<div className='flex items-start gap-2 flex-1'>
-										<Avatar
-											url={reply.author.image}
-											alt={reply.author.name}
-											width={26}
-										/>
+										<Link href={`/profile/${reply.author.username}`}>
+											<Avatar
+												url={reply.author.image}
+												alt={reply.author.name}
+												width={30}
+											/>
+										</Link>
 										<div>
 											<p className='text-sm'>
 												<Link

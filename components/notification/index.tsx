@@ -27,7 +27,7 @@ export default async function Notification({
 	const senderName = (sender.name || sender.username).split(' ')[0]
 
 	return (
-		<div className='flex items-center gap-6 p-5 w-full max-w-3xl bg-neutral-600/30 rounded-xl relative'>
+		<div className='flex items-center gap-3 sm:gap-6 p-3 sm:p-5 w-full max-w-3xl bg-neutral-600/30 rounded-xl relative'>
 			<Image
 				src={notificationIcons[notification.type]}
 				alt=''

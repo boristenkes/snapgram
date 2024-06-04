@@ -24,6 +24,8 @@ const authOptions: NextAuthOptions = {
 					throw new Error('Email and password are required')
 				}
 
+				await connectMongoDB()
+
 				const user = await User.findOne({ email })
 
 				if (!user) {

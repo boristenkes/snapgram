@@ -82,12 +82,14 @@ export default function Comment({ comment, currentUser }: CommentProps) {
 			className='flex gap-2'
 		>
 			<div className='flex items-start gap-2 flex-1'>
-				<Avatar
-					url={author.image}
-					alt={author.name}
-					width={36}
-					height={36}
-				/>
+				<Link href={`/profile/${author.username}`}>
+					<Avatar
+						url={author.image}
+						alt={author.name}
+						width={36}
+						height={36}
+					/>
+				</Link>
 
 				<div className='w-full'>
 					<p className='text-sm'>
