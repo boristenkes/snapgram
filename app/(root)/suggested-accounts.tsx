@@ -1,8 +1,8 @@
+import ErrorMessage from '@/components/error-message'
 import FollowButton from '@/components/follow-button'
+import UserCard from '@/components/user-card'
 import { fetchUsers } from '@/lib/actions/user.actions'
 import auth from '@/lib/auth'
-import ErrorMessage from '@/components/error-message'
-import UserCard from '@/components/user-card'
 
 export default async function SuggestedAccounts() {
 	const { user: currentUser } = await auth()

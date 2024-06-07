@@ -2,11 +2,11 @@
 
 import { OptimisticReply, TODO } from '@/lib/types'
 import { cn } from '@/lib/utils'
-import Avatar from '../avatar'
-import Link from 'next/link'
-import LikeCommentButton from './like-comment-button'
 import { formatDistanceToNowStrict } from 'date-fns'
+import Link from 'next/link'
+import Avatar from '../avatar'
 import Loader from '../loader'
+import LikeCommentButton from './like-comment-button'
 
 type CommentRepliesProps = {
 	replies: OptimisticReply[]

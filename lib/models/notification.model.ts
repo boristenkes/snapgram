@@ -1,5 +1,5 @@
-import mongoose from 'mongoose'
 import { notificationTypes } from '@/constants'
+import mongoose from 'mongoose'
 const { ObjectId } = mongoose.SchemaTypes
 {
 	;['LIKED_POST', 'NEW_COMMENT', 'NEW_FOLLOWER', 'NEW_FOLLOW_REQUEST']

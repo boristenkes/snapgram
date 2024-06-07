@@ -1,7 +1,7 @@
 'use client'
 
-import { cn } from '@/lib/utils'
 import { Button } from '@/components/elements'
+import { cn } from '@/lib/utils'
 
 type MenuButtonProps = {
 	isOpen: boolean

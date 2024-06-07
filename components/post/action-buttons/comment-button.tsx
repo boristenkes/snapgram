@@ -1,4 +1,4 @@
-import Image from 'next/image'
+import CommentList from '@/components/comment-list'
 import {
 	Drawer,
 	DrawerContent,
@@ -6,7 +6,7 @@ import {
 	DrawerTitle,
 	DrawerTrigger
 } from '@/components/ui/drawer'
-import CommentList from '@/components/comment-list'
+import Image from 'next/image'
 import CommentInput from '../comment-input'
 
 type CommentButtonProps = {

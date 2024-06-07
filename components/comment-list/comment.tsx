@@ -1,16 +1,16 @@
 'use client'
 
-import { formatDistanceToNowStrict } from 'date-fns'
-import Link from 'next/link'
-import Image from 'next/image'
 import Avatar from '@/components/avatar'
 import { Input } from '@/components/ui/input'
-import toast from '@/lib/toast'
 import { replyToComment } from '@/lib/actions/comment.actions'
+import toast from '@/lib/toast'
 import { Comment as CommentType, OptimisticReply, User } from '@/lib/types'
+import { formatDistanceToNowStrict } from 'date-fns'
+import Image from 'next/image'
+import Link from 'next/link'
 import { ElementRef, useOptimistic, useRef, useState } from 'react'
-import LikeCommentButton from './like-comment-button'
 import CommentReplies from './comment-replies'
+import LikeCommentButton from './like-comment-button'
 
 type CommentProps = {
 	comment: CommentType

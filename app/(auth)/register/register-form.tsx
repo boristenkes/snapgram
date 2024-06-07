@@ -1,16 +1,16 @@
 'use client'
 
-import Image from 'next/image'
 import { Button, TextInput } from '@/components/elements'
-import { createUser } from '@/lib/actions/user.actions'
-import { signIn } from 'next-auth/react'
-import { RegisterUserFields, registerUserSchema } from '@/lib/zod/user.schema'
 import SubmitButton from '@/components/elements/submit-button'
-import Loader from '@/components/loader'
 import ErrorMessage from '@/components/error-message'
-import { useForm, type SubmitHandler } from 'react-hook-form'
+import Loader from '@/components/loader'
+import { createUser } from '@/lib/actions/user.actions'
+import { RegisterUserFields, registerUserSchema } from '@/lib/zod/user.schema'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { signIn } from 'next-auth/react'
+import Image from 'next/image'
 import { useRouter } from 'next/navigation'
+import { useForm, type SubmitHandler } from 'react-hook-form'
 
 export default function RegisterForm() {
 	const {

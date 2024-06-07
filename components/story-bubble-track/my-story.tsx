@@ -1,8 +1,8 @@
+import { fetchStories } from '@/lib/actions/story.actions'
+import { User } from '@/lib/types'
+import Image from 'next/image'
 import Link from 'next/link'
 import Avatar from '../avatar'
-import Image from 'next/image'
-import { User } from '@/lib/types'
-import { fetchStories } from '@/lib/actions/story.actions'
 import ErrorMessage from '../error-message'
 import StoryBubble from '../story-bubble'
 

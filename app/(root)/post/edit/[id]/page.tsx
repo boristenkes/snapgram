@@ -1,7 +1,7 @@
+import ErrorMessage from '@/components/error-message'
+import { fetchPost } from '@/lib/actions/post.actions'
 import Image from 'next/image'
 import EditPostForm from './edit-post-form'
-import { fetchPost } from '@/lib/actions/post.actions'
-import ErrorMessage from '@/components/error-message'
 
 export default async function EditPostPage({
 	params: { id }

@@ -1,23 +1,23 @@
 'use server'
 
 import { Mention } from '@/app/(root)/story/new/mention-input'
-import connectMongoDB from '../mongoose'
-import { UTApi } from 'uploadthing/server'
 import auth from '@/lib/auth'
+import Comment from '@/lib/models/comment.model'
 import Post from '@/lib/models/post.model'
 import User from '@/lib/models/user.model'
-import Comment from '@/lib/models/comment.model'
+import { SortOrder } from 'mongoose'
 import { revalidatePath } from 'next/cache'
+import sharp from 'sharp'
+import { UTApi } from 'uploadthing/server'
+import Notification from '../models/notification.model'
+import connectMongoDB from '../mongoose'
 import {
 	Notification as NotificationType,
 	TODO,
 	type Post as PostType
 } from '../types'
-import { SortOrder } from 'mongoose'
-import { deleteNotification, sendNotification } from './notification.actions'
 import { isImage } from '../utils'
-import sharp from 'sharp'
-import Notification from '../models/notification.model'
+import { deleteNotification, sendNotification } from './notification.actions'
 
 const uploadthingApi = new UTApi()
 
@@ -296,6 +296,7 @@ export async function searchPosts(searchTerm: string): Promise<SearchPosts> {
 				},
 				{
 					$or: [
+						{ author: currentUser._id },
 						{ author: { $in: currentUser.following } }, // authors followed by the current user
 						{
 							author: { $in: await User.find({ private: false }).select('_id') }

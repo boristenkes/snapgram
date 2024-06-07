@@ -1,6 +1,6 @@
 'use client'
 
-import Image from 'next/image'
+import Loader from '@/components/loader'
 import {
 	AlertDialog,
 	AlertDialogCancel,
@@ -11,12 +11,12 @@ import {
 	AlertDialogTitle,
 	AlertDialogTrigger
 } from '@/components/ui/alert-dialog'
+import { Button } from '@/components/ui/button'
 import { deletePost } from '@/lib/actions/post.actions'
 import toast from '@/lib/toast'
+import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { useState } from 'react'
-import { Button } from '@/components/ui/button'
-import Loader from '@/components/loader'
 
 type DeletePostButtonProps = {
 	currentUserId: string

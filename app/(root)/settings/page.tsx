@@ -1,5 +1,5 @@
-import DeleteAccountButton from './delete-account-button'
 import auth from '@/lib/auth'
+import DeleteAccountButton from './delete-account-button'
 import PrivateAccountSwitch from './private-account-switch'
 
 export async function generateMetadata() {

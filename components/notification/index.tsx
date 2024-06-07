@@ -1,11 +1,11 @@
+import { Notification as NotificationType, User } from '@/lib/types'
 import Image from 'next/image'
 import Link from 'next/link'
 import Avatar from '../avatar'
-import { Notification as NotificationType, User } from '@/lib/types'
 import LikedPostContent from './notification-content/liked-post'
 import NewCommentContent from './notification-content/new-comment'
-import NewFollowerContent from './notification-content/new-follower'
 import NewFollowRequestContent from './notification-content/new-follow-request'
+import NewFollowerContent from './notification-content/new-follower'
 import PostMentionContent from './notification-content/post-mention'
 
 const notificationIcons = {

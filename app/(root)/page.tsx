@@ -1,8 +1,8 @@
-import StoryBubbleTrack from '@/components/story-bubble-track'
-import RightSidebar from './right-sidebar'
 import Feed from '@/components/feed'
-import { Suspense } from 'react'
 import FeedSkeleton from '@/components/skeletons/feed'
+import StoryBubbleTrack from '@/components/story-bubble-track'
+import { Suspense } from 'react'
+import RightSidebar from './right-sidebar'
 
 export default function Home() {
 	return (

@@ -1,18 +1,18 @@
 'use client'
 
+import Avatar from '@/components/avatar'
+import { Button } from '@/components/elements'
+import Searchbar from '@/components/search'
+import { topbarLinks } from '@/constants'
+import useAuth from '@/hooks/use-auth'
+import { cn } from '@/lib/utils'
+import { signOut } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
-import Avatar from '@/components/avatar'
-import MenuButton from './menu-button'
-import { useEffect, useState } from 'react'
-import { topbarLinks } from '@/constants'
-import { cn } from '@/lib/utils'
-import { Button } from '@/components/elements'
-import { signOut } from 'next-auth/react'
 import { usePathname } from 'next/navigation'
+import { useEffect, useState } from 'react'
+import MenuButton from './menu-button'
 import TopbarLink from './topbar-link'
-import Searchbar from '@/components/search'
-import useAuth from '@/hooks/use-auth'
 
 export default function Topbar() {
 	const { user: currentUser } = useAuth()

@@ -1,7 +1,7 @@
+import { Metadata } from 'next'
 import Image from 'next/image'
 import NewPostForm from './new-post-form'
 import RightSidebar from './right-sidebar'
-import { Metadata } from 'next'
 
 export const metadata: Metadata = {
 	title: 'Create New Post • Snapgram',

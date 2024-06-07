@@ -1,7 +1,7 @@
-import { type NextAuthOptions } from 'next-auth'
-import GoogleProvider from 'next-auth/providers/google'
-import CredentialsProvider from 'next-auth/providers/credentials'
 import User from '@/lib/models/user.model'
+import { type NextAuthOptions } from 'next-auth'
+import CredentialsProvider from 'next-auth/providers/credentials'
+import GoogleProvider from 'next-auth/providers/google'
 import connectMongoDB from './mongoose'
 const bcrypt = require('bcrypt')
 
@@ -15,7 +15,7 @@ const authOptions: NextAuthOptions = {
 			},
 			async authorize(credentials) {
 				if (!credentials) {
-					throw new Error('Crentials not provided')
+					throw new Error('Credentials not provided')
 				}
 
 				const { email, password } = credentials

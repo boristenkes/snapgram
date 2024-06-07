@@ -1,6 +1,6 @@
+import { isImage, isVideo } from '@/lib/utils'
 import Image from 'next/image'
 import ErrorMessage from '../error-message'
-import { isImage, isVideo } from '@/lib/utils'
 
 type PostContentProps = {
 	src: string

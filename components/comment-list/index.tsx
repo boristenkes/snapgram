@@ -1,7 +1,7 @@
 import { fetchComments } from '@/lib/actions/comment.actions'
-import ErrorMessage from '../error-message'
 import auth from '@/lib/auth'
 import { cn } from '@/lib/utils'
+import ErrorMessage from '../error-message'
 import Comment from './comment'
 
 export default async function CommentList({

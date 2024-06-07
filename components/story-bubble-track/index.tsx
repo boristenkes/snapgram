@@ -1,9 +1,9 @@
-import auth from '@/lib/auth'
 import { fetchStoriesForToday } from '@/lib/actions/story.actions'
-import ErrorMessage from '../error-message'
-import MyStory from './my-story'
-import StoryBubble from '../story-bubble'
+import auth from '@/lib/auth'
 import { User } from '@/lib/types'
+import ErrorMessage from '../error-message'
+import StoryBubble from '../story-bubble'
+import MyStory from './my-story'
 
 export default async function StoryBubbleTrack() {
 	const { user: currentUser } = await auth()

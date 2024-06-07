@@ -1,6 +1,6 @@
 import { User } from '@/lib/types'
-import Avatar from '../avatar'
 import Link from 'next/link'
+import Avatar from '../avatar'
 
 type UserCardProps = {
 	user: User

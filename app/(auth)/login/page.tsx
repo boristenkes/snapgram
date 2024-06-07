@@ -1,8 +1,8 @@
-import LoginForm from './login-form'
+import auth from '@/lib/auth'
 import Image from 'next/image'
 import Link from 'next/link'
-import auth from '@/lib/auth'
 import { redirect } from 'next/navigation'
+import LoginForm from './login-form'
 
 export default async function LoginPage() {
 	const session = await auth()

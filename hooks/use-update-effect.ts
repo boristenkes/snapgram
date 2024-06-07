@@ -1,5 +1,5 @@
+import type { DependencyList, EffectCallback } from 'react'
 import { useEffect, useRef } from 'react'
-import type { EffectCallback, DependencyList } from 'react'
 
 export default function useUpdateEffect(
 	callback: EffectCallback,

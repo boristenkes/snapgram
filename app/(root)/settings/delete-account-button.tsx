@@ -1,5 +1,6 @@
 'use client'
 
+import Loader from '@/components/loader'
 import {
 	AlertDialog,
 	AlertDialogCancel,
@@ -10,15 +11,14 @@ import {
 	AlertDialogTitle,
 	AlertDialogTrigger
 } from '@/components/ui/alert-dialog'
-import toast from '@/lib/toast'
-import { useRouter } from 'next/navigation'
-import { useState } from 'react'
 import { Button } from '@/components/ui/button'
-import Loader from '@/components/loader'
-import { deleteUser } from '@/lib/actions/user.actions'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
+import { deleteUser } from '@/lib/actions/user.actions'
+import toast from '@/lib/toast'
 import { signOut } from 'next-auth/react'
+import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 
 export default function DeleteAccountButton({
 	currentUserId,

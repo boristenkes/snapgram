@@ -1,13 +1,13 @@
 'use server'
 
+import { Mention } from '@/app/(root)/story/new/mention-input'
+import { revalidatePath } from 'next/cache'
+import { UTApi } from 'uploadthing/server'
+import auth from '../auth'
+import Story from '../models/story.model'
+import User from '../models/user.model'
 import connectMongoDB from '../mongoose'
 import { Story as StoryType } from '../types'
-import { UTApi } from 'uploadthing/server'
-import { Mention } from '@/app/(root)/story/new/mention-input'
-import auth from '../auth'
-import User from '../models/user.model'
-import Story from '../models/story.model'
-import { revalidatePath } from 'next/cache'
 import { removeDuplicates } from '../utils'
 
 const uploadthingApi = new UTApi()

@@ -1,14 +1,14 @@
-import { type ButtonProps } from './elements'
 import {
 	follow,
-	unfollow,
 	sendFollowRequest,
+	unfollow,
 	unsendFollowRequest
 } from '@/lib/actions/user.actions'
-import { useMemo } from 'react'
 import { TODO, User } from '@/lib/types'
-import Loader from './loader'
+import { useMemo } from 'react'
+import { type ButtonProps } from './elements'
 import SubmitButton from './elements/submit-button'
+import Loader from './loader'
 
 export type FollowButtonProps = ButtonProps & {
 	currentUserStr: string

@@ -1,8 +1,8 @@
-import { formatDistanceToNowStrict } from 'date-fns'
-import Link from 'next/link'
 import { fetchPost } from '@/lib/actions/post.actions'
-import Image from 'next/image'
 import { isImage } from '@/lib/utils'
+import { formatDistanceToNowStrict } from 'date-fns'
+import Image from 'next/image'
+import Link from 'next/link'
 
 type NewCommentContentProps = {
 	senderName: string

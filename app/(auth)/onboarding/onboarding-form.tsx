@@ -2,20 +2,20 @@
 
 import { Button, TextInput } from '@/components/elements'
 import SubmitButton from '@/components/elements/submit-button'
-import Loader from '@/components/loader'
+import Textarea from '@/components/elements/textarea'
 import ErrorMessage from '@/components/error-message'
+import Loader from '@/components/loader'
+import useAuth from '@/hooks/use-auth'
 import {
 	handleOnboardingBackButtonClick,
 	onboard
 } from '@/lib/actions/user.actions'
 import { OnboardingFields, onboardingSchema } from '@/lib/zod/user.schema'
+import { zodResolver } from '@hookform/resolvers/zod'
 import { signOut } from 'next-auth/react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { SubmitHandler, useForm } from 'react-hook-form'
-import Textarea from '@/components/elements/textarea'
-import { zodResolver } from '@hookform/resolvers/zod'
-import useAuth from '@/hooks/use-auth'
 
 export default function OnboardingForm() {
 	const { user: currentUser } = useAuth()

@@ -5,11 +5,11 @@ const f = createUploadthing()
 
 const profilePicture = f({ image: { maxFileSize: '2MB', maxFileCount: 1 } })
 	.middleware(async ({ req }) => {
-		const { user } = await auth()
+		const session = await auth()
 
-		if (!user) throw new Error('Unauthorized')
+		if (!session) throw new Error('Unauthorized')
 
-		return { userId: user?._id }
+		return { userId: session?.user?._id }
 	})
 	.onUploadComplete(async ({ metadata, file }) => {
 		console.log('Upload complete for userId:', metadata.userId)
@@ -23,11 +23,11 @@ const storyContent = f({
 	video: { maxFileSize: '8MB' }
 })
 	.middleware(async ({ req }) => {
-		const { user } = await auth()
+		const session = await auth()
 
-		if (!user) throw new Error('Unauthrized')
+		if (!session) throw new Error('Unauthorized')
 
-		return { userId: user?._id }
+		return { userId: session?.user?._id }
 	})
 	.onUploadComplete(async ({ metadata, file }) => {})
 
@@ -36,11 +36,11 @@ const postContent = f({
 	video: { maxFileSize: '8MB', maxFileCount: 10 }
 })
 	.middleware(async ({ req }) => {
-		const { user } = await auth()
+		const session = await auth()
 
-		if (!user) throw new Error('Unauthrized')
+		if (!session) throw new Error('Unauthorized')
 
-		return { userId: user?._id }
+		return { userId: session?.user?._id }
 	})
 	.onUploadComplete(async ({ metadata, file }) => {})
 

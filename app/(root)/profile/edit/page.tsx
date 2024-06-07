@@ -1,7 +1,7 @@
-import EditProfileForm from './edit-profile-form'
 import auth from '@/lib/auth'
 import { Metadata } from 'next'
 import Image from 'next/image'
+import EditProfileForm from './edit-profile-form'
 
 export const metadata: Metadata = {
 	title: 'Edit profile • Snapgram',

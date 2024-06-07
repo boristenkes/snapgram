@@ -1,9 +1,9 @@
 'use client'
 
-import Image from 'next/image'
 import { cn } from '@/lib/utils'
-import { useFormStatus } from 'react-dom'
+import Image from 'next/image'
 import { forwardRef } from 'react'
+import { useFormStatus } from 'react-dom'
 
 type TextareaProps = React.TextareaHTMLAttributes<HTMLTextAreaElement> & {
 	label?: string

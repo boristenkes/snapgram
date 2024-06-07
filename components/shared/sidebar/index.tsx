@@ -1,10 +1,10 @@
-import Image from 'next/image'
 import Avatar from '@/components/avatar'
 import SidebarLink from '@/components/shared/sidebar/sidebar-link'
-import LogoutButton from './logout-button'
-import Link from 'next/link'
 import { sidebarLinks } from '@/constants'
 import auth from '@/lib/auth'
+import Image from 'next/image'
+import Link from 'next/link'
+import LogoutButton from './logout-button'
 
 export default async function Sidebar() {
 	const { user } = await auth()

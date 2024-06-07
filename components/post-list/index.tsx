@@ -1,5 +1,5 @@
-import { type Post as PostType } from '@/lib/types'
 import PostCard from '@/components/post-card'
+import { type Post as PostType } from '@/lib/types'
 
 type PostListProps = {
 	posts: PostType[]

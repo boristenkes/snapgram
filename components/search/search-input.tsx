@@ -1,8 +1,8 @@
 'use client'
 
-import { useEffect, useState } from 'react'
 import useDebounce from '@/hooks/use-debounce'
-import type { SearchResult, SearchProps } from '.'
+import { useEffect, useState } from 'react'
+import type { SearchProps, SearchResult } from '.'
 import Loader from '../loader'
 
 type SearchInputProps = SearchProps & {

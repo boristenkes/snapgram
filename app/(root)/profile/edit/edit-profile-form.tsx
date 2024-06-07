@@ -1,18 +1,18 @@
 'use client'
 
-import { useState } from 'react'
+import Dropzone from '@/components/dropzone'
 import { TextInput, Textarea } from '@/components/elements'
 import SubmitButton from '@/components/elements/submit-button'
+import ErrorMessage from '@/components/error-message'
 import Loader from '@/components/loader'
 import { updateUser } from '@/lib/actions/user.actions'
-import { EditProfileFields, editProfileSchema } from '@/lib/zod/user.schema'
-import { id, megabytesToBytes } from '@/lib/utils'
 import toast from '@/lib/toast'
-import ErrorMessage from '@/components/error-message'
-import Dropzone from '@/components/dropzone'
-import { SubmitHandler, useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
 import { User } from '@/lib/types'
+import { id, megabytesToBytes } from '@/lib/utils'
+import { EditProfileFields, editProfileSchema } from '@/lib/zod/user.schema'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useState } from 'react'
+import { SubmitHandler, useForm } from 'react-hook-form'
 
 export default function EditProfileForm({ profile }: { profile: User }) {
 	const currentUser = profile

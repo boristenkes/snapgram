@@ -1,14 +1,13 @@
 'use server'
 
-import { revalidatePath } from 'next/cache'
-import Comment from '../models/comment.model'
-import { Comment as CommentType } from '../types'
-import connectMongoDB from '../mongoose'
-import auth from '../auth'
 import { SortOrder } from 'mongoose'
-import { TODO } from '../types'
-import User from '../models/user.model'
+import { revalidatePath } from 'next/cache'
+import auth from '../auth'
+import Comment from '../models/comment.model'
 import Post from '../models/post.model'
+import User from '../models/user.model'
+import connectMongoDB from '../mongoose'
+import { Comment as CommentType, TODO } from '../types'
 import { sendNotification } from './notification.actions'
 
 type CreateCommentProps = {

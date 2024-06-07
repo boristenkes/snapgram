@@ -1,9 +1,8 @@
 'use client'
 
 import { useUploadThing } from '@/lib/uploadthing'
-import { useDropzone } from 'react-dropzone'
 import { cn } from '@/lib/utils'
-import { DropzoneOptions } from 'react-dropzone'
+import { DropzoneOptions, useDropzone } from 'react-dropzone'
 import { generateClientDropzoneAccept } from 'uploadthing/client'
 import Errors from './errors'
 import Previews, { type Preview } from './previews'

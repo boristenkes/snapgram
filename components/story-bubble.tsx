@@ -1,9 +1,9 @@
 import auth from '@/lib/auth'
+import { User } from '@/lib/types'
 import { cn } from '@/lib/utils'
 import Link from 'next/link'
-import ErrorMessage from './error-message'
 import Avatar from './avatar'
-import { User } from '@/lib/types'
+import ErrorMessage from './error-message'
 
 type StoryBubbleProps = {
 	storyId: string

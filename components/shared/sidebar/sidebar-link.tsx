@@ -1,11 +1,11 @@
 'use client'
 
+import UnreadNotificationCounter from '@/components/unread-notification-counter'
+import { sidebarLinks } from '@/constants'
+import { cn } from '@/lib/utils'
 import Image from 'next/image'
 import Link from 'next/link'
-import { sidebarLinks } from '@/constants'
 import { usePathname } from 'next/navigation'
-import { cn } from '@/lib/utils'
-import UnreadNotificationCounter from '@/components/unread-notification-counter'
 
 type SidebarLinkProps = (typeof sidebarLinks)[0] & {
 	className?: string

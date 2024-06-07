@@ -1,10 +1,10 @@
 'use client'
 
+import { bottombarLinks } from '@/constants'
+import { cn } from '@/lib/utils'
 import Image from 'next/image'
 import Link from 'next/link'
-import { bottombarLinks } from '@/constants'
 import { usePathname } from 'next/navigation'
-import { cn } from '@/lib/utils'
 
 type BottombarLinkProps = (typeof bottombarLinks)[0] & {
 	className?: string

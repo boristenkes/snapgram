@@ -41,7 +41,7 @@
 }
 
 .or-line {
-	@apply relative my-6 w-full h-[1px] bg-neutral-300;
+	@apply relative my-6 w-full h-px bg-neutral-300;
 }
 
 .or-line::before {

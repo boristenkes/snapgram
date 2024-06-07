@@ -1,8 +1,8 @@
 'use client'
 
 import { useFormStatus } from 'react-dom'
-import { Button, ButtonProps } from './button'
 import Loader from '../loader'
+import { Button, ButtonProps } from './button'
 
 type SubmitButtonProps = ButtonProps & {
 	pendingContent?: React.ReactNode

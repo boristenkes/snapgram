@@ -1,8 +1,8 @@
-import RegisterForm from './register-form'
+import auth from '@/lib/auth'
 import Image from 'next/image'
 import Link from 'next/link'
-import auth from '@/lib/auth'
 import { redirect } from 'next/navigation'
+import RegisterForm from './register-form'
 
 export default async function RegisterPage() {
 	const session = await auth()

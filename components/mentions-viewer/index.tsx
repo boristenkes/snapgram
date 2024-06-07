@@ -1,9 +1,8 @@
-import React from 'react'
-import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
-import Image from 'next/image'
 import { fetchPost } from '@/lib/actions/post.actions'
-import ErrorMessage from '../error-message'
 import { User } from '@/lib/types'
+import Image from 'next/image'
+import ErrorMessage from '../error-message'
+import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
 import UserCard from '../user-card'
 
 export default async function MentionsViewer({ postId }: { postId: string }) {

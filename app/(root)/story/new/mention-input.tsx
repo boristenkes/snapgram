@@ -1,12 +1,12 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import Avatar from '@/components/avatar'
+import Loader from '@/components/loader'
+import { SearchResult } from '@/components/search'
 import useDebounce from '@/hooks/use-debounce'
 import { searchUsers } from '@/lib/actions/user.actions'
 import { removeDuplicates } from '@/lib/utils'
-import { SearchResult } from '@/components/search'
-import Avatar from '@/components/avatar'
-import Loader from '@/components/loader'
+import { useEffect, useState } from 'react'
 
 const MAX_MENTIONS = 10
 

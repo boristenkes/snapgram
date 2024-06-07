@@ -1,12 +1,12 @@
 'use client'
 
-import Image from 'next/image'
-import SearchInput from './search-input'
-import { useState } from 'react'
 import { searchUsers } from '@/lib/actions/user.actions'
-import UserCard from '../user-card'
 import { User } from '@/lib/types'
 import { cn } from '@/lib/utils'
+import Image from 'next/image'
+import { useState } from 'react'
+import UserCard from '../user-card'
+import SearchInput from './search-input'
 
 export type SearchProps = React.InputHTMLAttributes<HTMLInputElement> & {
 	wrapperClassName?: string

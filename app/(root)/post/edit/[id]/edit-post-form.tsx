@@ -1,14 +1,14 @@
 'use client'
 
-import { Post } from '@/lib/types'
-import { TextInput, Textarea } from '@/components/elements'
 import MentionInput, { Mention } from '@/app/(root)/story/new/mention-input'
-import { useState } from 'react'
 import TagInput from '@/app/(root)/story/new/tag-input'
+import { TextInput, Textarea } from '@/components/elements'
 import SubmitButton from '@/components/elements/submit-button'
 import Loader from '@/components/loader'
-import toast from '@/lib/toast'
 import { updatePost } from '@/lib/actions/post.actions'
+import toast from '@/lib/toast'
+import { Post } from '@/lib/types'
+import { useState } from 'react'
 
 type EditPostFormProps = {
 	post: Post

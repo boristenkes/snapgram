@@ -1,6 +1,14 @@
 'use client'
 
+import useAuth from '@/hooks/use-auth'
+import { fetchUser, removeFollower } from '@/lib/actions/user.actions'
+import { User } from '@/lib/types'
+import { cn } from '@/lib/utils'
+import Image from 'next/image'
 import { useState } from 'react'
+import ErrorMessage from '../error-message'
+import UserCardListSkeleton from '../skeletons/user-card-list'
+import { Button } from '../ui/button'
 import {
 	Dialog,
 	DialogClose,
@@ -9,15 +17,7 @@ import {
 	DialogTitle,
 	DialogTrigger
 } from '../ui/dialog'
-import { fetchUser, removeFollower } from '@/lib/actions/user.actions'
-import { User } from '@/lib/types'
-import ErrorMessage from '../error-message'
 import UserCard from '../user-card'
-import UserCardListSkeleton from '../skeletons/user-card-list'
-import { cn } from '@/lib/utils'
-import { Button } from '../ui/button'
-import useAuth from '@/hooks/use-auth'
-import Image from 'next/image'
 
 type Props = {
 	userId: string

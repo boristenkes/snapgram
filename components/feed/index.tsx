@@ -1,9 +1,9 @@
+import SuggestedAccounts from '@/app/(root)/suggested-accounts'
+import Post from '@/components/post'
 import { fetchPosts } from '@/lib/actions/post.actions'
 import auth from '@/lib/auth'
-import ErrorMessage from '../error-message'
-import Post from '@/components/post'
-import SuggestedAccounts from '@/app/(root)/suggested-accounts'
 import { Suspense } from 'react'
+import ErrorMessage from '../error-message'
 import UserCardListSkeleton from '../skeletons/user-card-list'
 
 export default async function Feed() {

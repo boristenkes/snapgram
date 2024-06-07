@@ -1,4 +1,4 @@
-import { Topbar, Sidebar, Bottombar } from '@/components/shared'
+import { Bottombar, Sidebar, Topbar } from '@/components/shared'
 import { TooltipProvider } from '@/components/ui/tooltip'
 import auth from '@/lib/auth'
 import { redirect } from 'next/navigation'

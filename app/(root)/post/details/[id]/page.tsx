@@ -1,12 +1,12 @@
-import { fetchPost, fetchPosts } from '@/lib/actions/post.actions'
-import { notFound, redirect } from 'next/navigation'
-import RelatedPosts from './related-posts'
 import PostDetails from '@/components/post-details'
-import BackButton from './back-button'
-import auth from '@/lib/auth'
-import { Suspense } from 'react'
 import PostListSkeleton from '@/components/skeletons/post-list'
+import { fetchPost, fetchPosts } from '@/lib/actions/post.actions'
+import auth from '@/lib/auth'
 import { format } from 'date-fns'
+import { notFound, redirect } from 'next/navigation'
+import { Suspense } from 'react'
+import BackButton from './back-button'
+import RelatedPosts from './related-posts'
 
 export const revalidate = 3600
 

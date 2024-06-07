@@ -1,7 +1,7 @@
 import auth from '@/lib/auth'
-import Avatar from '../avatar'
 import { User } from '@/lib/types'
 import Image from 'next/image'
+import Avatar from '../avatar'
 import { Button } from '../elements'
 import FollowButton from '../follow-button'
 import FollowersList from '../followers-list'

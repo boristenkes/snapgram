@@ -1,9 +1,9 @@
 import Avatar from '@/components/avatar'
+import TopPostsSkeleton from '@/components/skeletons/top-posts'
 import auth from '@/lib/auth'
 import { cn } from '@/lib/utils'
-import TopPosts from './top-posts'
 import { Suspense } from 'react'
-import TopPostsSkeleton from '@/components/skeletons/top-posts'
+import TopPosts from './top-posts'
 
 export default async function RigthSidebar({
 	className = ''

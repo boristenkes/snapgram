@@ -1,13 +1,13 @@
 'use client'
 
-import Avatar from '../avatar'
-import Image from 'next/image'
+import useAuth from '@/hooks/use-auth'
 import { createComment } from '@/lib/actions/comment.actions'
 import toast from '@/lib/toast'
-import { useRef } from 'react'
-import { usePathname } from 'next/navigation'
 import { cn } from '@/lib/utils'
-import useAuth from '@/hooks/use-auth'
+import Image from 'next/image'
+import { usePathname } from 'next/navigation'
+import { useRef } from 'react'
+import Avatar from '../avatar'
 
 export default function CommentInput({
 	postId,

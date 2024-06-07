@@ -1,7 +1,7 @@
 import Modal from '@/components/modal'
+import PostDetailsSkeleton from '@/components/skeletons/post-details'
 import { Suspense } from 'react'
 import PostInfo from './post-info'
-import PostDetailsSkeleton from '@/components/skeletons/post-details'
 
 export default async function PostModal({
 	params: { id }

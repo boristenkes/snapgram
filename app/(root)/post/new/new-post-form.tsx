@@ -2,15 +2,15 @@
 
 import Dropzone from '@/components/dropzone'
 import { TextInput, Textarea } from '@/components/elements'
-import { useState } from 'react'
-import MentionInput, { Mention } from '../../story/new/mention-input'
 import SubmitButton from '@/components/elements/submit-button'
+import ErrorMessage from '@/components/error-message'
 import Loader from '@/components/loader'
-import TagInput from '../../story/new/tag-input'
 import { createPost } from '@/lib/actions/post.actions'
 import toast from '@/lib/toast'
 import { useRouter } from 'next/navigation'
-import ErrorMessage from '@/components/error-message'
+import { useState } from 'react'
+import MentionInput, { Mention } from '../../story/new/mention-input'
+import TagInput from '../../story/new/tag-input'
 
 export default function NewPostForm() {
 	const router = useRouter()

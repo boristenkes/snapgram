@@ -1,8 +1,8 @@
 'use client'
 
+import { toggleCommentLike } from '@/lib/actions/comment.actions'
 import toast from '@/lib/toast'
 import Image from 'next/image'
-import { toggleCommentLike } from '@/lib/actions/comment.actions'
 import { useCallback, useOptimistic, useState } from 'react'
 
 type LikeButtonProps = {

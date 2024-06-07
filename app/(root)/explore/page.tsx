@@ -1,11 +1,11 @@
+import PopularTagsSkeleton from '@/components/skeletons/popular-tags'
+import PostListSkeleton from '@/components/skeletons/post-list'
 import { type SearchParams } from '@/lib/types'
+import { Metadata } from 'next'
+import { Suspense } from 'react'
 import ExploreHeader from './explore-header'
 import PopularTags from './popular-tags'
 import SearchResults from './search-results'
-import { Suspense } from 'react'
-import PostListSkeleton from '@/components/skeletons/post-list'
-import PopularTagsSkeleton from '@/components/skeletons/popular-tags'
-import { Metadata } from 'next'
 
 export const metadata: Metadata = {
 	title: 'Explore • Snapgram',

@@ -1,13 +1,13 @@
-import Image from 'next/image'
-import { Tabs, TabsList, TabsTrigger, TabsContent } from '@/components/ui/tabs'
-import { Posts, Tagged, Saved } from './tab-contents'
-import Liked from './tab-contents/liked'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { fetchUser } from '@/lib/actions/user.actions'
-import ErrorMessage from '../error-message'
 import auth from '@/lib/auth'
-import PrivateAccountLock from './private-account-lock'
+import Image from 'next/image'
 import { Suspense } from 'react'
+import ErrorMessage from '../error-message'
 import PostListSkeleton from '../skeletons/post-list'
+import PrivateAccountLock from './private-account-lock'
+import { Posts, Saved, Tagged } from './tab-contents'
+import Liked from './tab-contents/liked'
 
 type ProfilePosts = {
 	isCurrentUser: boolean

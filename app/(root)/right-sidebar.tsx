@@ -1,9 +1,9 @@
-import { sidebarLinks } from '@/constants'
-import SuggestedAccounts from './suggested-accounts'
 import Searchbar from '@/components/search'
+import UserCardListSkeleton from '@/components/skeletons/user-card-list'
+import { sidebarLinks } from '@/constants'
 import Link from 'next/link'
 import { Suspense } from 'react'
-import UserCardListSkeleton from '@/components/skeletons/user-card-list'
+import SuggestedAccounts from './suggested-accounts'
 
 export default function RightSidebar() {
 	return (

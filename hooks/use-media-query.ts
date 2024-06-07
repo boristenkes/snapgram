@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useCallback, useEffect } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 
 export default function useMediaQuery(query: string): boolean {
 	const [targetReached, setTargetReached] = useState<boolean>(false)

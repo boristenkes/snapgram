@@ -1,7 +1,7 @@
 import { fetchPost } from '@/lib/actions/post.actions'
+import { isImage } from '@/lib/utils'
 import { formatDistanceToNowStrict } from 'date-fns'
 import Image from 'next/image'
-import { isImage } from '@/lib/utils'
 import Link from 'next/link'
 
 type PostMentionContentProps = {
