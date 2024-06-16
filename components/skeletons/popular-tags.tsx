@@ -9,7 +9,7 @@ export default function PopularTagsSkeleton({
 }: PopularTagsSkeletonProps) {
 	return (
 		<div
-			className='flex justify-center gap-3 mt-9 text-sm sm:text-base'
+			className='flex justify-center gap-x-3 gap-y-9 mt-9 text-sm sm:text-base'
 			aria-label='Loading popular tags...'
 		>
 			{Array.from({ length: tagCount }, (_, index) => index).map((_, index) => (

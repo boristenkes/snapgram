@@ -9,7 +9,7 @@ export default function PostListSkeleton({
 }: PostListSkeletonProps) {
 	return (
 		<div
-			className='grid grid-cols-3 mt-14 gap-2 w-full'
+			className='grid grid-cols-3 mt-8 sm:mt-14 gap-2 w-full'
 			aria-label='Loading posts...'
 		>
 			{Array.from({ length: postCount }, (_, index) => index).map(

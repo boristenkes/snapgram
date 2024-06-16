@@ -12,7 +12,7 @@ export default async function RegisterPage() {
 	}
 
 	return (
-		<main className='w-[min(100%-2rem,25rem)]'>
+		<main className='w-[min(100%-2rem,25rem)] h-full overflow-y-auto custom-scrollbar py-12 scroll-smooth'>
 			<Image
 				src='/assets/logo-text.svg'
 				alt='Logo'

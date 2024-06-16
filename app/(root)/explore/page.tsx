@@ -21,7 +21,7 @@ export default async function ExplorePage({
 	const searchTerm = (searchParams.search as string) ?? ''
 
 	return (
-		<div className='my-16'>
+		<div className='my-8 sm:my-16'>
 			<ExploreHeader searchTerm={searchTerm} />
 
 			<Suspense fallback={<PopularTagsSkeleton />}>
@@ -29,7 +29,9 @@ export default async function ExplorePage({
 			</Suspense>
 
 			<main className='w-[min(62.5rem,100%-2rem)] mx-auto'>
-				<h1 className='text-2xl font-bold mt-20 sm:text-3xl'>Popular Today</h1>
+				<h1 className='text-2xl font-bold mt-12 sm:mt-20 sm:text-3xl'>
+					Popular Today
+				</h1>
 
 				<Suspense fallback={<PostListSkeleton />}>
 					<SearchResults searchTerm={searchTerm} />

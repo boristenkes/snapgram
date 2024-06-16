@@ -68,12 +68,16 @@ export default async function ProfileHeader({
 								<FollowButton
 									currentUserStr={JSON.stringify(currentUser)}
 									targetUserStr={JSON.stringify(user)}
+									formProps={{
+										className: 'grow'
+									}}
 								/>
 
 								<Button
 									size='xs'
 									variant='light'
 									// href={`/chat/${user?._id}`}
+									className='grow'
 								>
 									Message
 								</Button>
@@ -166,7 +170,7 @@ export default async function ProfileHeader({
 							<FollowButton
 								currentUserStr={JSON.stringify(currentUser)}
 								targetUserStr={JSON.stringify(user)}
-								formProps={{ className: 'flex-1' }}
+								formProps={{ className: 'grow' }}
 								stretch
 							/>
 
@@ -174,7 +178,7 @@ export default async function ProfileHeader({
 								size='xs'
 								variant='light'
 								// href={`/chat/${user?._id}`}
-								className='flex-1'
+								className='grow'
 							>
 								Message
 							</Button>

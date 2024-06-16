@@ -8,7 +8,7 @@ export default async function PopularTags() {
 	if (!response.success) return <ErrorMessage message={response.message} />
 
 	return (
-		<ul className='flex justify-center gap-3 mt-8 text-sm sm:text-base'>
+		<ul className='flex justify-center flex-wrap gap-x-3 gap-y-9 mt-8 text-sm sm:text-base'>
 			{response.hashtags.map(hashtag => (
 				<li key={hashtag}>
 					<Tag

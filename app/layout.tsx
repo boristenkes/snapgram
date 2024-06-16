@@ -1,19 +1,29 @@
+import SessionProvider from '@/components/session-provider'
+import auth from '@/lib/auth'
+import { NextSSRPlugin } from '@uploadthing/react/next-ssr-plugin'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
-import './globals.css'
 import { Toaster } from 'react-hot-toast'
-import SessionProvider from '@/components/session-provider'
-import { NextSSRPlugin } from '@uploadthing/react/next-ssr-plugin'
 import { extractRouterConfig } from 'uploadthing/server'
 import { ourFileRouter } from './api/uploadthing/core'
-import auth from '@/lib/auth'
+import './globals.css'
 
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
 	title: 'Snapgram',
 	description:
-		'Redesigned Instagram clone. Practice project built with Next.js v14 by @boristenkes on Github.'
+		'Redesigned Instagram clone. Practice project built with Next.js v14 by @boristenkes on Github.',
+	keywords: [
+		'next.js',
+		'next.js 14',
+		'instagram clone',
+		'mongodb',
+		'snapgram',
+		'redesigned instagram clone',
+		'server actions',
+		'uploadthing'
+	]
 }
 
 export default async function Layout({

@@ -11,7 +11,7 @@ export default async function Sidebar() {
 
 	return (
 		<aside className='h-screen w-full max-w-fit sticky top-0 left-0 z-40 bg-neutral-800 border-r-2 border-r-neutral-700 hidden | md:block xl:max-w-64'>
-			<div className='h-full flex flex-col gap-11 py-12 px-6'>
+			<div className='h-full flex flex-col gap-11 py-12 px-6 overflow-y-auto custom-scrollbar'>
 				<Link href='/'>
 					{/* dekstop logo */}
 					<Image
@@ -63,7 +63,7 @@ export default async function Sidebar() {
 				</Link>
 
 				<nav className='h-full'>
-					<ul className='h-full flex flex-col gap-2 overflow-y-auto no-scrollbar'>
+					<ul className='h-full flex flex-col gap-2'>
 						{sidebarLinks.map(link => (
 							<SidebarLink
 								key={link.path}
