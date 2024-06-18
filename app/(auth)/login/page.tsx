@@ -12,7 +12,7 @@ export default async function LoginPage() {
 	}
 
 	return (
-		<main className='w-[min(100%-1rem,25rem)] h-full overflow-y-auto custom-scrollbar py-12 scroll-smooth'>
+		<main className='w-[min(100%-1rem,25rem)] px-1 overflow-y-auto custom-scrollbar py-12 scroll-smooth'>
 			<Image
 				src='/assets/logo-text.svg'
 				alt='Logo'

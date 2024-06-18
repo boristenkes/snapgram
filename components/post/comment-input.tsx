@@ -8,6 +8,7 @@ import Image from 'next/image'
 import { usePathname } from 'next/navigation'
 import { useRef } from 'react'
 import Avatar from '../avatar'
+import SubmitButton from '../elements/submit-button'
 
 export default function CommentInput({
 	postId,
@@ -22,7 +23,12 @@ export default function CommentInput({
 
 	const clientAction = async (formData: FormData) => {
 		const content = formData.get('content') as string
-		if (!content.trim().length) return
+		if (!content?.trim().length) return
+
+		if (inputRef.current) {
+			inputRef.current.value = ''
+			inputRef.current.disabled = true
+		}
 
 		const response = await createComment({
 			content,
@@ -30,13 +36,9 @@ export default function CommentInput({
 			pathname
 		})
 
-		if (response.success) {
-			toast(response.message)
-		} else {
-			toast(response.message, { type: 'error' })
-		}
+		toast(response.message, { type: response.success ? 'success' : 'error' })
 
-		if (inputRef.current) inputRef.current.value = ''
+		if (inputRef.current) inputRef.current.disabled = false
 	}
 
 	return (
@@ -55,13 +57,13 @@ export default function CommentInput({
 					type='text'
 					name='content'
 					autoComplete='off'
-					className='outline-none border-none bg-transparent flex-1 placeholder-neutral-300 mr-3 w-full'
+					className='outline-none border-none bg-transparent flex-1 placeholder-neutral-300 mr-3 w-full disabled:opacity-50'
 					placeholder='Write your comment...'
 					ref={inputRef}
 				/>
-				<button
+				<SubmitButton
 					type='submit'
-					className='flex-none'
+					className='p-0 bg-transparent border-transparent flex-none disabled:opacity-50'
 				>
 					<Image
 						src='/assets/icons/send.svg'
@@ -70,7 +72,7 @@ export default function CommentInput({
 						height={19}
 					/>
 					<span className='sr-only'>Post comment</span>
-				</button>
+				</SubmitButton>
 			</div>
 		</form>
 	)
