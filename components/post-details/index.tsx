@@ -3,13 +3,11 @@ import Avatar from '@/components/avatar'
 import PostActionButtons from '@/components/post-action-buttons'
 import PostContent from '@/components/post-content'
 import CommentInput from '@/components/post/comment-input'
-import Tag from '@/components/tag'
 import auth from '@/lib/auth'
 import { Post } from '@/lib/types'
 import { format } from 'date-fns'
 import Image from 'next/image'
 import Link from 'next/link'
-import { Fragment } from 'react'
 import CommentList from '../comment-list'
 import MentionsViewer from '../mentions-viewer'
 import Caption from '../post-caption'
@@ -128,16 +126,10 @@ export default async function PostDetails({ post }: PostDetailsProps) {
 					)}
 				</div>
 
-				{(post.caption || !!post.tags.length) && (
-					<pre className='font-inherit mb-8 text-wrap'>
-						{post.caption}{' '}
-						{post.tags.map(tag => (
-							<Fragment key={tag}>
-								<Tag tag={tag} />{' '}
-							</Fragment>
-						))}
-					</pre>
-				)}
+				<Caption
+					caption={post.caption}
+					tags={post.tags}
+				/>
 
 				<div className='relative'>
 					<PostContent

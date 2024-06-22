@@ -11,7 +11,9 @@ export default async function PostModal({
 	return (
 		<Modal>
 			<Suspense fallback={<PostDetailsSkeleton />}>
-				<PostInfo postId={id} />
+				<div className='max-h-[90vh] overflow-y-auto'>
+					<PostInfo postId={id} />
+				</div>
 			</Suspense>
 		</Modal>
 	)
