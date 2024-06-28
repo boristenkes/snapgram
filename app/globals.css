@@ -48,14 +48,6 @@
 	@apply content-['or'] absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 bg-neutral-900 text-neutral-300 px-4 z-10;
 }
 
-.story-seen {
-	@apply bg-gradient-to-b from-slate-500 to-slate-600;
-}
-
-.story-unseen {
-	@apply bg-gradient-to-b from-[#877EFF] via-[#685DFF] to-[#3121FF];
-}
-
 .search-autofill:autofill,
 .search-autofill:autofill:is(:hover, :focus, :active) {
 	box-shadow: 0 0 0 30px hsl(240, 6%, 7%) inset !important;

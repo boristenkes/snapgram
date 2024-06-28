@@ -2,11 +2,13 @@
 
 import useAuth from '@/hooks/use-auth'
 import { countNotifications } from '@/lib/actions/notification.actions'
+import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
 export default function UnreadNotificationCounter() {
 	const { user: currentUser } = useAuth()
 	const [count, setCount] = useState(0)
+	const pathname = usePathname()
 
 	useEffect(() => {
 		const fetchCount = async () => {
@@ -22,6 +24,10 @@ export default function UnreadNotificationCounter() {
 
 		if (currentUser._id) fetchCount()
 	}, [currentUser])
+
+	useEffect(() => {
+		if (pathname === '/notifications') setCount(0)
+	}, [pathname])
 
 	if (count === 0) return
 

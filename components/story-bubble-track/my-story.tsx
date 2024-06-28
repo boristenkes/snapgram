@@ -1,31 +1,33 @@
-import { fetchStories } from '@/lib/actions/story.actions'
-import { User } from '@/lib/types'
+import { doesCurrentUserHaveActiveStories } from '@/lib/actions/story.actions'
+import auth from '@/lib/auth'
 import Image from 'next/image'
 import Link from 'next/link'
 import Avatar from '../avatar'
 import ErrorMessage from '../error-message'
 import StoryBubble from '../story-bubble'
 
-export default async function MyStory({ currentUser }: { currentUser: User }) {
-	const response = await fetchStories({
-		author: currentUser._id,
-		createdAt: {
-			$gte: new Date(new Date().getTime() - 24 * 60 * 60 * 1000) // is posted within last 24h
-		}
-	})
+export default async function MyStory() {
+	const { user: currentUser } = await auth()
+	const response = await doesCurrentUserHaveActiveStories()
 
 	if (!response.success) {
 		return <ErrorMessage message={response.message} />
 	}
 
-	const { stories: activeStories } = response
+	if (response.hasActiveStories) {
+		return (
+			<li className='relative flex-none text-center'>
+				<StoryBubble
+					story={{
+						author: currentUser,
+						seen: response.hasUnseenStories
+					}}
+				/>
+			</li>
+		)
+	}
 
-	return !!activeStories?.length ? (
-		<StoryBubble
-			author={currentUser}
-			storyId={activeStories[0]._id.toString()}
-		/>
-	) : (
+	return (
 		<li className='relative text-center'>
 			<Link href='/story/new'>
 				<div className='rounded-full p-[3px] relative'>

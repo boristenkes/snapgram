@@ -40,7 +40,6 @@ export type User = {
 	postsCount: number
 	private: boolean
 	savedPosts: Post[] | string[]
-	seenStories: Story[] | string[]
 	stories: Story[] | string[]
 	verified: boolean
 	onboarded: boolean
@@ -54,8 +53,8 @@ export type Story = {
 	mentions: User[] | string[]
 	tags: string
 	views: User[] | string[]
-	createdAt: Date
-	updatedAt: Date
+	createdAt: Date | string
+	updatedAt: Date | string
 }
 
 export type Post = {
@@ -73,8 +72,8 @@ export type Post = {
 	shares: User[] | string[]
 	shareCount: number
 	mentions: User[] | string[]
-	createdAt: string
-	updatedAt: string
+	createdAt: Date | string
+	updatedAt: Date | string
 }
 
 export type Comment = {

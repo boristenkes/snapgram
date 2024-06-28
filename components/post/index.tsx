@@ -33,7 +33,12 @@ export default async function Post({ post }: { post: PostType }) {
 
 					<div>
 						<strong>{post.author.name}</strong>
-						<p className='text-neutral-500'>{formattedDate}</p>
+						<time
+							className='text-neutral-500 block'
+							dateTime={post.createdAt.toString()}
+						>
+							{formattedDate}
+						</time>
 					</div>
 				</Link>
 

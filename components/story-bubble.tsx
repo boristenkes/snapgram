@@ -1,45 +1,42 @@
+import { StoryForToday } from '@/lib/actions/story.actions'
 import auth from '@/lib/auth'
-import { User } from '@/lib/types'
 import { cn } from '@/lib/utils'
 import Link from 'next/link'
 import Avatar from './avatar'
 import ErrorMessage from './error-message'
 
 type StoryBubbleProps = {
-	storyId: string
-	author: User
+	story: StoryForToday
 }
 
-export default async function StoryBubble({
-	storyId,
-	author
-}: StoryBubbleProps) {
+export default async function StoryBubble({ story }: StoryBubbleProps) {
 	const { user: currentUser } = await auth()
 
 	if (!currentUser)
 		return <ErrorMessage message='You must log in to view this story' />
 
-	const isSeen = currentUser.seenStories?.includes(storyId)
-
 	return (
-		<li className='relative flex-none text-center'>
-			<Link href={`/stories/${author._id}`}>
-				<div
-					className={cn('rounded-full p-[3px] w-fit mx-auto', {
-						'story-unseen': !isSeen,
-						'story-seen': isSeen
-					})}
-				>
-					<Avatar
-						url={author.image}
-						alt={`${author.username}'s story`}
-						width={62}
-						height={62}
-						className='p-0.5 mx-auto'
-					/>
-				</div>
-				{author.username}
-			</Link>
-		</li>
+		<Link
+			href={`/story/view/${story.author._id}`}
+			scroll={false}
+		>
+			<div
+				className={cn('rounded-full p-[3px] w-fit mx-auto', {
+					'bg-gradient-story': !story.seen,
+					'bg-gradient-to-b from-slate-500 to-slate-600': story.seen
+				})}
+			>
+				<Avatar
+					url={story.author.image}
+					alt={`${story.author.username}'s story`}
+					width={64}
+					height={64}
+					className='p-0.5 mx-auto size-14 sm:size-16'
+				/>
+			</div>
+			<span className='text-sm block max-w-20 overflow-hidden text-ellipsis whitespace-nowrap'>
+				{story.author.username}
+			</span>
+		</Link>
 	)
 }

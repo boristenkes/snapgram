@@ -47,7 +47,12 @@ export default async function PostDetails({ post }: PostDetailsProps) {
 								/>
 								<div>
 									<strong>{post.author.name}</strong>
-									<p className='text-neutral-500'>{formattedDate}</p>
+									<time
+										className='text-neutral-500 block'
+										dateTime={post.createdAt.toString()}
+									>
+										{formattedDate}
+									</time>
 								</div>
 							</Link>
 
@@ -104,7 +109,12 @@ export default async function PostDetails({ post }: PostDetailsProps) {
 						/>
 						<div>
 							<strong>{post.author.name}</strong>
-							<p className='text-neutral-500'>{formattedDate}</p>
+							<time
+								className='text-neutral-500 block'
+								dateTime={post.createdAt.toString()}
+							>
+								{formattedDate}
+							</time>
 						</div>
 					</Link>
 

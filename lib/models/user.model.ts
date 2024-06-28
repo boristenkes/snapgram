@@ -31,7 +31,6 @@ const userSchema = new mongoose.Schema({
 	followRequests: [{ type: ObjectId, ref: 'User' }],
 	followRequestsCount: { type: Number, default: 0, min: 0 },
 
-	seenStories: [{ type: ObjectId, ref: 'Story' }],
 	highlights: [{ type: ObjectId, ref: 'Highlight' }]
 })
 

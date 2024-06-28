@@ -102,16 +102,19 @@ export default function Comment({ comment, currentUser }: CommentProps) {
 						{comment.content}
 					</p>
 
-					<div className='flex items-center gap-2.5 mt-1'>
-						<small className='text-neutral-500'>
+					<div className='flex items-center gap-2.5 mt-1 text-xs'>
+						<time
+							className='text-neutral-500'
+							dateTime={comment.createdAt.toString()}
+						>
 							{formatDistanceToNowStrict(comment.createdAt, {
 								addSuffix: true
 							})}
-						</small>
+						</time>
 
 						<button
 							onClick={toggleReplyMode}
-							className='text-xs flex items-center gap-1 text-neutral-200'
+							className='flex items-center gap-1 text-neutral-200'
 						>
 							<Image
 								src='/assets/icons/reply.svg'

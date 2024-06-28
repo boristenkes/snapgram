@@ -1,13 +1,14 @@
 'use server'
 
 import { Mention } from '@/app/(root)/story/new/mention-input'
+import { SortOrder } from 'mongoose'
 import { revalidatePath } from 'next/cache'
+import sharp from 'sharp'
 import { UTApi } from 'uploadthing/server'
 import auth from '../auth'
 import Story from '../models/story.model'
-import User from '../models/user.model'
 import connectMongoDB from '../mongoose'
-import { Story as StoryType } from '../types'
+import { Story as StoryType, TODO, User as UserType } from '../types'
 import { removeDuplicates } from '../utils'
 
 const uploadthingApi = new UTApi()
@@ -43,7 +44,7 @@ export async function createStory({
 	message: string
 }> {
 	try {
-		const content = formData.get('content')
+		const content = formData.get('content') as File
 		const altText = formData.get('alt')
 
 		if (!content) {
@@ -56,7 +57,17 @@ export async function createStory({
 			throw new Error('You must be logged in to create story')
 		}
 
-		const response = await uploadthingApi.uploadFiles(content)
+		const contentBuffer = await content.arrayBuffer()
+
+		const resizedBuffer = await sharp(Buffer.from(contentBuffer))
+			.resize(420, 740, { fit: 'cover', position: 'center' })
+			.toBuffer()
+
+		const resizedContent = new File([resizedBuffer], content.name, {
+			type: content.type
+		})
+
+		const response = await uploadthingApi.uploadFiles(resizedContent)
 
 		if (response.error) {
 			throw new Error(`Failed to upload content: ${response.error.message}`)
@@ -90,18 +101,22 @@ type FetchStory =
 	| { success: true; story: StoryType }
 	| { success: false; message: string }
 
+type FetchStoryOptions = {
+	select?: string
+	populate?: [string, string]
+}
+
 export async function fetchStory(
 	conditions: Record<string, string>,
-	fields?: string,
-	populate?: string
+	{ select, populate }: FetchStoryOptions = {}
 ): Promise<FetchStory> {
 	try {
 		await connectMongoDB()
 
-		let query = Story.findOne(conditions, fields)
+		let query = Story.findOne(conditions, select)
 
 		if (populate?.length) {
-			query = query.populate(populate)
+			query = query.populate(populate[0], populate[1])
 		}
 
 		const story = await query.exec()
@@ -119,19 +134,25 @@ type FetchStories =
 	| { success: true; stories: StoryType[] }
 	| { success: false; message: string }
 
+type FetchStoriesOptions = FetchStoryOptions & {
+	sort?: Record<string, SortOrder>
+	limit?: number
+}
+
 export async function fetchStories(
-	conditions: Record<any, any>,
-	fields?: string,
-	populate?: string
+	conditions?: Record<any, any>,
+	{ select, populate, sort, limit }: FetchStoriesOptions = {}
 ): Promise<FetchStories> {
 	try {
 		await connectMongoDB()
 
-		let query = Story.find(conditions, fields)
+		let query = Story.find(conditions as TODO, select)
 
-		if (populate?.length) {
-			query.populate(populate)
-		}
+		if (populate?.length) query.populate(populate[0], populate[1])
+
+		if (sort) query.sort(sort)
+
+		if (typeof limit === 'number') query.limit(limit)
 
 		const stories = await query.exec()
 
@@ -144,70 +165,100 @@ export async function fetchStories(
 	}
 }
 
+export type StoryForToday = {
+	author: UserType
+	seen: boolean
+}
+
 type FetchStoriesForToday =
-	| { success: true; stories: StoryType[] }
+	| { success: true; stories: StoryForToday[] }
 	| { success: false; message: string }
 
-export async function fetchStoriesForToday(
-	currentUserId: string
-): Promise<FetchStoriesForToday> {
+export async function fetchStoriesForToday(): Promise<FetchStoriesForToday> {
 	try {
 		await connectMongoDB()
 
-		const currentUser = await User.findById(currentUserId).select(
-			'following seenStories'
-		)
+		const { user: currentUser } = await auth()
 
 		if (!currentUser) throw new Error('User not found')
 
 		if (!currentUser.following.length) return { success: true, stories: [] }
 
-		const stories = await Story.find<StoryType>({
+		const storiesForToday = await Story.find<StoryType>({
 			author: { $in: currentUser.following },
 			...isPostedWithinLast24h
 		})
 			.sort({ createdAt: -1 })
 			.populate('author', 'image username')
-			.select('author')
+			.select('author views')
 			.exec()
 
-		// Sorting stories to not-seen stories appear first
-		stories.sort(story =>
-			currentUser.seenStories.includes(story._id) ? 1 : -1
+
+		const stories = storiesForToday
+			.map(story => ({
+				author: story.author as UserType,
+				seen: (story.views as string[]).includes(currentUser._id)
+			}))
+			.toSorted(story => (story.seen ? 1 : -1))
+
+
+
+		const grouped = stories.filter(
+			(story, index, self) =>
+				index === self.findIndex(t => t.author._id === story.author._id)
 		)
 
-		const grouped = removeDuplicates(stories, 'author') as StoryType[]
-
-		return { success: true, stories: grouped }
+		return {
+			success: true,
+			stories: JSON.parse(JSON.stringify(grouped))
+		}
 	} catch (error: any) {
 		console.log('Error in `fetchStoriesForToday`:', error)
 		return { success: false, message: error.message }
 	}
 }
 
-type ViewStoryProps = {
-	storyId: string
-	currentUserId: string
+export async function doesCurrentUserHaveActiveStories() {
+	try {
+		await connectMongoDB()
+
+		const { user: currentUser } = await auth()
+
+		const stories = await Story.find({
+			author: currentUser._id,
+			...isPostedWithinLast24h
+		}).select('views')
+
+		const hasUnseenStories = stories.some(story =>
+			story.views.includes(currentUser._id)
+		)
+
+		return {
+			success: true,
+			hasActiveStories: !!stories.length,
+			hasUnseenStories
+		}
+	} catch (error: any) {
+		console.log('`doesCurrentUserHaveActiveStories`:', error)
+		return { success: false, message: error.message }
+	}
 }
 
-export async function viewStory({ storyId, currentUserId }: ViewStoryProps) {
-	if (!storyId || !currentUserId) return
+export async function viewStory(storyId: string) {
+	if (!storyId) return
 
 	try {
 		await connectMongoDB()
 
-		const currentUser = await User.findById(currentUserId).select('seenStories')
+		const { user: currentUser } = await auth()
 
-		if (currentUser.seenStories.includes(storyId)) return
+		const story = await Story.findById(storyId).select('views')
 
-		await Promise.all([
-			User.findByIdAndUpdate(currentUserId, {
-				$push: { seenStories: storyId }
-			}),
-			Story.findByIdAndUpdate(storyId, {
-				$push: { views: currentUserId }
-			})
-		])
+		if (story.views.includes(currentUser._id)) return
+
+		story.views.push(currentUser._id)
+
+		await story.save()
 	} catch (error) {
 		console.log('Error in `viewStory`:', error)
 	}
@@ -236,11 +287,7 @@ export async function deleteStory(storyId: string): Promise<DeleteStory> {
 
 		await Promise.all([
 			uploadthingApi.deleteFiles(uploadthingKey),
-			Story.findByIdAndDelete(storyId),
-			User.updateMany(
-				{ seenStories: storyId },
-				{ $pull: { seenStories: storyId } }
-			)
+			Story.findByIdAndDelete(storyId)
 		])
 
 		return { success: true, message: 'Successfully deleted story' }

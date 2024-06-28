@@ -20,7 +20,9 @@ const config = {
 			backgroundImage: {
 				'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',
 				'gradient-conic':
-					'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))'
+					'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
+				'gradient-story':
+					'linear-gradient(to bottom right, #877EFF, #685DFF, #3121FF)'
 			},
 			width: {
 				paragraph: 'min(70ch, 100% - 2rem)'

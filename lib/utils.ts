@@ -84,9 +84,9 @@ export function isVideo(src: string) {
 export function removeDuplicates<T>(array: T[], id?: string | number): T[] {
 	if (!array) return []
 
-	if (typeof array[0] !== 'object') {
-		return Array.from(new Set([...array]))
-	}
+	const containsObjects = array.some(el => typeof el === 'object')
+
+	if (!containsObjects) return Array.from(new Set([...array]))
 
 	if (!id) throw new Error('id is required when array contains objects')
 

@@ -4,7 +4,12 @@ import { Dialog, DialogContent } from '@/components/ui/dialog'
 import { usePathname, useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
-export default function Modal({ children }: { children: React.ReactNode }) {
+type Props = {
+	children: React.ReactNode
+	className?: string
+}
+
+export default function Modal({ children, className }: Props) {
 	const [open, setOpen] = useState(true)
 	const router = useRouter()
 	const pathname = usePathname()
@@ -14,7 +19,11 @@ export default function Modal({ children }: { children: React.ReactNode }) {
 	}
 
 	useEffect(() => {
-		if (!pathname.includes('/post/details/')) setOpen(false)
+		if (
+			!pathname.includes('/post/details/') &&
+			!pathname.includes('/story/view/')
+		)
+			setOpen(false)
 	}, [pathname])
 
 	return (
@@ -22,7 +31,7 @@ export default function Modal({ children }: { children: React.ReactNode }) {
 			open={open}
 			onOpenChange={handleOpenChange}
 		>
-			<DialogContent>{children}</DialogContent>
+			<DialogContent className={className}>{children}</DialogContent>
 		</Dialog>
 	)
 }
