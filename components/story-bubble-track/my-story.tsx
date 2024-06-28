@@ -29,7 +29,10 @@ export default async function MyStory() {
 
 	return (
 		<li className='relative text-center'>
-			<Link href='/story/new'>
+			<Link
+				href='/story/new'
+				className='text-sm'
+			>
 				<div className='rounded-full p-[3px] relative'>
 					<Avatar
 						url={currentUser?.image}

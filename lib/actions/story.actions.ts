@@ -9,7 +9,6 @@ import auth from '../auth'
 import Story from '../models/story.model'
 import connectMongoDB from '../mongoose'
 import { Story as StoryType, TODO, User as UserType } from '../types'
-import { removeDuplicates } from '../utils'
 
 const uploadthingApi = new UTApi()
 const isPostedWithinLast24h = {
@@ -193,15 +192,12 @@ export async function fetchStoriesForToday(): Promise<FetchStoriesForToday> {
 			.select('author views')
 			.exec()
 
-
 		const stories = storiesForToday
 			.map(story => ({
 				author: story.author as UserType,
 				seen: (story.views as string[]).includes(currentUser._id)
 			}))
 			.toSorted(story => (story.seen ? 1 : -1))
-
-
 
 		const grouped = stories.filter(
 			(story, index, self) =>

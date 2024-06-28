@@ -1,6 +1,7 @@
 'use client'
 
 import { cn } from '@/lib/utils'
+import { useRouter } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
 import { Progress } from '../ui/progress'
 
@@ -23,6 +24,7 @@ const StoryBars = ({
 }: Props) => {
 	const [activeBarValue, setActiveBarValue] = useState(0)
 	const intervalRef = useRef<NodeJS.Timeout | null>(null)
+	const router = useRouter()
 
 	useEffect(() => {
 		const updateProgress = () => {
@@ -37,6 +39,7 @@ const StoryBars = ({
 					} else {
 						if (intervalRef.current) {
 							clearInterval(intervalRef.current)
+							router.replace('/')
 						}
 					}
 					return 100

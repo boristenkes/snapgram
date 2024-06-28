@@ -8,14 +8,16 @@ import RightSidebar from './right-sidebar'
 export default function Home() {
 	return (
 		<div className='flex'>
-			<main className='flex-1'>
-				<Suspense fallback={<StoryBubbleTrackSkeleton />}>
-					<StoryBubbleTrack />
-				</Suspense>
+			<main className='overflow-x-hidden grid grid-cols-1'>
+				<div className='overflow-hidden'>
+					<Suspense fallback={<StoryBubbleTrackSkeleton />}>
+						<StoryBubbleTrack />
+					</Suspense>
 
-				<Suspense fallback={<FeedSkeleton />}>
-					<Feed />
-				</Suspense>
+					<Suspense fallback={<FeedSkeleton />}>
+						<Feed />
+					</Suspense>
+				</div>
 			</main>
 
 			<RightSidebar />
