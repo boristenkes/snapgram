@@ -8,7 +8,7 @@ import RightSidebar from './right-sidebar'
 export default function Home() {
 	return (
 		<div className='flex'>
-			<main className='overflow-x-hidden grid grid-cols-1'>
+			<main className='overflow-x-hidden grid grid-cols-1 w-full'>
 				<div className='overflow-hidden'>
 					<Suspense fallback={<StoryBubbleTrackSkeleton />}>
 						<StoryBubbleTrack />
