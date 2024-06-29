@@ -30,7 +30,9 @@ export default async function PostDetails({ post }: PostDetailsProps) {
 						content={post.content}
 						alt={post.altText}
 					/>
-					{!!post.mentions.length && <MentionsViewer postId={post._id} />}
+					{!!post.mentions.length && (
+						<MentionsViewer mentions={post.mentions as string[]} />
+					)}
 				</div>
 
 				<div className='pt-9 px-7 flex-1 overflow-y-auto custom-scrollbar'>
@@ -147,7 +149,9 @@ export default async function PostDetails({ post }: PostDetailsProps) {
 						alt={post.altText}
 						className='rounded-2xl overflow-hidden'
 					/>
-					{!!post.mentions.length && <MentionsViewer postId={post._id} />}
+					{!!post.mentions.length && (
+						<MentionsViewer mentions={post.mentions as string[]} />
+					)}
 				</div>
 
 				<PostActionButtons

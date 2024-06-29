@@ -5,6 +5,8 @@ import Notification from '../models/notification.model'
 import connectMongoDB from '../mongoose'
 import { Notification as NotificationType } from '../types'
 
+const MAX_NOTIFICATIONS = 10
+
 type FetchNotification =
 	| { success: true; notification: NotificationType }
 	| { success: false; message: string }
@@ -92,7 +94,24 @@ export async function sendNotification(
 	try {
 		await connectMongoDB()
 
-		await Notification.create(notificationData)
+		const newNotification = await Notification.create(notificationData)
+
+		if (!newNotification) {
+			throw new Error('Failed to create notification')
+		}
+
+		const countResult = await countNotifications({
+			recipient: notificationData.recipient
+		})
+
+		if (!countResult.success) throw new Error(countResult.message)
+
+		if (countResult.count > MAX_NOTIFICATIONS) {
+			await Notification.findOneAndDelete(
+				{ recipient: notificationData.recipient },
+				{ sort: { createdAt: 1 } }
+			)
+		}
 
 		return { success: true }
 	} catch (error: any) {

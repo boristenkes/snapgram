@@ -30,6 +30,7 @@ const Slides = ({ slides, index, setPaused }: Props) => {
 			className='object-fit'
 			sizes='(max-width: 420px) 100vw, 420px'
 			onLoad={() => setPaused(false)}
+			priority
 		/>
 	)
 }

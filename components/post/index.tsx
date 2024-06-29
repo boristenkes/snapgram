@@ -71,7 +71,9 @@ export default async function Post({ post }: { post: PostType }) {
 					alt={post.altText}
 					className='rounded-2xl overflow-hidden'
 				/>
-				{!!post.mentions.length && <MentionsViewer postId={post._id} />}
+				{!!post.mentions.length && (
+					<MentionsViewer mentions={post.mentions as string[]} />
+				)}
 			</div>
 
 			<PostActionButtons

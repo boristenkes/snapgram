@@ -87,6 +87,13 @@ export async function createPost({
 			User.findByIdAndUpdate(currentUser._id, { $inc: { postsCount: 1 } })
 		])
 
+		await uploadthingApi.renameFiles(
+			response.map(file => ({
+				fileKey: file.data?.key as string,
+				newName: `post_${newPost._id.toString()}`
+			}))
+		)
+
 		const notifyMentionedUsers = mentions.map(mention =>
 			sendNotification({
 				recipient: mention._id,

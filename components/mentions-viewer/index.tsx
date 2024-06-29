@@ -1,19 +1,17 @@
-import { fetchPost } from '@/lib/actions/post.actions'
+import { fetchUsers } from '@/lib/actions/user.actions'
 import { User } from '@/lib/types'
 import Image from 'next/image'
+import { Suspense } from 'react'
 import ErrorMessage from '../error-message'
+import UserCardListSkeleton from '../skeletons/user-card-list'
 import { Popover, PopoverContent, PopoverTrigger } from '../ui/popover'
 import UserCard from '../user-card'
 
-export default async function MentionsViewer({ postId }: { postId: string }) {
-	const response = await fetchPost(
-		{ _id: postId },
-		{
-			populate: ['mentions', 'image username name'],
-			select: 'mentions'
-		}
-	)
-
+export default async function MentionsViewer({
+	mentions
+}: {
+	mentions: string[]
+}) {
 	return (
 		<Popover>
 			<PopoverTrigger
@@ -30,17 +28,23 @@ export default async function MentionsViewer({ postId }: { postId: string }) {
 
 			<PopoverContent side='top'>
 				<strong className='block mb-1'>Mentioned users</strong>
-				{response.success ? (
-					<ul>
-						{(response.post.mentions as User[]).map(user => (
-							<li key={user.username}>
-								<UserCard user={user} />
-							</li>
-						))}
-					</ul>
-				) : (
-					<ErrorMessage message={response.message} />
-				)}
+				<Suspense
+					fallback={<UserCardListSkeleton cardCount={mentions.length} />}
+				>
+					{fetchUsers({ _id: { $in: mentions } }).then(response =>
+						response.success ? (
+							<ul>
+								{(response.users as User[]).map(user => (
+									<li key={user.username}>
+										<UserCard user={user} />
+									</li>
+								))}
+							</ul>
+						) : (
+							<ErrorMessage message={response.message} />
+						)
+					)}
+				</Suspense>
 			</PopoverContent>
 		</Popover>
 	)
