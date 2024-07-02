@@ -6,11 +6,19 @@ import { redirect } from 'next/navigation'
 
 type Props = {
 	authorId: string
+	index: number
+	paused: boolean
 }
 
-export default async function StoryDetails({ authorId }: Props) {
+export default async function StoryDetails({ authorId, index, paused }: Props) {
 	const response = await fetchStories(
-		{ author: authorId },
+		{
+			author: authorId,
+			createdAt: {
+				// is posted within last 24h
+				$gte: new Date(new Date().getTime() - 24 * 60 * 60 * 1000)
+			}
+		},
 		{
 			populate: ['author', 'image name username']
 		}
@@ -24,5 +32,11 @@ export default async function StoryDetails({ authorId }: Props) {
 
 	if (!stories.length) redirect('/')
 
-	return <StorySlider stories={stories} />
+	return (
+		<StorySlider
+			stories={stories}
+			index={index}
+			paused={paused}
+		/>
+	)
 }

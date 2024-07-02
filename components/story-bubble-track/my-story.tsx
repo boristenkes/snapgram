@@ -1,6 +1,6 @@
 import { doesCurrentUserHaveActiveStories } from '@/lib/actions/story.actions'
 import auth from '@/lib/auth'
-import Image from 'next/image'
+import { SquarePlus } from 'lucide-react'
 import Link from 'next/link'
 import Avatar from '../avatar'
 import ErrorMessage from '../error-message'
@@ -41,12 +41,9 @@ export default async function MyStory() {
 						height={62}
 						className='p-0.5 mx-auto'
 					/>
-					<Image
-						src='/assets/icons/add-story.svg'
-						alt='Create story'
-						width={16}
-						height={16}
-						className='absolute bottom-1 right-2'
+					<SquarePlus
+						size={16}
+						className='absolute bottom-1 right-2 text-primary-500'
 					/>
 				</div>
 				Your story

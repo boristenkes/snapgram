@@ -3,7 +3,7 @@
 import { TextInput } from '@/components/elements'
 import Loader from '@/components/loader'
 import { useDebounce, useUpdateEffect } from '@/hooks'
-import Image from 'next/image'
+import { SearchIcon } from 'lucide-react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
@@ -30,11 +30,9 @@ export default function ExploreHeader({ searchTerm }: { searchTerm: string }) {
 			</h1>
 
 			<div className='flex items-center relative bg-neutral-600 rounded-2xl border-2 border-transparent has-[input:focus]:border-neutral-100 w-[min(41rem,100%-2rem)] mx-auto px-5'>
-				<Image
-					src='/assets/icons/search.svg'
-					alt=''
-					width={24}
-					height={24}
+				<SearchIcon
+					size={24}
+					color='#5C5C7B'
 				/>
 				<TextInput
 					name='search-term'

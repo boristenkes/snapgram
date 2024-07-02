@@ -9,6 +9,7 @@ import auth from '../auth'
 import Story from '../models/story.model'
 import connectMongoDB from '../mongoose'
 import { Story as StoryType, TODO, User as UserType } from '../types'
+import { isImage } from '../utils'
 
 const uploadthingApi = new UTApi()
 const isPostedWithinLast24h = {
@@ -56,17 +57,23 @@ export async function createStory({
 			throw new Error('You must be logged in to create story')
 		}
 
-		const contentBuffer = await content.arrayBuffer()
+		let response
 
-		const resizedBuffer = await sharp(Buffer.from(contentBuffer))
-			.resize(420, 740, { fit: 'cover', position: 'center' })
-			.toBuffer()
+		if (isImage(content.type)) {
+			const contentBuffer = await content.arrayBuffer()
 
-		const resizedContent = new File([resizedBuffer], content.name, {
-			type: content.type
-		})
+			const resizedBuffer = await sharp(Buffer.from(contentBuffer))
+				.resize(420, 740, { fit: 'cover', position: 'center' })
+				.toBuffer()
 
-		const response = await uploadthingApi.uploadFiles(resizedContent)
+			const resizedContent = new File([resizedBuffer], content.name, {
+				type: content.type
+			})
+
+			response = await uploadthingApi.uploadFiles(resizedContent)
+		} else {
+			response = await uploadthingApi.uploadFiles(content)
+		}
 
 		if (response.error) {
 			throw new Error(`Failed to upload content: ${response.error.message}`)

@@ -7,9 +7,9 @@ import { Progress } from '../ui/progress'
 
 type Props = {
 	amountOfBars: number
-	currentIndex: number
-	setCurrentIndex: React.Dispatch<React.SetStateAction<number>>
-	paused?: boolean
+	index: number
+	paused: boolean
+	authorId: string
 	className?: string
 }
 
@@ -17,9 +17,9 @@ const intervalDuration = 3000
 
 const StoryBars = ({
 	amountOfBars,
-	currentIndex,
-	setCurrentIndex,
+	index,
 	paused,
+	authorId,
 	className
 }: Props) => {
 	const [activeBarValue, setActiveBarValue] = useState(0)
@@ -34,12 +34,17 @@ const StoryBars = ({
 				if (prevValue < 100) {
 					return prevValue + 1
 				} else {
-					if (currentIndex < amountOfBars - 1) {
-						setCurrentIndex(currentIndex + 1)
+					if (index < amountOfBars - 1) {
+						router.push(
+							`/story/view/${authorId}?index=${index + 1}&paused=true`,
+							{
+								scroll: false
+							}
+						)
 					} else {
 						if (intervalRef.current) {
 							clearInterval(intervalRef.current)
-							router.replace('/')
+							router.replace('/', { scroll: false })
 						}
 					}
 					return 100
@@ -56,20 +61,18 @@ const StoryBars = ({
 				clearInterval(intervalRef.current)
 			}
 		}
-	}, [paused, currentIndex, amountOfBars, setCurrentIndex])
+	}, [paused, index, amountOfBars])
 
 	useEffect(() => {
 		setActiveBarValue(0)
-	}, [currentIndex])
+	}, [index])
 
 	return (
 		<div className={cn('flex items-center gap-1 mb-2', className)}>
 			{Array.from({ length: amountOfBars }, (_, idx) => (
 				<Progress
 					key={idx}
-					value={
-						idx < currentIndex ? 100 : idx === currentIndex ? activeBarValue : 0
-					}
+					value={idx < index ? 100 : idx === index ? activeBarValue : 0}
 				/>
 			))}
 		</div>

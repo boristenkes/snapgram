@@ -1,8 +1,4 @@
-'use client'
-
-import { viewStory } from '@/lib/actions/story.actions'
 import Image from 'next/image'
-import { useEffect } from 'react'
 
 type Slide = {
 	_id: string
@@ -13,15 +9,10 @@ type Slide = {
 type Props = {
 	slides: Slide[]
 	index: number
-	setPaused: React.Dispatch<React.SetStateAction<boolean>>
+	paused: boolean
 }
 
-const Slides = ({ slides, index, setPaused }: Props) => {
-	useEffect(() => {
-		viewStory(slides[index]._id)
-		setPaused(true)
-	}, [index])
-
+const Slides = ({ slides, index, paused }: Props) => {
 	return (
 		<Image
 			src={slides[index].src}
@@ -29,7 +20,6 @@ const Slides = ({ slides, index, setPaused }: Props) => {
 			fill
 			className='object-fit'
 			sizes='(max-width: 420px) 100vw, 420px'
-			onLoad={() => setPaused(false)}
 			priority
 		/>
 	)

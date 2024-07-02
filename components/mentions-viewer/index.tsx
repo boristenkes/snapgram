@@ -1,6 +1,6 @@
 import { fetchUsers } from '@/lib/actions/user.actions'
 import { User } from '@/lib/types'
-import Image from 'next/image'
+import { UserRound } from 'lucide-react'
 import { Suspense } from 'react'
 import ErrorMessage from '../error-message'
 import UserCardListSkeleton from '../skeletons/user-card-list'
@@ -18,12 +18,7 @@ export default async function MentionsViewer({
 				className='absolute bottom-4 left-4 bg-neutral-800 p-2 aspect-square rounded-full'
 				aria-label='View mentioned users'
 			>
-				<Image
-					src='/assets/icons/user.svg'
-					alt=''
-					width={16}
-					height={16}
-				/>
+				<UserRound size={16} />
 			</PopoverTrigger>
 
 			<PopoverContent side='top'>

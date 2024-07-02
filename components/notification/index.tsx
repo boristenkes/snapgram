@@ -1,5 +1,5 @@
 import { Notification as NotificationType, User } from '@/lib/types'
-import Image from 'next/image'
+import { Heart, MessageCircleMore, UserRound } from 'lucide-react'
 import Link from 'next/link'
 import Avatar from '../avatar'
 import LikedPostContent from './notification-content/liked-post'
@@ -8,12 +8,14 @@ import NewFollowRequestContent from './notification-content/new-follow-request'
 import NewFollowerContent from './notification-content/new-follower'
 import PostMentionContent from './notification-content/post-mention'
 
+const iconSize = 20
+
 const notificationIcons = {
-	LIKED_POST: '/assets/icons/like.svg',
-	NEW_COMMENT: '/assets/icons/comment.svg',
-	POST_MENTION: '/assets/icons/user-2.svg',
-	NEW_FOLLOWER: '/assets/icons/user-2.svg',
-	NEW_FOLLOW_REQUEST: '/assets/icons/user-2.svg'
+	LIKED_POST: <Heart size={iconSize} />,
+	NEW_COMMENT: <MessageCircleMore size={iconSize} />,
+	POST_MENTION: <UserRound size={iconSize} />,
+	NEW_FOLLOWER: <UserRound size={iconSize} />,
+	NEW_FOLLOW_REQUEST: <UserRound size={iconSize} />
 }
 
 type NotificationProps = {
@@ -28,13 +30,9 @@ export default async function Notification({
 
 	return (
 		<div className='flex items-center gap-3 sm:gap-6 p-3 sm:p-5 w-full max-w-3xl bg-neutral-600/30 rounded-xl relative'>
-			<Image
-				src={notificationIcons[notification.type]}
-				alt=''
-				width={36}
-				height={36}
-				className='bg-neutral-600 p-2 rounded-full aspect-square'
-			/>
+			<div className='bg-neutral-600 text-primary-500 p-2 rounded-full aspect-square'>
+				{notificationIcons[notification.type]}
+			</div>
 
 			<div className='flex items-center gap-3 w-full'>
 				<Link

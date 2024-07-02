@@ -3,7 +3,7 @@
 import { searchUsers } from '@/lib/actions/user.actions'
 import { User } from '@/lib/types'
 import { cn } from '@/lib/utils'
-import Image from 'next/image'
+import { SearchIcon } from 'lucide-react'
 import { useState } from 'react'
 import UserCard from '../user-card'
 import SearchInput from './search-input'
@@ -30,11 +30,9 @@ export default function Search({ wrapperClassName, ...rest }: SearchProps) {
 				wrapperClassName
 			)}
 		>
-			<Image
-				src='/assets/icons/search.svg'
-				alt=''
-				width={24}
-				height={24}
+			<SearchIcon
+				size={24}
+				color='#5C5C7B'
 			/>
 
 			<div className='flex-1'>

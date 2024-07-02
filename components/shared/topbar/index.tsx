@@ -6,6 +6,7 @@ import Searchbar from '@/components/search'
 import { topbarLinks } from '@/constants'
 import useAuth from '@/hooks/use-auth'
 import { cn } from '@/lib/utils'
+import { SearchIcon } from 'lucide-react'
 import { signOut } from 'next-auth/react'
 import Image from 'next/image'
 import Link from 'next/link'
@@ -52,11 +53,9 @@ export default function Topbar() {
 								aria-label='Toggle search bar'
 								onClick={() => setSearchExpanded(true)}
 							>
-								<Image
-									src='/assets/icons/search.svg'
-									alt=''
-									width={24}
-									height={24}
+								<SearchIcon
+									size={24}
+									color='#5C5C7B'
 								/>
 							</button>
 							<Link href={`/profile/${currentUser?.username}`}>

@@ -2,6 +2,7 @@ import Avatar from '@/components/avatar'
 import SidebarLink from '@/components/shared/sidebar/sidebar-link'
 import { sidebarLinks } from '@/constants'
 import auth from '@/lib/auth'
+import { LogOut } from 'lucide-react'
 import Image from 'next/image'
 import Link from 'next/link'
 import LogoutButton from './logout-button'
@@ -43,9 +44,7 @@ export default async function Sidebar() {
 					/>
 					<div className='flex-1 hidden xl:block'>
 						<p className='text-lg break-keep flex items-center gap-1'>
-							<strong className='text-ellipsis overflow-hidden whitespace-nowrap max-w-36'>
-								{user?.name}
-							</strong>
+							<strong className='truncate max-w-36'>{user?.name}</strong>
 							{user?.verified && (
 								<Image
 									src='/assets/icons/verified.svg'
@@ -56,7 +55,7 @@ export default async function Sidebar() {
 							)}
 						</p>
 
-						<p className='text-sm text-neutral-500 text-ellipsis overflow-hidden whitespace-nowrap max-w-36'>
+						<p className='text-sm text-neutral-500 truncate max-w-36'>
 							@{user.username}
 						</p>
 					</div>
@@ -77,15 +76,15 @@ export default async function Sidebar() {
 								stretch
 								className='sidebar-link | justify-start'
 							>
-								<Image
-									src='/assets/icons/logout-primary.svg'
-									alt=''
-									width={24}
-									height={24}
+								<LogOut
+									size={24}
+									strokeWidth={1.5}
+									className='text-primary-500'
 								/>
 								<span className='sr-only xl:not-sr-only'>Logout</span>
 							</LogoutButton>
 						</li>
+
 						<SidebarLink
 							path='/settings'
 							icon={{

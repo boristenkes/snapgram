@@ -21,10 +21,12 @@ export default async function StoryBubble({ story }: StoryBubbleProps) {
 			scroll={false}
 		>
 			<div
-				className={cn('rounded-full p-[3px] w-fit mx-auto', {
-					'bg-gradient-story': !story.seen,
-					'bg-gradient-to-b from-slate-500 to-slate-600': story.seen
-				})}
+				className={cn(
+					'rounded-full p-[3px] w-fit mx-auto',
+					story.seen
+						? 'bg-gradient-to-b from-slate-500 to-slate-600'
+						: 'bg-gradient-story'
+				)}
 			>
 				<Avatar
 					url={story.author.image}
@@ -34,7 +36,7 @@ export default async function StoryBubble({ story }: StoryBubbleProps) {
 					className='p-0.5 mx-auto size-14 sm:size-16'
 				/>
 			</div>
-			<span className='text-sm block max-w-20 overflow-hidden text-ellipsis whitespace-nowrap'>
+			<span className='text-sm block max-w-20 truncate'>
 				{story.author.username}
 			</span>
 		</Link>

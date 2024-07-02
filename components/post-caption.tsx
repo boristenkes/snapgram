@@ -14,7 +14,7 @@ export default function Caption({ caption, tags }: Props) {
 	const [viewMore, setViewMore] = useState(false)
 
 	return (
-		<pre className='font-inherit mb-8 text-wrap'>
+		<pre className='font-inherit mb-8 text-wrap text-sm sm:text-base'>
 			{viewMore ? caption : caption.slice(0, 100)}
 			{!viewMore && caption.length > 100 && (
 				<button

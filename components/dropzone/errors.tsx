@@ -20,7 +20,7 @@ export default function Errors({ fileRejections }: ErrorsProps) {
 							key={file.name}
 							className='flex items-center'
 						>
-							<q className='text-semantic-danger inline-block max-w-[20ch] overflow-x-hidden text-ellipsis whitespace-nowrap'>
+							<q className='text-semantic-danger inline-block max-w-[20ch] truncate'>
 								{file.name}
 							</q>
 							:&nbsp;
