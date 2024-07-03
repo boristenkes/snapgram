@@ -38,8 +38,7 @@ export default async function NewFollowRequestContent({
 				<RejectFollowerButton
 					senderId={senderId}
 					recipientId={recipientId}
-					variant='dark'
-					className='h-8 rounded-md px-3 text-xs'
+					className='h-8 rounded-md px-3 text-xs bg-neutral-600 text-neutral-100 hover:bg-neutral-600/90'
 				/>
 			</div>
 		</div>
