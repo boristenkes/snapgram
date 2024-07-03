@@ -1,5 +1,5 @@
-import { type ButtonProps } from '@/components/elements/button'
 import SubmitButton from '@/components/elements/submit-button'
+import { type ButtonProps } from '@/components/ui/button'
 import { rejectFollower } from '@/lib/actions/user.actions'
 import toast from '@/lib/toast'
 

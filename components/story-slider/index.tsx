@@ -1,5 +1,3 @@
-// 'use client'
-
 import auth from '@/lib/auth'
 import { Story, User } from '@/lib/types'
 import { formatDistanceToNowStrict } from 'date-fns'
@@ -20,7 +18,6 @@ type Props = {
 
 export default async function StorySlider({ stories, index, paused }: Props) {
 	const { user: currentUser } = await auth()
-	// const [paused, setPaused] = useState(false)
 	const author = stories[index].author
 
 	return (
@@ -87,7 +84,10 @@ export default async function StorySlider({ stories, index, paused }: Props) {
 							</Link>
 						</Button>
 
-						<StoryOptionsButton storyId={stories[index]._id} />
+						<StoryOptionsButton
+							storyId={stories[index]._id}
+							authorId={author._id}
+						/>
 					</div>
 				</div>
 			</div>

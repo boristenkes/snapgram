@@ -277,11 +277,16 @@ export async function deleteStory(storyId: string): Promise<DeleteStory> {
 		if (!storyId || typeof storyId !== 'string')
 			throw new Error('Story ID not provided')
 
+		const { user: currentUser } = await auth()
+
 		await connectMongoDB()
 
-		const story = await Story.findById(storyId).select('content')
+		const story = await Story.findById(storyId).select('content author')
 
 		if (!story) throw new Error('Story not found')
+
+		if (currentUser._id !== story.author.toString())
+			throw new Error('Unauthorized')
 
 		// `story.content` example: https://utfs.io/f/eeb195b1-95de-4160-8b44-167ca3c3beec-9o58rl.png
 		const uploadthingKey = story.content.substring(

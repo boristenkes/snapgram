@@ -1,10 +1,11 @@
 'use client'
 
-import { Button, TextInput } from '@/components/elements'
+import { TextInput } from '@/components/elements'
 import SubmitButton from '@/components/elements/submit-button'
 import Textarea from '@/components/elements/textarea'
 import ErrorMessage from '@/components/error-message'
 import Loader from '@/components/loader'
+import { Button } from '@/components/ui/button'
 import useAuth from '@/hooks/use-auth'
 import {
 	handleOnboardingBackButtonClick,
@@ -12,8 +13,8 @@ import {
 } from '@/lib/actions/user.actions'
 import { OnboardingFields, onboardingSchema } from '@/lib/zod/user.schema'
 import { zodResolver } from '@hookform/resolvers/zod'
+import { ArrowLeft } from 'lucide-react'
 import { signOut } from 'next-auth/react'
-import Image from 'next/image'
 import { useRouter } from 'next/navigation'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
@@ -75,8 +76,7 @@ export default function OnboardingForm() {
 
 			<div className='flex justify-between items-center mt-8'>
 				<Button
-					variant='dark'
-					size='sm'
+					size='lg'
 					disabled={isSubmitting}
 					onClick={async () => {
 						await Promise.all([
@@ -84,20 +84,17 @@ export default function OnboardingForm() {
 							signOut({ callbackUrl: '/register' })
 						])
 					}}
+					className='bg-neutral-600 text-neutral-100 hover:bg-neutral-600/90 h-12 flex items-center gap-2'
 				>
-					<Image
-						src='/assets/icons/arrow-left.svg'
-						alt=''
-						width={16}
-						height={17}
-					/>
+					<ArrowLeft size={16} />
 					Back
 				</Button>
 
 				<SubmitButton
 					pendingContent={<Loader text={'Please wait...'} />}
-					size='sm'
+					size='lg'
 					disabled={isSubmitting}
+					className='h-12'
 				>
 					Continue to Snapgram
 				</SubmitButton>

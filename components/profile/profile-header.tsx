@@ -1,11 +1,12 @@
 import auth from '@/lib/auth'
 import { User } from '@/lib/types'
 import Image from 'next/image'
+import Link from 'next/link'
 import Avatar from '../avatar'
-import { Button } from '../elements'
 import FollowButton from '../follow-button'
 import FollowersList from '../followers-list'
 import FollowingList from '../following-list'
+import { Button } from '../ui/button'
 
 type ProfileHeaderProps = {
 	user: User
@@ -50,18 +51,19 @@ export default async function ProfileHeader({
 
 						{isCurrentUser ? (
 							<Button
-								size='xs'
-								variant='dark'
-								className='py-3'
-								href='/profile/edit'
+								size='lg'
+								className='py-3 bg-neutral-600 text-neutral-100 hover:bg-neutral-600/90 flex items-center gap-3'
+								asChild
 							>
-								<Image
-									src='/assets/icons/edit.svg'
-									alt=''
-									width={16}
-									height={16}
-								/>
-								Edit Profile
+								<Link href='/profile/edit'>
+									<Image
+										src='/assets/icons/edit.svg'
+										alt=''
+										width={16}
+										height={16}
+									/>
+									Edit Profile
+								</Link>
 							</Button>
 						) : (
 							<div className='flex gap-3'>
@@ -74,10 +76,9 @@ export default async function ProfileHeader({
 								/>
 
 								<Button
-									size='xs'
-									variant='light'
+									size='lg'
 									// href={`/chat/${user?._id}`}
-									className='grow'
+									className='grow bg-neutral-200 border-neutral-200 text-neutral-700 hover:bg-neutral-200/90'
 								>
 									Message
 								</Button>
@@ -152,33 +153,34 @@ export default async function ProfileHeader({
 				<div className='my-3'>
 					{isCurrentUser ? (
 						<Button
-							size='xs'
-							variant='dark'
-							className='py-1.5'
-							href='/profile/edit'
+							size='sm'
+							className='py-1.5 bg-neutral-600 text-neutral-100 hover:bg-neutral-600/90 flex items-center gap-3'
+							asChild
 						>
-							<Image
-								src='/assets/icons/edit.svg'
-								alt=''
-								width={16}
-								height={16}
-							/>
-							Edit Profile
+							<Link href='/profile/edit'>
+								<Image
+									src='/assets/icons/edit.svg'
+									alt=''
+									width={16}
+									height={16}
+								/>
+								Edit Profile
+							</Link>
 						</Button>
 					) : (
-						<div className='flex gap-3'>
+						<div className='flex items-center gap-3'>
 							<FollowButton
 								currentUserStr={JSON.stringify(currentUser)}
 								targetUserStr={JSON.stringify(user)}
 								formProps={{ className: 'grow' }}
-								stretch
+								className='w-full'
+								size='sm'
 							/>
 
 							<Button
-								size='xs'
-								variant='light'
+								size='sm'
 								// href={`/chat/${user?._id}`}
-								className='grow'
+								className='grow bg-neutral-200 border-neutral-200 text-neutral-700'
 							>
 								Message
 							</Button>

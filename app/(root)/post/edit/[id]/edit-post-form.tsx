@@ -76,8 +76,8 @@ export default function EditPostForm({ post }: EditPostFormProps) {
 
 			<SubmitButton
 				pendingContent={<Loader text='Saving changes...' />}
-				size='sm'
-				className='ml-auto mt-8 transition-all'
+				size='lg'
+				className='block ml-auto mt-8 transition-all'
 			>
 				Save changes
 			</SubmitButton>

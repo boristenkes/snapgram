@@ -120,8 +120,8 @@ export default function EditProfileForm({ profile }: { profile: User }) {
 
 			<SubmitButton
 				pendingContent={<Loader text='Updating profile...' />}
-				size='sm'
-				className='mt-10 ml-auto'
+				size='lg'
+				className='block mt-10 ml-auto'
 				disabled={isSubmitting}
 			>
 				Update Profile

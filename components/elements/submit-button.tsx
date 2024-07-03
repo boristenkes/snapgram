@@ -1,8 +1,9 @@
 'use client'
 
+import { cn } from '@/lib/utils'
 import { useFormStatus } from 'react-dom'
 import Loader from '../loader'
-import { Button, ButtonProps } from './button'
+import { Button, ButtonProps } from '../ui/button'
 
 type SubmitButtonProps = ButtonProps & {
 	pendingContent?: React.ReactNode
@@ -22,7 +23,7 @@ export default function SubmitButton({
 		<Button
 			type='submit'
 			disabled={pending || disabled}
-			className={className}
+			className={cn('space-x-2', className)}
 			{...rest}
 		>
 			{disabled || pending ? pendingContent || children : children}

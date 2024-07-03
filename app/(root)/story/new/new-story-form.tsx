@@ -79,8 +79,8 @@ export default function NewStoryForm() {
 
 			<SubmitButton
 				pendingContent={<Loader text='Uploading...' />}
-				size='sm'
-				className='ml-auto mt-8 transition-all'
+				size='lg'
+				className='block ml-auto mt-8 transition-all'
 			>
 				Upload
 			</SubmitButton>

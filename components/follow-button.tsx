@@ -5,10 +5,11 @@ import {
 	unsendFollowRequest
 } from '@/lib/actions/user.actions'
 import { TODO, User } from '@/lib/types'
+import { cn } from '@/lib/utils'
 import { useMemo } from 'react'
-import { type ButtonProps } from './elements'
 import SubmitButton from './elements/submit-button'
 import Loader from './loader'
+import { ButtonProps } from './ui/button'
 
 export type FollowButtonProps = ButtonProps & {
 	currentUserStr: string
@@ -23,13 +24,14 @@ type ButtonData = {
 		| typeof unfollow
 		| typeof sendFollowRequest
 		| typeof unsendFollowRequest
-	styles?: Record<string, string>
+	dark?: boolean
 }
 
 export default function FollowButton({
 	currentUserStr,
 	targetUserStr,
 	formProps,
+	className,
 	...rest
 }: FollowButtonProps) {
 	const currentUser = useMemo(
@@ -59,9 +61,13 @@ export default function FollowButton({
 				value={targetUser?._id}
 			/>
 			<SubmitButton
-				size='xs'
+				size='lg'
 				disabled={!buttonData}
-				{...buttonData?.styles}
+				className={cn(
+					buttonData.dark &&
+						'bg-neutral-600 text-neutral-100 hover:bg-neutral-600/90',
+					className
+				)}
 				{...rest}
 			>
 				{buttonData?.text || <Loader />}
@@ -79,9 +85,7 @@ function determineButtonData(currentUser: User, targetUser: User): ButtonData {
 		return {
 			text: 'Following',
 			action: unfollow,
-			styles: {
-				variant: 'dark'
-			}
+			dark: true
 		}
 	}
 
@@ -94,9 +98,7 @@ function determineButtonData(currentUser: User, targetUser: User): ButtonData {
 			return {
 				text: 'Request Sent',
 				action: unsendFollowRequest,
-				styles: {
-					variant: 'dark'
-				}
+				dark: true
 			}
 		}
 

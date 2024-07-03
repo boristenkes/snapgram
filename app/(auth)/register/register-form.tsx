@@ -1,9 +1,10 @@
 'use client'
 
-import { Button, TextInput } from '@/components/elements'
+import { TextInput } from '@/components/elements'
 import SubmitButton from '@/components/elements/submit-button'
 import ErrorMessage from '@/components/error-message'
 import Loader from '@/components/loader'
+import { Button } from '@/components/ui/button'
 import { createUser } from '@/lib/actions/user.actions'
 import { RegisterUserFields, registerUserSchema } from '@/lib/zod/user.schema'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -80,8 +81,8 @@ export default function RegisterForm() {
 			{errors.root && <ErrorMessage message={errors.root.message} />}
 
 			<SubmitButton
-				stretch
-				className='mt-8'
+				className='mt-8 w-full h-12'
+				size='lg'
 				pendingContent={<Loader text='Please wait...' />}
 				disabled={isSubmitting}
 			>
@@ -91,15 +92,16 @@ export default function RegisterForm() {
 			<div className='or-line' />
 
 			<Button
-				variant='light'
+				size='lg'
 				onClick={() => signIn('google', { callbackUrl: '/' })}
-				stretch
+				className='flex items-center gap-2 w-full bg-neutral-200 border-neutral-200 text-neutral-700 hover:bg-neutral-200/90 h-12'
+				type='button'
 			>
 				<Image
 					src='/assets/icons/google.svg'
 					alt='Google logo'
-					width={25}
-					height={24}
+					width={19}
+					height={18}
 				/>
 				Continue with Google
 			</Button>

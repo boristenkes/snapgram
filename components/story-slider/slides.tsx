@@ -1,3 +1,4 @@
+import { viewStory } from '@/lib/actions/story.actions'
 import Image from 'next/image'
 
 type Slide = {
@@ -13,6 +14,8 @@ type Props = {
 }
 
 const Slides = ({ slides, index, paused }: Props) => {
+	viewStory(slides[index]._id)
+
 	return (
 		<Image
 			src={slides[index].src}

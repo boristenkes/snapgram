@@ -92,8 +92,8 @@ export default function NewPostForm() {
 
 			<SubmitButton
 				pendingContent={<Loader text='Sharing Post...' />}
-				size='sm'
-				className='ml-auto mt-8 transition-all'
+				size='lg'
+				className='block ml-auto mt-8 transition-all'
 			>
 				Share Post
 			</SubmitButton>
