@@ -1,5 +1,4 @@
 import { Button } from '@/components/ui/button'
-import auth from '@/lib/auth'
 import { Ellipsis } from 'lucide-react'
 import {
 	DropdownMenu,
@@ -10,13 +9,9 @@ import DeleteStoryButton from './delete-story-button'
 
 type Props = {
 	storyId: string
-	authorId: string
 }
 
-export default async function StoryOptionsButton({ storyId, authorId }: Props) {
-	const { user: currentUser } = await auth()
-	const isCurrentUserAuthor = currentUser._id === authorId
-
+export default async function StoryOptionsButton({ storyId }: Props) {
 	return (
 		<DropdownMenu>
 			<DropdownMenuTrigger asChild>
@@ -29,7 +24,7 @@ export default async function StoryOptionsButton({ storyId, authorId }: Props) {
 			</DropdownMenuTrigger>
 
 			<DropdownMenuContent className='p-1'>
-				{isCurrentUserAuthor && <DeleteStoryButton storyId={storyId} />}
+				<DeleteStoryButton storyId={storyId} />
 			</DropdownMenuContent>
 		</DropdownMenu>
 	)

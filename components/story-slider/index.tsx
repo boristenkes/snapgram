@@ -84,10 +84,9 @@ export default async function StorySlider({ stories, index, paused }: Props) {
 							</Link>
 						</Button>
 
-						<StoryOptionsButton
-							storyId={stories[index]._id}
-							authorId={author._id}
-						/>
+						{currentUser._id === author._id && (
+							<StoryOptionsButton storyId={stories[index]._id} />
+						)}
 					</div>
 				</div>
 			</div>

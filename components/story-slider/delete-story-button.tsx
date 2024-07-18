@@ -2,7 +2,6 @@
 
 import { deleteStory } from '@/lib/actions/story.actions'
 import toast from '@/lib/toast'
-import { Trash } from 'lucide-react'
 import { redirect } from 'next/navigation'
 import SubmitButton from '../elements/submit-button'
 import Loader from '../loader'
@@ -28,10 +27,6 @@ export default function DeleteStoryButton({ storyId }: DeleteStoryButtonProps) {
 				className='text-sm gap-4 bg-transparent border-transparent hover:bg-neutral-600 transition-colors duration-200'
 			>
 				Delete
-				<Trash
-					size={16}
-					className='text-semantic-danger'
-				/>
 			</SubmitButton>
 		</form>
 	)
