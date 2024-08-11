@@ -19,7 +19,7 @@ export default function CommentInput({
 }) {
 	const { user: currentUser } = useAuth()
 	const inputRef = useRef<HTMLInputElement>(null)
-	const pathname = usePathname()
+	const pathname = usePathname() as string | undefined
 
 	const clientAction = async (formData: FormData) => {
 		const content = formData.get('content') as string

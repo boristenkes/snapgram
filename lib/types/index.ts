@@ -1,5 +1,8 @@
+import { Server as NetServer, Socket } from 'net'
+import { NextApiResponse } from 'next'
 import { Session } from 'next-auth'
 import { InputHTMLAttributes } from 'react'
+import { Server as SocketIOServer } from 'socket.io'
 
 export type TODO = any
 
@@ -137,3 +140,28 @@ export type Notification = NotificationRoot &
 		| NewFollowerNotification
 		| NewFollowRequestNotification
 	)
+
+export type Message = {
+	_id: string
+	chat: Chat | string
+	sender: User | string
+	content: string
+	createdAt: Date | string
+	updatedAt: Date | string
+}
+
+export type Chat = {
+	_id: string
+	participants: User[] | string[]
+	lastMessage: Message | string
+	createdAt: Date | string
+	updatedAt: Date | string
+}
+
+export type NextApiResponseServerIO = NextApiResponse & {
+	socket: Socket & {
+		server: NetServer & {
+			io: SocketIOServer
+		}
+	}
+}

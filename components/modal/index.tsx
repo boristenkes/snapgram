@@ -20,8 +20,8 @@ export default function Modal({ children, className }: Props) {
 
 	useEffect(() => {
 		if (
-			!pathname.includes('/post/details/') &&
-			!pathname.includes('/story/view/')
+			!pathname?.includes('/post/details/') &&
+			!pathname?.includes('/story/view/')
 		)
 			setOpen(false)
 	}, [pathname])

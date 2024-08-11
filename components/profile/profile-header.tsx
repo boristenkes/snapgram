@@ -2,11 +2,13 @@ import auth from '@/lib/auth'
 import { User } from '@/lib/types'
 import Image from 'next/image'
 import Link from 'next/link'
+import { Suspense } from 'react'
 import Avatar from '../avatar'
 import FollowButton from '../follow-button'
 import FollowersList from '../followers-list'
 import FollowingList from '../following-list'
 import { Button } from '../ui/button'
+import MessageButton from './message-button'
 
 type ProfileHeaderProps = {
 	user: User
@@ -75,13 +77,19 @@ export default async function ProfileHeader({
 									}}
 								/>
 
-								<Button
-									size='lg'
-									// href={`/chat/${user?._id}`}
-									className='grow bg-neutral-200 border-neutral-200 text-neutral-700 hover:bg-neutral-200/90'
+								<Suspense
+									fallback={
+										<Button
+											size='lg'
+											className='grow bg-neutral-200 border-neutral-200 text-neutral-700 hover:bg-neutral-200/90'
+											disabled
+										>
+											Message
+										</Button>
+									}
 								>
-									Message
-								</Button>
+									<MessageButton targetUser={user} />
+								</Suspense>
 							</div>
 						)}
 					</div>

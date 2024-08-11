@@ -21,7 +21,7 @@ export default async function RootLayout({
 	return (
 		<TooltipProvider>
 			<Topbar />
-			<div className='flex'>
+			<div className='flex flex-1'>
 				<Sidebar />
 				<div className='flex-1'>{children}</div>
 			</div>
