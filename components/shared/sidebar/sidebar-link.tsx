@@ -19,7 +19,7 @@ export default function SidebarLink({
 }: SidebarLinkProps) {
 	const pathname = usePathname()
 	const isActive =
-		(pathname.includes(path) && path.length > 1) || pathname === path
+		(pathname?.includes(path) && path.length > 1) || pathname === path
 
 	return (
 		<li>
