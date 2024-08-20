@@ -4,6 +4,8 @@ import Chat from '@/lib/models/chat.model'
 import connectMongoDB from '@/lib/mongoose'
 import { Chat as ChatType, TODO } from '@/lib/types'
 import { SortOrder } from 'mongoose'
+import auth from '../auth'
+import Message from '../models/message.model'
 
 type CreateChatProps = {
 	participants: string[]
@@ -88,6 +90,43 @@ export async function fetchChats(
 		return { success: true, chats: JSON.parse(JSON.stringify(chats)) }
 	} catch (error: any) {
 		console.log('`fetchChats`:', error)
+		return { success: false, message: error.message }
+	}
+}
+
+export async function deleteChat(chatId: string) {
+	try {
+		await connectMongoDB()
+
+		const session = await auth()
+
+		if (!session) throw new Error('Unauthorized')
+
+		const { user: currentUser } = session
+
+		const chat = await Chat.findById(chatId)
+
+		if (!chat) throw new Error('Chat not found')
+
+		if (
+			!chat.participants.some(
+				(participantId: string) => participantId !== currentUser._id
+			)
+		) {
+			throw new Error('Unauthorized')
+		}
+
+		const [deleteResponse] = await Promise.all([
+			Chat.deleteOne({ _id: chatId }),
+			Message.deleteMany({ chat: chatId })
+		])
+
+		if (deleteResponse.deletedCount === 0)
+			throw new Error('Failed to delete chat')
+
+		return { success: true, message: 'Successfully deleted chat' }
+	} catch (error: any) {
+		console.log('`deleteChat`:', error)
 		return { success: false, message: error.message }
 	}
 }

@@ -3,13 +3,19 @@
 import { fetchChats } from '@/lib/actions/chat.actions'
 import { Chat, User } from '@/lib/types'
 import { useQuery } from '@tanstack/react-query'
-import { Loader2Icon, Menu } from 'lucide-react'
+import { EllipsisIcon, Loader2Icon, Menu } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import Avatar from './avatar'
 import ErrorMessage from './error-message'
 import { Button } from './ui/button'
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuTrigger
+} from './ui/dropdown-menu'
 import {
 	Sheet,
 	SheetContent,
@@ -79,10 +85,13 @@ export default function MobileChatList({
 									: chat.participants[0]
 
 							return (
-								<li key={chat._id}>
+								<li
+									key={chat._id}
+									className='flex items-center hover:bg-neutral-700/90 transition-colors pr-4'
+								>
 									<Link
 										href={`/chats/${chat._id}`}
-										className='flex items-center gap-2 hover:bg-neutral-700/90 p-4 rounded-lg transition-colors'
+										className='flex items-center flex-1 gap-2 p-4 pr-0 rounded-lg'
 									>
 										<Avatar
 											url={otherParticipant.image}
@@ -96,6 +105,20 @@ export default function MobileChatList({
 											</p>
 										</div>
 									</Link>
+
+									<DropdownMenu>
+										<DropdownMenuTrigger asChild>
+											<Button
+												size='icon'
+												variant='ghost'
+											>
+												<EllipsisIcon size={16} />
+											</Button>
+										</DropdownMenuTrigger>
+										<DropdownMenuContent align='end'>
+											<DropdownMenuItem>Delete</DropdownMenuItem>
+										</DropdownMenuContent>
+									</DropdownMenu>
 								</li>
 							)
 						})}

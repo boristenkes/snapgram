@@ -6,6 +6,7 @@ import { fetchChat } from '@/lib/actions/chat.actions'
 import auth from '@/lib/auth'
 import { Chat, User } from '@/lib/types'
 import { EllipsisVerticalIcon } from 'lucide-react'
+import Link from 'next/link'
 
 type ChatRoomPageProps = {
 	params: {
@@ -31,18 +32,24 @@ export default async function ChatRoomPage({
 
 	return (
 		<div className='flex flex-col h-full'>
-			<header className='flex items-start justify-between border-b border-neutral-600 pb-6'>
-				<div className='flex items-center gap-4'>
+			<header className='flex items-center justify-between border-b border-neutral-600 pb-6'>
+				<Link
+					href={`/profile/${otherParticipant.username}`}
+					className='flex items-center gap-4'
+				>
 					<Avatar
 						url={otherParticipant.image}
 						alt={otherParticipant.name}
 						width={70}
+						className='size-12 lg:size-16'
 					/>
 					<div>
-						<strong className='text-xl'>{otherParticipant.name}</strong>
+						<strong className='text-lg lg:text-xl'>
+							{otherParticipant.name}
+						</strong>
 						{/* <p className='text-sm text-neutral-500'>Online</p> */}
 					</div>
-				</div>
+				</Link>
 
 				<div className='flex items-center gap-4'>
 					<EllipsisVerticalIcon

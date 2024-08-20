@@ -17,7 +17,7 @@ export default function Message({ currentUserId, message }: MessageProps) {
 		<div>
 			<p
 				className={cn(
-					'p-4 rounded-lg w-fit max-w-[80%] relative',
+					'p-3.5 py-3 lg:p-4 rounded-lg w-fit max-w-[80%] relative',
 					isMessageFromCurrentUser ? 'bg-primary-600 ml-auto' : 'bg-neutral-600'
 				)}
 			>

@@ -1,8 +1,17 @@
 import { fetchChats } from '@/lib/actions/chat.actions'
 import { Chat, User } from '@/lib/types'
+import { EllipsisIcon } from 'lucide-react'
 import Link from 'next/link'
 import Avatar from './avatar'
+import DeleteChatButton from './delete-chat-button'
 import ErrorMessage from './error-message'
+import { Button } from './ui/button'
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuTrigger
+} from './ui/dropdown-menu'
 
 type ChatListProps = {
 	userId: string
@@ -27,10 +36,13 @@ export default async function ChatList({ userId }: ChatListProps) {
 						: chat.participants[0]
 
 				return (
-					<li key={chat._id}>
+					<li
+						key={chat._id}
+						className='group flex items-center hover:bg-neutral-700/90 transition-colors pr-4'
+					>
 						<Link
 							href={`/chats/${chat._id}`}
-							className='flex items-center gap-2 hover:bg-neutral-700/90 p-4 rounded-lg transition-colors'
+							className='flex items-center flex-1 gap-2 p-4 pr-0 rounded-lg'
 						>
 							<Avatar
 								url={otherParticipant.image}
@@ -44,6 +56,26 @@ export default async function ChatList({ userId }: ChatListProps) {
 								</p>
 							</div>
 						</Link>
+
+						<DropdownMenu>
+							<DropdownMenuTrigger asChild>
+								<Button
+									size='icon'
+									variant='ghost'
+									className='transition-opacity opacity-0 group-hover:opacity-100'
+								>
+									<EllipsisIcon size={16} />
+								</Button>
+							</DropdownMenuTrigger>
+							<DropdownMenuContent
+								align='end'
+								className='border border-neutral-600'
+							>
+								<DropdownMenuItem>
+									<DeleteChatButton chatId={chat._id} />
+								</DropdownMenuItem>
+							</DropdownMenuContent>
+						</DropdownMenu>
 					</li>
 				)
 			})}

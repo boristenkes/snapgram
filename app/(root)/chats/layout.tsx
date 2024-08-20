@@ -11,7 +11,7 @@ export default async function ChatsLayout({
 	const { user: currentUser } = await auth()
 
 	return (
-		<main className='container h-[min(70rem,100%-2rem)] flex flex-col lg:flex-row gap-8 pt-10 lg:pt-20 flex-1 px-8 pb-20'>
+		<main className='container h-[min(70rem,100%-2rem)] flex flex-col lg:flex-row gap-8 pt-10 lg:pt-20 flex-1 px-1 lg:px-8 pb-20'>
 			<div className='w-full max-w-96 hidden lg:block'>
 				<h1 className='text-2xl lg:text-4xl font-bold flex items-center gap-2.5 mb-10 lg:mb-14'>
 					<Image
