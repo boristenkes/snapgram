@@ -2,10 +2,11 @@
 
 import Chat from '@/lib/models/chat.model'
 import connectMongoDB from '@/lib/mongoose'
-import { Chat as ChatType, TODO } from '@/lib/types'
+import { Chat as ChatType, TODO, User as UserType } from '@/lib/types'
 import { SortOrder } from 'mongoose'
 import auth from '../auth'
 import Message from '../models/message.model'
+import User from '../models/user.model'
 
 type CreateChatProps = {
 	participants: string[]
@@ -90,6 +91,33 @@ export async function fetchChats(
 		return { success: true, chats: JSON.parse(JSON.stringify(chats)) }
 	} catch (error: any) {
 		console.log('`fetchChats`:', error)
+		return { success: false, message: error.message }
+	}
+}
+
+type FetchNewChats =
+	| { success: true; users: UserType[] }
+	| { success: false; message: string }
+
+export async function fetchNewChats(): Promise<FetchNewChats> {
+	try {
+		await connectMongoDB()
+
+		const { user: currentUser } = await auth()
+
+		const usedChats = (
+			await Chat.find({ participants: currentUser._id }).select('participants')
+		).map(chat =>
+			chat.participants.find((userId: string) => userId !== currentUser._id)
+		)
+
+		const newChats = await User.find({
+			_id: { $nin: [...usedChats, currentUser._id] }
+		}).select('image name username')
+
+		return { success: true, users: newChats }
+	} catch (error: any) {
+		console.log('`fetchNewChats`:', error)
 		return { success: false, message: error.message }
 	}
 }
