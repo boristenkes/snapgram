@@ -32,9 +32,13 @@ export default async function ChatsLayout({
 				<ChatList userId={currentUser._id} />
 			</div>
 
-			<div className='flex items-center gap-4 w-[min(37.5rem,100%-2rem)] mx-auto lg:hidden'>
-				<MobileChatList currentUserId={currentUser._id} />
-				<h1 className='text-2xl lg:text-4xl font-bold'>Chats</h1>
+			<div className='flex items-center justify-between w-[min(37.5rem,100%-2rem)] mx-auto lg:hidden'>
+				<div className='flex items-center gap-4'>
+					<MobileChatList currentUserId={currentUser._id} />
+					<h1 className='text-2xl lg:text-4xl font-bold'>Chats</h1>
+				</div>
+
+				<NewChatList currentUserId={currentUser._id} />
 			</div>
 
 			<div className='bg-[#09090A] w-[min(37.5rem,100%-2rem)] h-full py-5 px-4 sm:py-9 sm:px-7 mx-auto rounded-2xl border-2 border-neutral-700'>

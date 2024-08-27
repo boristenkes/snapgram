@@ -115,7 +115,7 @@ export async function fetchNewChats(): Promise<FetchNewChats> {
 			_id: { $nin: [...usedChats, currentUser._id] }
 		}).select('image name username')
 
-		return { success: true, users: newChats }
+		return { success: true, users: JSON.parse(JSON.stringify(newChats)) }
 	} catch (error: any) {
 		console.log('`fetchNewChats`:', error)
 		return { success: false, message: error.message }
