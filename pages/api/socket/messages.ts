@@ -38,6 +38,8 @@ export default async function handler(
 			content: message
 		})
 
+		await Chat.findByIdAndUpdate(chatId, { lastMessage: newMessage._id })
+
 		const chatKey = `chat:${chatId}:messages`
 
 		res?.socket?.server?.io?.emit(chatKey, newMessage)

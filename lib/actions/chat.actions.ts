@@ -95,6 +95,30 @@ export async function fetchChats(
 	}
 }
 
+export async function fetchUserChats(userId: string) {
+	try {
+		await connectMongoDB()
+
+		const chats = await Chat.find({ participants: userId }).populate([
+			{
+				path: 'participants',
+				select: 'image name username'
+			},
+			{
+				path: 'lastMessage',
+				select: 'content sender'
+			}
+		])
+
+		if (!chats) throw new Error('Failed to fetch chats')
+
+		return { success: true, chats: JSON.parse(JSON.stringify(chats)) }
+	} catch (error: any) {
+		console.log('`fetchUserChats`:', error)
+		return { success: false, message: error.message }
+	}
+}
+
 type FetchNewChats =
 	| { success: true; users: UserType[] }
 	| { success: false; message: string }

@@ -1,5 +1,6 @@
-import { fetchChats } from '@/lib/actions/chat.actions'
-import { Chat, User } from '@/lib/types'
+import { fetchUserChats } from '@/lib/actions/chat.actions'
+import auth from '@/lib/auth'
+import { Chat, Message, User } from '@/lib/types'
 import { EllipsisIcon } from 'lucide-react'
 import Link from 'next/link'
 import Avatar from './avatar'
@@ -18,14 +19,15 @@ type ChatListProps = {
 }
 
 export default async function ChatList({ userId }: ChatListProps) {
-	const response = await fetchChats(
-		{ participants: userId },
-		{ populate: ['participants', 'image name username'] }
-	)
+	const { user: currentUser } = await auth()
+	const response = await fetchUserChats(userId)
 
 	if (!response.success) return <ErrorMessage message={response.message} />
 
-	const chats = response.chats as (Chat & { participants: User[] })[]
+	const chats = response.chats as (Chat & {
+		participants: User[]
+		lastMessage: Message
+	})[]
 
 	return (
 		<ul className='divide-y divide-neutral-600'>
@@ -50,9 +52,11 @@ export default async function ChatList({ userId }: ChatListProps) {
 								width={50}
 							/>
 							<div>
-								<strong>{otherParticipant.name}</strong>
+								<strong className='text-lg'>{otherParticipant.name}</strong>
 								<p className='text-sm text-neutral-500'>
-									@{otherParticipant.username}
+									{chat.lastMessage?.sender === currentUser._id
+										? `You: ${chat.lastMessage?.content}`
+										: chat.lastMessage?.content}
 								</p>
 							</div>
 						</Link>
