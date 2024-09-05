@@ -23,7 +23,7 @@ const messageFormSchema = z.object({
 export default function ChatMessages({ chatId }: { chatId: string }) {
 	const { user: currentUser } = useAuth()
 	const {
-		data: recentMessages,
+		data: messages,
 		error,
 		isLoading,
 		mutate
@@ -42,7 +42,7 @@ export default function ChatMessages({ chatId }: { chatId: string }) {
 		if (chatRef.current) {
 			chatRef.current.scrollTop = chatRef.current.scrollHeight // scroll to latest message
 		}
-	}, [recentMessages])
+	}, [messages])
 
 	useEffect(() => {
 		const channel = pusherClient.subscribe(chatId)
@@ -84,7 +84,7 @@ export default function ChatMessages({ chatId }: { chatId: string }) {
 
 				{error && <ErrorMessage message={error.message} />}
 
-				{recentMessages?.map(message => (
+				{messages?.map(message => (
 					<Message
 						key={message._id}
 						currentUserId={currentUser._id}
@@ -102,6 +102,7 @@ export default function ChatMessages({ chatId }: { chatId: string }) {
 						placeholder='Write your message here...'
 						className='grow'
 						disabled={isSubmitting}
+						autoFocus
 						{...form.register('message')}
 					/>
 					<Button

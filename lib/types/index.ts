@@ -1,8 +1,5 @@
-import { Server as NetServer, Socket } from 'net'
-import { NextApiResponse } from 'next'
 import { Session } from 'next-auth'
 import { InputHTMLAttributes } from 'react'
-import { Server as SocketIOServer } from 'socket.io'
 
 export type TODO = any
 
@@ -156,12 +153,4 @@ export type Chat = {
 	lastMessage: Message | string
 	createdAt: Date | string
 	updatedAt: Date | string
-}
-
-export type NextApiResponseServerIO = NextApiResponse & {
-	socket: Socket & {
-		server: NetServer & {
-			io: SocketIOServer
-		}
-	}
 }
