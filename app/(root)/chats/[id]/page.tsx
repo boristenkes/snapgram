@@ -1,7 +1,6 @@
 import Avatar from '@/components/avatar'
+import ChatMessages from '@/components/chat-messages'
 import ErrorMessage from '@/components/error-message'
-import MessageInput from '@/components/message-input'
-import MessageList from '@/components/message-list'
 import { fetchChat } from '@/lib/actions/chat.actions'
 import auth from '@/lib/auth'
 import { Chat, User } from '@/lib/types'
@@ -59,11 +58,7 @@ export default async function ChatRoomPage({
 				</div>
 			</header>
 
-			<MessageList chatId={chat._id} />
-
-			<footer className='border-t border-neutral-600 pt-6'>
-				<MessageInput chatId={chat._id} />
-			</footer>
+			<ChatMessages chatId={chat._id} />
 		</div>
 	)
 }

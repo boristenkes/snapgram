@@ -2,37 +2,57 @@
 
 import Message from '@/lib/models/message.model'
 import connectMongoDB from '@/lib/mongoose'
-import { Message as MessageType, TODO } from '@/lib/types'
+import { Message as TMessage, TODO, User } from '@/lib/types'
 import { SortOrder } from 'mongoose'
 import auth from '../auth'
+import Chat from '../models/chat.model'
+import { pusherServer } from '../pusher'
 
 type CreateMessageProps = {
 	chatId: string
 	content: string
 }
 
-export async function createMessage({ chatId, content }: CreateMessageProps) {
+export async function sendMessage({ chatId, content }: CreateMessageProps) {
 	try {
 		await connectMongoDB()
 
-		const { user: currentUser } = await auth()
+		const session = await auth()
 
-		const message = await Message.create({
+		if (!session) throw new Error('Unauthorized')
+
+		const currentUser = session?.user as User
+
+		if (!content || !chatId || !content.length) throw new Error('Bad Request')
+
+		const isCurrentUserPartOfChat = await Chat.exists({
+			_id: chatId,
+			participants: currentUser._id
+		})
+
+		if (!isCurrentUserPartOfChat) throw new Error('Unauthorized')
+
+		const newMessage = await Message.create({
 			chat: chatId,
 			sender: currentUser._id,
 			content
 		})
 
-		if (!message) throw new Error('Something went wrong')
+		await Promise.all([
+			Chat.findByIdAndUpdate(chatId, { lastMessage: newMessage._id }),
+			pusherServer.trigger(chatId, 'message:new', newMessage)
+		])
 
-		return { success: true, message }
+		if (!newMessage) throw new Error('Something went wrong')
+
+		return { success: true, message: JSON.parse(JSON.stringify(newMessage)) }
 	} catch (error: any) {
 		return { success: false, message: error.message }
 	}
 }
 
 type FetchMessage =
-	| { success: true; message: MessageType }
+	| { success: true; message: TMessage }
 	| { success: false; message: string }
 
 type FetchMessageOptions = {
@@ -65,7 +85,7 @@ export async function fetchMessage(
 }
 
 type FetchMessages =
-	| { success: true; messages: MessageType[] }
+	| { success: true; messages: TMessage[] }
 	| { success: false; message: string }
 
 type FetchMessagesOptions = FetchMessageOptions & {
@@ -110,9 +130,9 @@ export async function fetchChatMessages(chatId: string) {
 
 		if (!response.success) throw new Error(response.message)
 
-		return { success: true, messages: response.messages }
+		return response.messages
 	} catch (error: any) {
 		console.log('`fetchChatMessages`:', error)
-		return { success: false, message: error.message }
+		throw error
 	}
 }

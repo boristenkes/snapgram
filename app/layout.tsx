@@ -1,6 +1,5 @@
 import QueryProvider from '@/components/query-provider'
 import SessionProvider from '@/components/session-provider'
-import SocketProvider from '@/components/socket-provider'
 import auth from '@/lib/auth'
 import { NextSSRPlugin } from '@uploadthing/react/next-ssr-plugin'
 import type { Metadata } from 'next'
@@ -38,17 +37,13 @@ export default async function Layout({
 		<html lang='en'>
 			<SessionProvider session={session}>
 				<QueryProvider>
-					<SocketProvider>
-						<body
-							className={`${inter.className} flex flex-col bg-neutral-900 text-neutral-100 min-h-screen pb-20 md:pb-0`}
-						>
-							<NextSSRPlugin
-								routerConfig={extractRouterConfig(ourFileRouter)}
-							/>
-							{children}
-							<Toaster />
-						</body>
-					</SocketProvider>
+					<body
+						className={`${inter.className} flex flex-col bg-neutral-900 text-neutral-100 min-h-screen pb-20 md:pb-0`}
+					>
+						<NextSSRPlugin routerConfig={extractRouterConfig(ourFileRouter)} />
+						{children}
+						<Toaster />
+					</body>
 				</QueryProvider>
 			</SessionProvider>
 		</html>
