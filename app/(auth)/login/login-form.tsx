@@ -10,6 +10,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { signIn } from 'next-auth/react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
+import { useTransition } from 'react'
 import { useForm, type SubmitHandler } from 'react-hook-form'
 
 export default function LoginForm() {
@@ -17,25 +18,28 @@ export default function LoginForm() {
 		register,
 		handleSubmit,
 		setError,
-		formState: { errors, isSubmitting }
+		formState: { errors }
 	} = useForm<LoginFields>({
 		resolver: zodResolver(loginUserSchema)
 	})
 	const router = useRouter()
+	const [isPending, startTransition] = useTransition()
 
 	const onSubmit: SubmitHandler<LoginFields> = async data => {
-		const res = await signIn('credentials', {
-			email: data.email,
-			password: data.password,
-			redirect: false
+		startTransition(async () => {
+			const res = await signIn('credentials', {
+				email: data.email,
+				password: data.password,
+				redirect: false
+			})
+
+			if (res?.error) {
+				setError('root', { message: res.error })
+				return
+			}
+
+			router.replace('/')
 		})
-
-		if (res?.error) {
-			setError('root', { message: res.error })
-			return
-		}
-
-		router.replace('/')
 	}
 
 	return (
@@ -47,7 +51,7 @@ export default function LoginForm() {
 				type='email'
 				label='Email'
 				className='mt-6'
-				disabled={isSubmitting}
+				disabled={isPending}
 				errors={errors.email?.message}
 				{...register('email')}
 			/>
@@ -55,7 +59,7 @@ export default function LoginForm() {
 				type='password'
 				label='Password'
 				className='mt-6'
-				disabled={isSubmitting}
+				disabled={isPending}
 				errors={errors.password?.message}
 				{...register('password')}
 			/>
@@ -66,7 +70,7 @@ export default function LoginForm() {
 				className='mt-8 w-full h-12'
 				size='lg'
 				pendingContent={<Loader text='Please wait...' />}
-				disabled={isSubmitting}
+				disabled={isPending}
 			>
 				Log in
 			</SubmitButton>
@@ -78,6 +82,7 @@ export default function LoginForm() {
 				onClick={() => signIn('google', { callbackUrl: '/' })}
 				className='flex items-center gap-2 w-full bg-neutral-200 border-neutral-200 text-neutral-700 hover:bg-neutral-200/90 h-12'
 				type='button'
+				disabled={isPending}
 			>
 				<Image
 					src='/assets/icons/google.svg'

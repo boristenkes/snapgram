@@ -11,6 +11,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { signIn } from 'next-auth/react'
 import Image from 'next/image'
 import { useRouter } from 'next/navigation'
+import { useTransition } from 'react'
 import { useForm, type SubmitHandler } from 'react-hook-form'
 
 export default function RegisterForm() {
@@ -18,34 +19,37 @@ export default function RegisterForm() {
 		register,
 		handleSubmit,
 		setError,
-		formState: { errors, isSubmitting }
+		formState: { errors }
 	} = useForm<RegisterUserFields>({
 		resolver: zodResolver(registerUserSchema)
 	})
 	const router = useRouter()
+	const [isPending, startTransition] = useTransition()
 
 	const onSubmit: SubmitHandler<RegisterUserFields> = async data => {
-		const { email, password } = data
+		startTransition(async () => {
+			const { email, password } = data
 
-		const serverResp = await createUser({ email, password })
+			const serverResp = await createUser({ email, password })
 
-		if (!serverResp.success) {
-			setError('root', { message: serverResp.message })
-			return
-		}
+			if (!serverResp.success) {
+				setError('root', { message: serverResp.message })
+				return
+			}
 
-		const signInResponse = await signIn('credentials', {
-			email,
-			password,
-			redirect: false
+			const signInResponse = await signIn('credentials', {
+				email,
+				password,
+				redirect: false
+			})
+
+			if (signInResponse?.error) {
+				setError('root', { message: signInResponse?.error })
+				return
+			}
+
+			router.replace('/onboarding')
 		})
-
-		if (signInResponse?.error) {
-			setError('root', { message: signInResponse?.error })
-			return
-		}
-
-		router.replace('/onboarding')
 	}
 
 	return (
@@ -57,7 +61,7 @@ export default function RegisterForm() {
 				type='email'
 				label='Email'
 				className='mt-6'
-				disabled={isSubmitting}
+				disabled={isPending}
 				errors={errors.email?.message}
 				{...register('email')}
 			/>
@@ -65,7 +69,7 @@ export default function RegisterForm() {
 				type='password'
 				label='Password'
 				className='mt-6'
-				disabled={isSubmitting}
+				disabled={isPending}
 				errors={errors.password?.message}
 				{...register('password')}
 			/>
@@ -73,7 +77,7 @@ export default function RegisterForm() {
 				type='password'
 				label='Confirm Password'
 				className='mt-6'
-				disabled={isSubmitting}
+				disabled={isPending}
 				errors={errors.confirmPassword?.message}
 				{...register('confirmPassword')}
 			/>
@@ -84,7 +88,7 @@ export default function RegisterForm() {
 				className='mt-8 w-full h-12'
 				size='lg'
 				pendingContent={<Loader text='Please wait...' />}
-				disabled={isSubmitting}
+				disabled={isPending}
 			>
 				Register
 			</SubmitButton>
@@ -96,6 +100,7 @@ export default function RegisterForm() {
 				onClick={() => signIn('google', { callbackUrl: '/' })}
 				className='flex items-center gap-2 w-full bg-neutral-200 border-neutral-200 text-neutral-700 hover:bg-neutral-200/90 h-12'
 				type='button'
+				disabled={isPending}
 			>
 				<Image
 					src='/assets/icons/google.svg'

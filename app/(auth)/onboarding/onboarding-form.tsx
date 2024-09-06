@@ -16,6 +16,7 @@ import { zodResolver } from '@hookform/resolvers/zod'
 import { ArrowLeft } from 'lucide-react'
 import { signOut } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
+import { useTransition } from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 
 export default function OnboardingForm() {
@@ -24,7 +25,7 @@ export default function OnboardingForm() {
 		register,
 		handleSubmit,
 		setError,
-		formState: { errors, isSubmitting }
+		formState: { errors }
 	} = useForm<OnboardingFields>({
 		resolver: zodResolver(onboardingSchema),
 		defaultValues: {
@@ -32,16 +33,19 @@ export default function OnboardingForm() {
 		}
 	})
 	const router = useRouter()
+	const [isPending, startTransition] = useTransition()
 
 	const onSubmit: SubmitHandler<OnboardingFields> = async data => {
-		const response = await onboard(currentUser._id, { ...data })
+		startTransition(async () => {
+			const response = await onboard(currentUser._id, { ...data })
 
-		if (!response.success) {
-			setError('root', { message: response.message })
-			return
-		}
+			if (!response.success) {
+				setError('root', { message: response.message })
+				return
+			}
 
-		router.replace('/')
+			router.replace('/')
+		})
 	}
 
 	return (
@@ -52,14 +56,14 @@ export default function OnboardingForm() {
 			<TextInput
 				label='Full Name'
 				className='mt-6'
-				disabled={isSubmitting}
+				disabled={isPending}
 				errors={errors.name?.message}
 				{...register('name')}
 			/>
 			<TextInput
 				label='Username'
 				className='mt-6'
-				disabled={isSubmitting}
+				disabled={isPending}
 				errors={errors.username?.message}
 				{...register('username')}
 			/>
@@ -67,7 +71,7 @@ export default function OnboardingForm() {
 				label='Bio (optional)'
 				rows={6}
 				className='mt-6'
-				disabled={isSubmitting}
+				disabled={isPending}
 				errors={errors.bio?.message}
 				{...register('bio')}
 			/>
@@ -77,7 +81,7 @@ export default function OnboardingForm() {
 			<div className='flex justify-between items-center mt-8'>
 				<Button
 					size='lg'
-					disabled={isSubmitting}
+					disabled={isPending}
 					onClick={async () => {
 						await Promise.all([
 							handleOnboardingBackButtonClick({ email: currentUser.email }),
@@ -93,7 +97,7 @@ export default function OnboardingForm() {
 				<SubmitButton
 					pendingContent={<Loader text={'Please wait...'} />}
 					size='lg'
-					disabled={isSubmitting}
+					disabled={isPending}
 					className='h-12'
 				>
 					Continue to Snapgram
