@@ -1,6 +1,14 @@
 import Avatar from '@/components/avatar'
 import ChatMessages from '@/components/chat-messages'
+import DeleteChatButton from '@/components/delete-chat-button'
 import ErrorMessage from '@/components/error-message'
+import { Button } from '@/components/ui/button'
+import {
+	DropdownMenu,
+	DropdownMenuContent,
+	DropdownMenuItem,
+	DropdownMenuTrigger
+} from '@/components/ui/dropdown-menu'
 import { fetchChat } from '@/lib/actions/chat.actions'
 import auth from '@/lib/auth'
 import { Chat, User } from '@/lib/types'
@@ -51,10 +59,27 @@ export default async function ChatRoomPage({
 				</Link>
 
 				<div className='flex items-center gap-4'>
-					<EllipsisVerticalIcon
-						size={22}
-						className='text-neutral-500'
-					/>
+					<DropdownMenu>
+						<DropdownMenuTrigger asChild>
+							<Button
+								size='icon'
+								variant='ghost'
+							>
+								<EllipsisVerticalIcon
+									size={22}
+									className='text-neutral-500'
+								/>
+							</Button>
+						</DropdownMenuTrigger>
+						<DropdownMenuContent
+							align='end'
+							className='border border-neutral-600'
+						>
+							<DropdownMenuItem>
+								<DeleteChatButton chatId={chat._id} />
+							</DropdownMenuItem>
+						</DropdownMenuContent>
+					</DropdownMenu>
 				</div>
 			</header>
 

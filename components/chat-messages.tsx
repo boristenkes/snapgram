@@ -7,6 +7,7 @@ import useAuth from '@/hooks/use-auth'
 import { fetchChatMessages, sendMessage } from '@/lib/actions/message.actions'
 import { pusherClient } from '@/lib/pusher'
 import toast from '@/lib/toast'
+import { Message as TMessage } from '@/lib/types'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { SendIcon } from 'lucide-react'
 import { ElementRef, useEffect, useRef } from 'react'
@@ -47,7 +48,9 @@ export default function ChatMessages({ chatId }: { chatId: string }) {
 	useEffect(() => {
 		const channel = pusherClient.subscribe(chatId)
 
-		const newMessageHandler = () => mutate()
+		const newMessageHandler = (newMessage: TMessage) => {
+			mutate(current => [...(current as TMessage[]), newMessage])
+		}
 
 		channel.bind('message:new', newMessageHandler)
 
