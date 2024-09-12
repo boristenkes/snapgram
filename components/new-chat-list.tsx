@@ -35,13 +35,13 @@ export default async function NewChatList({ currentUserId }: Props) {
 				</Button>
 			</DialogTrigger>
 
-			<DialogContent className='bg-[#09090A] w-[min(30rem,100%-2rem)] py-5 px-4 sm:py-9 sm:px-7 mx-auto rounded-2xl border-2 border-neutral-700'>
+			<DialogContent className='flex flex-col bg-[#09090A] w-[min(30rem,100%-2rem)] max-h-[90vh] py-5 px-4 sm:py-9 sm:px-7 mx-auto rounded-2xl border-2 border-neutral-700'>
 				<DialogHeader>
 					<DialogTitle>New chat</DialogTitle>
 					<DialogDescription>Start a new conversation</DialogDescription>
 				</DialogHeader>
 
-				<ul>
+				<ul className='grow overflow-y-auto custom-scrollbar'>
 					{response.users.map(user => (
 						<li
 							key={user._id}

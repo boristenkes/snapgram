@@ -10,7 +10,7 @@ export default function RightSidebar() {
 		<aside className='sticky right-0 top-0 h-screen w-full max-w-sm border-l border-l-neutral-700 bg-neutral-800 px-6 py-14 hidden lg:flex lg:flex-col xl:max-w-md'>
 			<Searchbar placeholder='Search users...' />
 
-			<div className='py-8 space-y-4'>
+			<div className='h-full py-8 space-y-4'>
 				<h2 className='text-xl font-semibold'>Suggested Accounts</h2>
 
 				<Suspense fallback={<UserCardListSkeleton />}>

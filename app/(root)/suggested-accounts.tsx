@@ -16,7 +16,7 @@ export default async function SuggestedAccounts() {
 	const suggestedAccounts = response.users
 
 	return (
-		<ul>
+		<ul className='h-full overflow-y-auto custom-scrollbar pb-8'>
 			{suggestedAccounts?.map(account => (
 				<li
 					key={account.username}
