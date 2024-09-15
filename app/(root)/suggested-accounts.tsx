@@ -7,8 +7,14 @@ import auth from '@/lib/auth'
 export default async function SuggestedAccounts() {
 	const { user: currentUser } = await auth()
 	const response = await fetchUsers(
-		{ _id: { $ne: currentUser._id }, onboarded: true },
-		{ select: 'image username name' }
+		{
+			onboarded: true,
+			$and: [
+				{ _id: { $ne: currentUser._id } },
+				{ _id: { $nin: currentUser.following } }
+			]
+		},
+		{ select: 'image username name', limit: 10 }
 	)
 
 	if (!response.success) return <ErrorMessage message={response.message} />

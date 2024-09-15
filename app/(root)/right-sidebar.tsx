@@ -1,5 +1,6 @@
 import Searchbar from '@/components/search'
 import UserCardListSkeleton from '@/components/skeletons/user-card-list'
+import { Button } from '@/components/ui/button'
 import { sidebarLinks } from '@/constants'
 import Link from 'next/link'
 import { Suspense } from 'react'
@@ -11,7 +12,16 @@ export default function RightSidebar() {
 			<Searchbar placeholder='Search users...' />
 
 			<div className='h-full py-8 space-y-4'>
-				<h2 className='text-xl font-semibold'>Suggested Accounts</h2>
+				<div className='flex items-center justify-between'>
+					<h2 className='text-xl font-semibold'>Suggested Accounts</h2>
+					<Button
+						asChild
+						variant='link'
+						className='text-neutral-200'
+					>
+						<Link href='/suggested'>See all</Link>
+					</Button>
+				</div>
 
 				<Suspense fallback={<UserCardListSkeleton />}>
 					<SuggestedAccounts />
