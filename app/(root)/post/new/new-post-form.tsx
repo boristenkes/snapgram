@@ -91,11 +91,11 @@ export default function NewPostForm() {
 			/>
 
 			<SubmitButton
-				pendingContent={<Loader text='Sharing Post...' />}
+				pendingContent={<Loader text='Uploading...' />}
 				size='lg'
 				className='block ml-auto mt-8 transition-all'
 			>
-				Share Post
+				Upload
 			</SubmitButton>
 		</form>
 	)
