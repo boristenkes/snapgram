@@ -3,6 +3,7 @@ import { type NextAuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
 import GoogleProvider from 'next-auth/providers/google'
 import connectMongoDB from './mongoose'
+import { id } from './utils'
 const bcrypt = require('bcrypt')
 
 const authOptions: NextAuthOptions = {
@@ -69,7 +70,10 @@ const authOptions: NextAuthOptions = {
 
 					await User.findOneAndUpdate(
 						{ email },
-						{ email, name, image },
+						{
+							email, name, image,
+							username: `user_${id()}` // temporary username
+						},
 						{ upsert: true } // if user already exists, update user. else create new user
 					)
 				} catch (error) {
