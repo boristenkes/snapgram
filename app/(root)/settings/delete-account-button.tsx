@@ -17,7 +17,6 @@ import { Label } from '@/components/ui/label'
 import { deleteUser } from '@/lib/actions/user.actions'
 import toast from '@/lib/toast'
 import { signOut } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 
 export default function DeleteAccountButton({
@@ -27,7 +26,6 @@ export default function DeleteAccountButton({
 	currentUserId: string
 	currentUserUsername: string
 }) {
-	const router = useRouter()
 	const [open, setOpen] = useState(false)
 	const [loading, setLoading] = useState(false)
 	const [confirmMessage, setConfirmMessage] = useState('')
@@ -70,6 +68,7 @@ export default function DeleteAccountButton({
 					</Label>
 					<Input
 						type='text'
+						disabled={loading}
 						value={confirmMessage}
 						onChange={e => setConfirmMessage(e.target.value)}
 					/>

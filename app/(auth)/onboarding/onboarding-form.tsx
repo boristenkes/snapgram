@@ -80,6 +80,7 @@ export default function OnboardingForm() {
 
 			<div className='flex justify-between items-center mt-8'>
 				<Button
+					type='button'
 					size='lg'
 					disabled={isPending}
 					onClick={async () => {
