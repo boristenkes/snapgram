@@ -30,11 +30,7 @@ export default function PostActionButtons({
 					commentCount={post.commentCount}
 				/>
 
-				<ShareButton
-					currentUserId={currentUser._id}
-					postId={post._id}
-					shareCount={post.shareCount}
-				/>
+				<ShareButton postId={post._id} />
 			</div>
 
 			<SaveButton
