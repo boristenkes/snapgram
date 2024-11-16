@@ -7,6 +7,7 @@ import { SortOrder } from 'mongoose'
 import auth from '../auth'
 import Message from '../models/message.model'
 import User from '../models/user.model'
+import { serialize } from '../utils'
 
 type CreateChatProps = {
 	participants: string[]
@@ -53,7 +54,7 @@ export async function fetchChat(
 
 		if (!chat) throw new Error('Failed to fetch chat')
 
-		return { success: true, chat: JSON.parse(JSON.stringify(chat)) }
+		return { success: true, chat: serialize(chat) }
 	} catch (error: any) {
 		console.error('`fetchChat`:', error)
 		return { success: false, message: error.message }
@@ -88,7 +89,7 @@ export async function fetchChats(
 
 		if (!chats) throw new Error('Failed to fetch chats')
 
-		return { success: true, chats: JSON.parse(JSON.stringify(chats)) }
+		return { success: true, chats: serialize(chats) }
 	} catch (error: any) {
 		console.log('`fetchChats`:', error)
 		return { success: false, message: error.message }
@@ -112,7 +113,7 @@ export async function fetchUserChats(userId: string) {
 
 		if (!chats) throw new Error('Failed to fetch chats')
 
-		return { success: true, chats: JSON.parse(JSON.stringify(chats)) }
+		return { success: true, chats: serialize(chats) }
 	} catch (error: any) {
 		console.log('`fetchUserChats`:', error)
 		return { success: false, message: error.message }
@@ -139,7 +140,7 @@ export async function fetchNewChats(): Promise<FetchNewChats> {
 			_id: { $nin: [...usedChats, currentUser._id] }
 		}).select('image name username')
 
-		return { success: true, users: JSON.parse(JSON.stringify(newChats)) }
+		return { success: true, users: serialize(newChats) }
 	} catch (error: any) {
 		console.log('`fetchNewChats`:', error)
 		return { success: false, message: error.message }

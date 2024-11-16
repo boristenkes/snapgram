@@ -12,7 +12,7 @@ import Story from '../models/story.model'
 import User from '../models/user.model'
 import connectMongoDB from '../mongoose'
 import { User as UserType } from '../types'
-import { id, validateImage } from '../utils'
+import { id, serialize, validateImage } from '../utils'
 import { createUserSchema, editProfileSchema } from '../zod/user.schema'
 import { deleteComment } from './comment.actions'
 import { deleteNotification, sendNotification } from './notification.actions'
@@ -118,7 +118,7 @@ export async function fetchUser(
 
 		if (!user) throw new Error('Failed to fetch user')
 
-		return { success: true, user: JSON.parse(JSON.stringify(user)) }
+		return { success: true, user: serialize(user) }
 	} catch (error: any) {
 		console.error('`fetchUser`:', error)
 		return { success: false, message: error.message }
@@ -155,7 +155,7 @@ export async function fetchUsers(
 
 		if (!users) throw new Error('Failed to fetch users')
 
-		return { success: true, users: JSON.parse(JSON.stringify(users)) }
+		return { success: true, users: serialize(users) }
 	} catch (error: any) {
 		console.log('`fetchUsers`:', error)
 		return { success: false, message: error.message }

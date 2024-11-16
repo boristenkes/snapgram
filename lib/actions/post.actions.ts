@@ -16,7 +16,7 @@ import {
 	TODO,
 	type Post as PostType
 } from '../types'
-import { isImage } from '../utils'
+import { isImage, serialize } from '../utils'
 import { deleteNotification, sendNotification } from './notification.actions'
 
 const uploadthingApi = new UTApi()
@@ -181,7 +181,7 @@ export async function fetchPost(
 
 		if (!post) throw new Error('Failed to fetch post')
 
-		return { success: true, post: JSON.parse(JSON.stringify(post)) }
+		return { success: true, post: serialize(post) }
 	} catch (error: any) {
 		console.error('`fetchPost`:', error)
 		return { success: false, message: error.message }
@@ -216,7 +216,7 @@ export async function fetchPosts(
 
 		if (!posts) throw new Error('Failed to fetch posts')
 
-		return { success: true, posts: JSON.parse(JSON.stringify(posts)) }
+		return { success: true, posts: serialize(posts) }
 	} catch (error: any) {
 		console.log('`fetchPosts`:', error)
 		return { success: false, message: error.message }
@@ -244,7 +244,7 @@ export async function fetchTopPostsByUser(
 
 		if (!posts) throw new Error('Failed to fetch posts')
 
-		return { success: true, posts: JSON.parse(JSON.stringify(posts)) }
+		return { success: true, posts: serialize(posts) }
 	} catch (error: any) {
 		console.log('Error in `fetchTopPostsByUser`:', error)
 		return { success: false, message: error.message }
@@ -313,7 +313,7 @@ export async function searchPosts(searchTerm: string): Promise<SearchPosts> {
 			]
 		}).populate('author')
 
-		return { success: true, posts: JSON.parse(JSON.stringify(searchResults)) }
+		return { success: true, posts: serialize(searchResults) }
 	} catch (error: any) {
 		console.error('`searchPosts`:', error)
 		return { success: false, message: error.message }

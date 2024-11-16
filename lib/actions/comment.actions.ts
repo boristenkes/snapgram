@@ -8,6 +8,7 @@ import Post from '../models/post.model'
 import User from '../models/user.model'
 import connectMongoDB from '../mongoose'
 import { Comment as CommentType, TODO } from '../types'
+import { serialize } from '../utils'
 import { sendNotification } from './notification.actions'
 
 type CreateCommentProps = {
@@ -93,7 +94,7 @@ export async function fetchComment(
 
 		if (!comment) throw new Error('Failed to fetch comment')
 
-		return { success: true, comment: JSON.parse(JSON.stringify(comment)) }
+		return { success: true, comment: serialize(comment) }
 	} catch (error: any) {
 		console.error('`fetchComment`:', error)
 		return { success: false, message: error.message }
@@ -136,7 +137,7 @@ export async function fetchComments(
 
 		if (!comments) throw new Error('Failed to fetch comments')
 
-		return { success: true, comments: JSON.parse(JSON.stringify(comments)) }
+		return { success: true, comments: serialize(comments) }
 	} catch (error: any) {
 		console.log('`fetchComments`:', error)
 		return { success: false, message: error.message }
@@ -211,7 +212,7 @@ export async function replyToComment({
 			$push: { replies: newComment._id }
 		})
 
-		return { success: true, comment: JSON.parse(JSON.stringify(newComment)) }
+		return { success: true, comment: serialize(newComment) }
 	} catch (error: any) {
 		console.error('`replyToComment`:', error)
 		return { success: false, message: error.message }

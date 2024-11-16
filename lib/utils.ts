@@ -104,3 +104,5 @@ export const bytesToMegabytes = (bytes: number) => bytes / (1024 * 1024)
 export const megabytesToBytes = (mb: number) => mb * (1024 * 1024)
 
 export const id = () => Math.random().toString(36).slice(2)
+
+export const serialize = (data: any) => JSON.parse(JSON.stringify(data))

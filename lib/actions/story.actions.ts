@@ -9,7 +9,7 @@ import auth from '../auth'
 import Story from '../models/story.model'
 import connectMongoDB from '../mongoose'
 import { Story as StoryType, TODO, User as UserType } from '../types'
-import { isImage } from '../utils'
+import { isImage, serialize } from '../utils'
 
 const uploadthingApi = new UTApi()
 const isPostedWithinLast24h = {
@@ -129,7 +129,7 @@ export async function fetchStory(
 
 		if (!story) throw new Error('Failed to fetch story')
 
-		return { success: true, story: JSON.parse(JSON.stringify(story)) }
+		return { success: true, story: serialize(story) }
 	} catch (error: any) {
 		console.error('`fetchStory`:', error)
 		return { success: false, message: error.message }
@@ -164,7 +164,7 @@ export async function fetchStories(
 
 		if (!stories) throw new Error('Failed to fetch stories')
 
-		return { success: true, stories: JSON.parse(JSON.stringify(stories)) }
+		return { success: true, stories: serialize(stories) }
 	} catch (error: any) {
 		console.log('`fetchStories`:', error)
 		return { success: false, message: error.message }
@@ -213,7 +213,7 @@ export async function fetchStoriesForToday(): Promise<FetchStoriesForToday> {
 
 		return {
 			success: true,
-			stories: JSON.parse(JSON.stringify(grouped))
+			stories: serialize(grouped)
 		}
 	} catch (error: any) {
 		console.log('Error in `fetchStoriesForToday`:', error)

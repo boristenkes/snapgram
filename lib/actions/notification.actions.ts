@@ -4,6 +4,7 @@ import { FilterQuery, SortOrder } from 'mongoose'
 import Notification from '../models/notification.model'
 import connectMongoDB from '../mongoose'
 import { Notification as NotificationType } from '../types'
+import { serialize } from '../utils'
 
 const MAX_NOTIFICATIONS = 10
 
@@ -35,7 +36,7 @@ export async function fetchNotification(
 
 		return {
 			success: true,
-			notification: JSON.parse(JSON.stringify(notification))
+			notification: serialize(notification)
 		}
 	} catch (error: any) {
 		console.error('`fetchNotification`:', error)
@@ -75,7 +76,7 @@ export async function fetchNotifications(
 
 		return {
 			success: true,
-			notifications: JSON.parse(JSON.stringify(notifications))
+			notifications: serialize(notifications)
 		}
 	} catch (error: any) {
 		console.log('`fetchNotifications`:', error)

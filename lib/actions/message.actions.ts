@@ -7,6 +7,7 @@ import { SortOrder } from 'mongoose'
 import auth from '../auth'
 import Chat from '../models/chat.model'
 import { pusherServer } from '../pusher'
+import { serialize } from '../utils'
 
 type CreateMessageProps = {
 	chatId: string
@@ -45,7 +46,7 @@ export async function sendMessage({ chatId, content }: CreateMessageProps) {
 
 		if (!newMessage) throw new Error('Something went wrong')
 
-		return { success: true, message: JSON.parse(JSON.stringify(newMessage)) }
+		return { success: true, message: serialize(newMessage) }
 	} catch (error: any) {
 		return { success: false, message: error.message }
 	}
@@ -77,7 +78,7 @@ export async function fetchMessage(
 
 		if (!message) throw new Error('Failed to fetch message')
 
-		return { success: true, message: JSON.parse(JSON.stringify(message)) }
+		return { success: true, message: serialize(message) }
 	} catch (error: any) {
 		console.error('`fetchMessage`:', error)
 		return { success: false, message: error.message }
@@ -112,7 +113,7 @@ export async function fetchMessages(
 
 		if (!messages) throw new Error('Failed to fetch messages')
 
-		return { success: true, messages: JSON.parse(JSON.stringify(messages)) }
+		return { success: true, messages: serialize(messages) }
 	} catch (error: any) {
 		console.log('`fetchMessages`:', error)
 		return { success: false, message: error.message }
