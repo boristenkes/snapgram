@@ -4,6 +4,7 @@ import auth from '@/lib/auth'
 import { NextSSRPlugin } from '@uploadthing/react/next-ssr-plugin'
 import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
+import NextTopLoader from 'nextjs-toploader'
 import { Toaster } from 'react-hot-toast'
 import { extractRouterConfig } from 'uploadthing/server'
 import { ourFileRouter } from './api/uploadthing/core'
@@ -40,6 +41,7 @@ export default async function Layout({
 					<body
 						className={`${inter.className} flex flex-col bg-neutral-900 text-neutral-100 min-h-screen pb-20 md:pb-0`}
 					>
+						<NextTopLoader />
 						<NextSSRPlugin routerConfig={extractRouterConfig(ourFileRouter)} />
 						{children}
 						<Toaster />
