@@ -53,7 +53,7 @@ export default async function ChatList({ userId }: ChatListProps) {
 							/>
 							<div>
 								<strong className='text-lg'>{otherParticipant.name}</strong>
-								<p className='text-sm text-neutral-500'>
+								<p className='text-sm text-neutral-500 line-clamp-1'>
 									{chat.lastMessage?.sender === currentUser._id
 										? `You: ${chat.lastMessage?.content}`
 										: chat.lastMessage?.content}

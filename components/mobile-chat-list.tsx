@@ -1,12 +1,12 @@
 'use client'
 
-import { fetchChats } from '@/lib/actions/chat.actions'
-import { Chat, User } from '@/lib/types'
-import { useQuery } from '@tanstack/react-query'
+import { fetchUserChats } from '@/lib/actions/chat.actions'
+import { Chat, Message, User } from '@/lib/types'
 import { EllipsisIcon, Loader2Icon, Menu } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
+import useSWR from 'swr'
 import Avatar from './avatar'
 import ErrorMessage from './error-message'
 import { Button } from './ui/button'
@@ -31,14 +31,9 @@ export default function MobileChatList({
 	currentUserId: string
 }) {
 	const [open, setOpen] = useState(false)
-	const { data, error, isLoading } = useQuery({
-		queryKey: [`chats:${currentUserId}`],
-		queryFn: async () =>
-			await fetchChats(
-				{ participants: currentUserId },
-				{ populate: ['participants', 'image name username'] }
-			)
-	})
+	const { data, error, isLoading } = useSWR(`chats:${currentUserId}`, () =>
+		fetchUserChats(currentUserId)
+	)
 	const pathname = usePathname()
 
 	useEffect(() => {
@@ -78,7 +73,12 @@ export default function MobileChatList({
 
 				{data?.success && (
 					<ul className='divide-y divide-neutral-600'>
-						{(data.chats as (Chat & { participants: User[] })[]).map(chat => {
+						{(
+							data.chats as (Chat & {
+								participants: User[]
+								lastMessage: Message
+							})[]
+						).map(chat => {
 							const otherParticipant =
 								chat.participants[0]._id === currentUserId
 									? chat.participants[1]
@@ -100,8 +100,10 @@ export default function MobileChatList({
 										/>
 										<div>
 											<strong>{otherParticipant.name}</strong>
-											<p className='text-sm text-neutral-500'>
-												@{otherParticipant.username}
+											<p className='text-sm text-neutral-500 line-clamp-1'>
+												{chat.lastMessage?.sender === currentUserId
+													? `You: ${chat.lastMessage?.content}`
+													: chat.lastMessage?.content}
 											</p>
 										</div>
 									</Link>

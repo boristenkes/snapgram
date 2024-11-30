@@ -1,5 +1,6 @@
 'use client'
 
+import UnreadNotificationCounter from '@/components/unread-notification-counter'
 import { topbarLinks } from '@/constants'
 import { cn } from '@/lib/utils'
 import Image from 'next/image'
@@ -25,7 +26,7 @@ export default function TopbarLink({
 			<Link
 				href={path}
 				className={cn(
-					'flex gap-4 text-lg p-4 w-full rounded-lg font-normal hover:bg-primary-500 hover:bg-opacity-10 transition-colors duration-200',
+					'flex gap-4 text-lg p-4 w-full rounded-lg font-normal hover:bg-primary-500 hover:bg-opacity-10 transition-colors duration-200 relative',
 					{
 						'bg-primary-500 hover:bg-opacity-100 font-bold': isActive
 					},
@@ -39,6 +40,8 @@ export default function TopbarLink({
 					height={28}
 				/>
 				{title}
+
+				{path === '/notifications' && <UnreadNotificationCounter />}
 			</Link>
 		</li>
 	)

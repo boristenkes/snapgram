@@ -29,10 +29,12 @@ export default function ChatMessages({ chatId }: { chatId: string }) {
 		isLoading,
 		mutate
 	} = useSWR(`chat:${chatId}:messages`, () => fetchChatMessages(chatId))
+
 	const form = useForm<z.infer<typeof messageFormSchema>>({
 		defaultValues: { message: '' },
 		resolver: zodResolver(messageFormSchema)
 	})
+
 	const {
 		formState: { isSubmitting }
 	} = form
