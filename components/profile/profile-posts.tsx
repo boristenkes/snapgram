@@ -94,11 +94,11 @@ export default async function ProfilePosts({
 					{isCurrentUser && (
 						<>
 							<TabsContent value='saved'>
-								<Saved userId={userId} />
+								<Saved savedPosts={currentUser.savedPosts} />
 							</TabsContent>
 
 							<TabsContent value='liked'>
-								<Liked userId={userId} />
+								<Liked likedPosts={currentUser.likedPosts} />
 							</TabsContent>
 						</>
 					)}

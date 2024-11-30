@@ -1,15 +1,14 @@
 import ErrorMessage from '@/components/error-message'
 import PostList from '@/components/post-list'
-import { fetchUser } from '@/lib/actions/user.actions'
-import { Post } from '@/lib/types'
+import { fetchPosts } from '@/lib/actions/post.actions'
 
-export default async function Saved({ userId }: { userId: string }) {
-	const response = await fetchUser(
-		{ _id: userId },
-		{ select: 'savedPosts', populate: ['savedPosts'] }
+export default async function Saved({ savedPosts }: { savedPosts: string[] }) {
+	const response = await fetchPosts(
+		{ _id: { $in: savedPosts } },
+		{ select: 'content altText' }
 	)
 
 	if (!response.success) return <ErrorMessage message={response.message} />
 
-	return <PostList posts={response.user.savedPosts as Post[]} />
+	return <PostList posts={response.posts} />
 }
