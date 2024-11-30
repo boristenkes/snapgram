@@ -23,7 +23,7 @@ export async function createChat({ participants }: CreateChatProps) {
 
 		return { success: true, chat }
 	} catch (error: any) {
-		console.log('`createChat`:', error)
+		console.error('[CREATE_CHAT]:', error)
 		return { success: false, message: error.message }
 	}
 }
@@ -56,7 +56,7 @@ export async function fetchChat(
 
 		return { success: true, chat: serialize(chat) }
 	} catch (error: any) {
-		console.error('`fetchChat`:', error)
+		console.error('[FETCH_CHAT]:', error)
 		return { success: false, message: error.message }
 	}
 }
@@ -91,7 +91,7 @@ export async function fetchChats(
 
 		return { success: true, chats: serialize(chats) }
 	} catch (error: any) {
-		console.log('`fetchChats`:', error)
+		console.error('[FETCH_CHATS]:', error)
 		return { success: false, message: error.message }
 	}
 }
@@ -115,7 +115,7 @@ export async function fetchUserChats(userId: string) {
 
 		return { success: true, chats: serialize(chats) }
 	} catch (error: any) {
-		console.log('`fetchUserChats`:', error)
+		console.error('[FETCH_USER_CHATS]:', error)
 		return { success: false, message: error.message }
 	}
 }
@@ -142,7 +142,7 @@ export async function fetchNewChats(): Promise<FetchNewChats> {
 
 		return { success: true, users: serialize(newChats) }
 	} catch (error: any) {
-		console.log('`fetchNewChats`:', error)
+		console.error('[FETCH_NEW_CHATS]:', error)
 		return { success: false, message: error.message }
 	}
 }
@@ -179,7 +179,7 @@ export async function deleteChat(chatId: string) {
 
 		return { success: true, message: 'Successfully deleted chat' }
 	} catch (error: any) {
-		console.log('`deleteChat`:', error)
+		console.error('[DELETE_CHAT]:', error)
 		return { success: false, message: error.message }
 	}
 }

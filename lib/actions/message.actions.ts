@@ -48,6 +48,7 @@ export async function sendMessage({ chatId, content }: CreateMessageProps) {
 
 		return { success: true, message: serialize(newMessage) }
 	} catch (error: any) {
+		console.error('[SEND_MESSAGE]:', error)
 		return { success: false, message: error.message }
 	}
 }
@@ -80,7 +81,7 @@ export async function fetchMessage(
 
 		return { success: true, message: serialize(message) }
 	} catch (error: any) {
-		console.error('`fetchMessage`:', error)
+		console.error('[FETCH_MESSAGE]:', error)
 		return { success: false, message: error.message }
 	}
 }
@@ -115,7 +116,7 @@ export async function fetchMessages(
 
 		return { success: true, messages: serialize(messages) }
 	} catch (error: any) {
-		console.log('`fetchMessages`:', error)
+		console.error('[FETCH_MESSAGES]:', error)
 		return { success: false, message: error.message }
 	}
 }
@@ -133,7 +134,7 @@ export async function fetchChatMessages(chatId: string) {
 
 		return response.messages
 	} catch (error: any) {
-		console.log('`fetchChatMessages`:', error)
+		console.error('[FETCH_CHAT_MESSAGES]:', error)
 		throw error
 	}
 }

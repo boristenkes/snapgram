@@ -17,17 +17,6 @@ const isPostedWithinLast24h = {
 		$gte: new Date(new Date().getTime() - 24 * 60 * 60 * 1000)
 	}
 }
-let isCleanedUp = false
-
-async function cleanUp() {
-	if (isCleanedUp) return
-
-	const stories = await Story.find()
-	await Promise.all(stories.map(story => deleteStory(story._id.toString())))
-	isCleanedUp = true
-	console.log('cleaned 👍')
-}
-// cleanUp()
 
 type CreateStoryProps = {
 	formData: FormData
@@ -47,15 +36,11 @@ export async function createStory({
 		const content = formData.get('content') as File
 		const altText = formData.get('alt')
 
-		if (!content) {
-			throw new Error('You must provide some content')
-		}
+		if (!content) throw new Error('You must provide some content')
 
 		const { user: currentUser } = await auth()
 
-		if (!currentUser) {
-			throw new Error('You must be logged in to create story')
-		}
+		if (!currentUser) throw new Error('You must be logged in to create story')
 
 		let response
 
@@ -99,6 +84,7 @@ export async function createStory({
 		revalidatePath('/')
 		return { success: true, message: 'Story created successfully' }
 	} catch (error: any) {
+		console.error('[CREATE_STORY]:', error)
 		return { success: false, message: error.message }
 	}
 }
@@ -131,7 +117,7 @@ export async function fetchStory(
 
 		return { success: true, story: serialize(story) }
 	} catch (error: any) {
-		console.error('`fetchStory`:', error)
+		console.error('[FETCH_STORY]:', error)
 		return { success: false, message: error.message }
 	}
 }
@@ -166,7 +152,7 @@ export async function fetchStories(
 
 		return { success: true, stories: serialize(stories) }
 	} catch (error: any) {
-		console.log('`fetchStories`:', error)
+		console.error('[FETCH_STORIES]:', error)
 		return { success: false, message: error.message }
 	}
 }
@@ -216,7 +202,7 @@ export async function fetchStoriesForToday(): Promise<FetchStoriesForToday> {
 			stories: serialize(grouped)
 		}
 	} catch (error: any) {
-		console.log('Error in `fetchStoriesForToday`:', error)
+		console.error('[FETCH_STORIES_FOR_TODAY]:', error)
 		return { success: false, message: error.message }
 	}
 }
@@ -242,7 +228,7 @@ export async function doesCurrentUserHaveActiveStories() {
 			hasUnseenStories
 		}
 	} catch (error: any) {
-		console.log('`doesCurrentUserHaveActiveStories`:', error)
+		console.error('[DOES_CURRENT_USER_HAVE_ACTIVE_STORIES]:', error)
 		return { success: false, message: error.message }
 	}
 }
@@ -263,7 +249,7 @@ export async function viewStory(storyId: string) {
 
 		await story.save()
 	} catch (error) {
-		console.log('Error in `viewStory`:', error)
+		console.error('[VIEW_STORY]:', error)
 	}
 }
 
@@ -300,7 +286,7 @@ export async function deleteStory(storyId: string): Promise<DeleteStory> {
 
 		return { success: true, message: 'Successfully deleted story' }
 	} catch (error: any) {
-		console.log('Error in `deleteStory`:', error)
+		console.error('[DELETE_STORY]:', error)
 		return {
 			success: false,
 			message: 'Failed to delete story:' + error.message

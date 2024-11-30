@@ -39,7 +39,7 @@ export async function fetchNotification(
 			notification: serialize(notification)
 		}
 	} catch (error: any) {
-		console.error('`fetchNotification`:', error)
+		console.error('[FETCH_NOTIFICATION]:', error)
 		return { success: false, message: error.message }
 	}
 }
@@ -79,7 +79,7 @@ export async function fetchNotifications(
 			notifications: serialize(notifications)
 		}
 	} catch (error: any) {
-		console.log('`fetchNotifications`:', error)
+		console.error('[FETCH_NOTIFICATIONS]:', error)
 		return { success: false, message: error.message }
 	}
 }
@@ -116,7 +116,7 @@ export async function sendNotification(
 
 		return { success: true }
 	} catch (error: any) {
-		console.log('`sendNotification`:', error)
+		console.error('[SEND_NOTIFICATION]:', error)
 		return { success: false, message: error.message }
 	}
 }
@@ -132,7 +132,7 @@ export async function markNotificationsAsSeen(recipiendId: string) {
 
 		return { success: true }
 	} catch (error: any) {
-		console.log('`markNotificationsAsSeen`:', error)
+		console.error('[MARK_NOTIFICATIONS_AS_SEEN]:', error)
 		return { success: false, message: error.message }
 	}
 }
@@ -151,7 +151,7 @@ export async function countNotifications(
 
 		return { success: true, count }
 	} catch (error: any) {
-		console.log('`countNotifications`:', error)
+		console.error('[COUNT_NOTIFICATIONS]:', error)
 		return { success: false, message: error.message }
 	}
 }
@@ -166,7 +166,7 @@ export async function deleteNotification(
 
 		return { success: true }
 	} catch (error: any) {
-		console.log('`deleteNotification`:', error)
+		console.error('[DELETE_NOTIFICATION]:', error)
 		return { success: false, message: error.message }
 	}
 }

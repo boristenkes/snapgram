@@ -54,7 +54,7 @@ export async function createUser({ email, password }: Record<string, unknown>) {
 
 		return { success: true, email: newUser.email, password: newUser.password }
 	} catch (error: any) {
-		console.error('Error creating new user:', error)
+		console.error('[CREATE_USER]:', error)
 		return { success: false, message: error.message }
 	}
 }
@@ -87,7 +87,7 @@ export async function onboard(
 
 		return { success: true }
 	} catch (error: any) {
-		console.error('Failed to onboard user:', error)
+		console.error('[ONBOARD]:', error)
 		return { success: false, message: error.message }
 	}
 }
@@ -120,7 +120,7 @@ export async function fetchUser(
 
 		return { success: true, user: serialize(user) }
 	} catch (error: any) {
-		console.error('`fetchUser`:', error)
+		console.error('[FETCH_USER]:', error)
 		return { success: false, message: error.message }
 	}
 }
@@ -157,7 +157,7 @@ export async function fetchUsers(
 
 		return { success: true, users: serialize(users) }
 	} catch (error: any) {
-		console.log('`fetchUsers`:', error)
+		console.error('[FETCH_USERS]:', error)
 		return { success: false, message: error.message }
 	}
 }
@@ -263,7 +263,7 @@ export async function updateUser({
 
 		return { success: true, message: 'Successfully updated.' }
 	} catch (error: any) {
-		console.log('Error in `updateUser`:', error)
+		console.error('[UPDATE_USER]:', error)
 		return { success: false, message: error.message }
 	}
 }
@@ -302,7 +302,7 @@ export async function follow(formData: FormData) {
 
 		revalidatePath(`/profile/${targetUserId}`)
 	} catch (error: any) {
-		console.log('Error in `follow`:', error)
+		console.error('[FOLLOW]:', error)
 		return { error: 'Failed to follow user. Please try again later.' }
 	}
 }
@@ -336,7 +336,7 @@ export async function unfollow(formData: FormData) {
 
 		revalidatePath(`/profile/${targetUserId}`)
 	} catch (error) {
-		console.log('Error in `unfollow`:', error)
+		console.error('[UNFOLLOW]:', error)
 		return { error: 'Failed to unfollow user. Please try again later.' }
 	}
 }
@@ -370,7 +370,7 @@ export async function sendFollowRequest(formData: FormData) {
 
 		return { success: true }
 	} catch (error: any) {
-		console.log('`sendFollowRequest`:', error)
+		console.error('[SEND_FOLLOW_REQUEST]:', error)
 		return { success: false, message: error.message }
 	}
 }
@@ -401,7 +401,7 @@ export async function unsendFollowRequest(formData: FormData) {
 
 		return { success: true }
 	} catch (error: any) {
-		console.log('`sendFollowRequest`:', error)
+		console.error('[UNSEND_FOLLOW_REQUEST]:', error)
 		return { success: false, message: error.message }
 	}
 }
@@ -428,7 +428,7 @@ export async function acceptFollower(senderId: string, recipientId: string) {
 
 		return { success: true }
 	} catch (error: any) {
-		console.log('`acceptFollower`:', error)
+		console.error('[ACCEPT_FOLLOWER]:', error)
 		return { success: false, message: error.message }
 	}
 }
@@ -452,7 +452,7 @@ export async function rejectFollower(senderId: string, recipientId: string) {
 
 		return { success: true }
 	} catch (error: any) {
-		console.log('`rejectFollower`:', error)
+		console.error('[REJECT_FOLLOWER]:', error)
 		return { success: false, message: error.message }
 	}
 }
@@ -482,7 +482,7 @@ export async function searchUsers(searchTerm: string) {
 
 		return JSON.stringify(searchResults)
 	} catch (error: any) {
-		console.log('Error searching users:', error)
+		console.error('[SEARCH_USERS]:', error)
 	}
 }
 
@@ -498,6 +498,7 @@ export async function handleOnboardingBackButtonClick({
 
 		return response
 	} catch (error: any) {
+		console.error('[HANDLE_ONBOARDING_BACK_BUTTON_CLICK]:', error)
 		return { success: false, message: error.message }
 	}
 }
@@ -518,7 +519,7 @@ export async function switchAccountPrivate(
 			}`
 		}
 	} catch (error: any) {
-		console.log('`switchAccountPrivate`:', error)
+		console.error('[SWITCH_ACCOUNT_PRIVATE]:', error)
 		return { success: false, message: error.message }
 	}
 }
@@ -542,7 +543,7 @@ export async function removeFollower(userId: string, followerId: string) {
 
 		return { success: true }
 	} catch (error: any) {
-		console.log('`removeFollower`:', error)
+		console.error('[REMOVE_FOLLOWER]:', error)
 		return { success: false, message: error.message }
 	}
 }
@@ -611,7 +612,7 @@ export async function deleteUser(filters: FilterQuery<UserType>) {
 
 		return { success: true, message: 'Successfully deleted account' }
 	} catch (error: any) {
-		console.log('Error in `deleteUser`:', error)
+		console.error('[DELETE_USER]:', error)
 		return { success: false, message: error.message }
 	}
 }

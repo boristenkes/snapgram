@@ -109,7 +109,7 @@ export async function createPost({
 		revalidatePath('/')
 		return { success: true, message: 'Successfully created post' }
 	} catch (error: any) {
-		console.log('Error in `createPost`:', error)
+		console.error('[CREATE_POST]:', error)
 		return { success: false, message: error.message }
 	}
 }
@@ -150,7 +150,7 @@ export async function updatePost({
 
 		return { success: true, message: 'Successfully edited post' }
 	} catch (error: any) {
-		console.log('`updatePost`:', error)
+		console.error('[UPDATE_POST]:', error)
 		return { success: false, message: error.message }
 	}
 }
@@ -183,7 +183,7 @@ export async function fetchPost(
 
 		return { success: true, post: serialize(post) }
 	} catch (error: any) {
-		console.error('`fetchPost`:', error)
+		console.error('[FETCH_POST]:', error)
 		return { success: false, message: error.message }
 	}
 }
@@ -218,7 +218,7 @@ export async function fetchPosts(
 
 		return { success: true, posts: serialize(posts) }
 	} catch (error: any) {
-		console.log('`fetchPosts`:', error)
+		console.error('[FETCH_POSTS]:', error)
 		return { success: false, message: error.message }
 	}
 }
@@ -246,7 +246,7 @@ export async function fetchTopPostsByUser(
 
 		return { success: true, posts: serialize(posts) }
 	} catch (error: any) {
-		console.log('Error in `fetchTopPostsByUser`:', error)
+		console.error('[FETCH_TOP_POSTS_BY_USER]:', error)
 		return { success: false, message: error.message }
 	}
 }
@@ -268,7 +268,7 @@ export async function fetchPopularHashtags(): Promise<FetchPopularHashtags> {
 
 		return { success: true, hashtags }
 	} catch (error: any) {
-		console.error('`fetchPopularHashtags`:', error)
+		console.error('[FETCH_POPULAR_HASHTAGS]:', error)
 		return { success: false, message: error.message }
 	}
 }
@@ -315,7 +315,7 @@ export async function searchPosts(searchTerm: string): Promise<SearchPosts> {
 
 		return { success: true, posts: serialize(searchResults) }
 	} catch (error: any) {
-		console.error('`searchPosts`:', error)
+		console.error('[SEARCH_POSTS]:', error)
 		return { success: false, message: error.message }
 	}
 }
@@ -339,20 +339,21 @@ export async function togglePostLike({
 
 		const isLiked = currentUser.likedPosts.includes(postId)
 
-		await Promise.all([
-			User.findByIdAndUpdate(
-				currentUserId,
-				isLiked
-					? { $pull: { likedPosts: postId } }
-					: { $push: { likedPosts: postId } }
-			),
-			Post.findByIdAndUpdate(
-				postId,
-				isLiked
-					? { $pull: { likes: currentUserId }, $inc: { likeCount: -1 } }
-					: { $push: { likes: currentUserId }, $inc: { likeCount: 1 } }
-			)
-		])
+		const updateUserLikedPosts = User.findByIdAndUpdate(
+			currentUserId,
+			isLiked
+				? { $pull: { likedPosts: postId } }
+				: { $push: { likedPosts: postId } }
+		)
+
+		const updatePostLikes = Post.findByIdAndUpdate(
+			postId,
+			isLiked
+				? { $pull: { likes: currentUserId }, $inc: { likeCount: -1 } }
+				: { $push: { likes: currentUserId }, $inc: { likeCount: 1 } }
+		)
+
+		await Promise.all([updateUserLikedPosts, updatePostLikes])
 
 		const notificationData = {
 			type: 'LIKED_POST',
@@ -369,6 +370,7 @@ export async function togglePostLike({
 
 		return { success: true }
 	} catch (error: any) {
+		console.error('[TOGGLE_POST_LIKE]:', error)
 		return { success: false, message: error.message }
 	}
 }
@@ -392,6 +394,7 @@ export async function togglePostSave({
 
 		return { success: true }
 	} catch (error: any) {
+		console.error('[TOGGLE_POST_SAVE]:', error)
 		return { success: false, message: error.message }
 	}
 }
@@ -420,16 +423,25 @@ export async function deletePost(
 			url.substring(url.indexOf('/f/') + 3)
 		)
 
+		const deleteImages = uploadthingApi.deleteFiles(uploadthingKeys)
+		const updateUserPostRelations = User.updateMany(
+			{ posts: postId, savedPosts: postId, likedPosts: postId },
+			{ $pull: { posts: postId, savedPosts: postId, likedPosts: postId } }
+		)
+		const decreaseCurrentUserPostCount = User.findByIdAndUpdate(currentUserId, {
+			$inc: { postsCount: -1 }
+		})
+		const deletePost = Post.findByIdAndDelete(postId)
+		const deleteComments = Comment.deleteMany({ postId })
+		const deleteNotifications = Notification.deleteMany({ postId })
+
 		const responses = await Promise.allSettled([
-			uploadthingApi.deleteFiles(uploadthingKeys),
-			User.updateMany(
-				{ posts: postId, savedPosts: postId, likedPosts: postId },
-				{ $pull: { posts: postId, savedPosts: postId, likedPosts: postId } }
-			),
-			User.findByIdAndUpdate(currentUserId, { $inc: { postsCount: -1 } }),
-			Post.findByIdAndDelete(postId),
-			Comment.deleteMany({ postId }),
-			Notification.deleteMany({ postId })
+			deleteImages,
+			updateUserPostRelations,
+			decreaseCurrentUserPostCount,
+			deletePost,
+			deleteComments,
+			deleteNotifications
 		])
 
 		let errorMessage = ''
@@ -443,7 +455,7 @@ export async function deletePost(
 
 		return { success: true, message: 'Successfully deleted post' }
 	} catch (error: any) {
-		console.log('Error in `deletePost`:', error)
+		console.error('[DELETE_POST]:', error)
 		return { success: false, message: error.message }
 	}
 }

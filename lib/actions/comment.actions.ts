@@ -58,6 +58,7 @@ export async function createComment({
 
 		return { success: true, message: 'Successfully commented post' }
 	} catch (error: any) {
+		console.error('[CREATE_COMMENT]:', error)
 		return { success: false, message: error.message }
 	}
 }
@@ -96,7 +97,7 @@ export async function fetchComment(
 
 		return { success: true, comment: serialize(comment) }
 	} catch (error: any) {
-		console.error('`fetchComment`:', error)
+		console.error('[FETCH_COMMENT]:', error)
 		return { success: false, message: error.message }
 	}
 }
@@ -139,7 +140,7 @@ export async function fetchComments(
 
 		return { success: true, comments: serialize(comments) }
 	} catch (error: any) {
-		console.log('`fetchComments`:', error)
+		console.error('[FETCH_COMMENTS]:', error)
 		return { success: false, message: error.message }
 	}
 }
@@ -174,6 +175,7 @@ export async function toggleCommentLike({
 
 		return { success: true }
 	} catch (error: any) {
+		console.error('[TOGGLE_COMMENT_LIKE]:', error)
 		return { success: false, message: error.message }
 	}
 }
@@ -214,7 +216,7 @@ export async function replyToComment({
 
 		return { success: true, comment: serialize(newComment) }
 	} catch (error: any) {
-		console.error('`replyToComment`:', error)
+		console.error('[REPLY_TO_COMMENT]:', error)
 		return { success: false, message: error.message }
 	}
 }
@@ -233,27 +235,19 @@ export async function deleteComment(commentId: string) {
 
 		const comment = await Comment.findById(commentId).select('postId')
 
-		const parentPost = await Post.findById(comment.postId)
+		const decreaseCommentCount = Post.findByIdAndUpdate(comment.postId, {
+			commentCount: { $inc: -1 }
+		})
 
-		parentPost.commentCount--
-
-		await parentPost.save()
-
-		await Comment.deleteMany({
+		const deleteCommentAndReplies = Comment.deleteMany({
 			$or: [{ _id: commentId }, { parentCommentId: commentId }]
 		})
 
+		await Promise.all([decreaseCommentCount, deleteCommentAndReplies])
+
 		return { success: true, message: 'Successfully deleted comment' }
 	} catch (error: any) {
-		console.log('`deleteComment`:', error)
+		console.error('[DELETE_COMMENT]:', error)
 		return { success: false, message: error.message }
 	}
 }
-
-// ;(async () => {
-// 	await Promise.all([
-// 		Comment.deleteMany({ isReply: true }),
-// 		Comment.updateMany({}, { replies: [] })
-// 	])
-// 	console.log('deleted')
-// })()
