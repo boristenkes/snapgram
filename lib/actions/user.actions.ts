@@ -1,5 +1,6 @@
 'use server'
 
+import { DEMO_ACCOUNT_ID } from '@/constants'
 import { FilterQuery, SortOrder } from 'mongoose'
 import { revalidatePath } from 'next/cache'
 import sharp from 'sharp'
@@ -194,13 +195,16 @@ export async function updateUser({
 		// Server-side form validation
 		const validationResult = editProfileSchema.safeParse(formObj)
 
+		if (userId.toString() === DEMO_ACCOUNT_ID) {
+			delete formObj.email // Email on demo account cannot be changed
+		}
+
 		if (!validationResult.success) throw new Error('Invalid data')
 
 		await connectMongoDB()
 
 		const image = formData.get('image') as File
 
-		// const image = formData.get('image') as File
 		const isImageProvided = image?.name !== 'undefined' && image?.size
 
 		let imageResponse
@@ -555,6 +559,9 @@ export async function deleteUser(filters: FilterQuery<UserType>) {
 		const user = await User.findOne(filters)
 
 		if (!user) throw new Error('User not found')
+
+		if (user._id.toString() === DEMO_ACCOUNT_ID)
+			throw new Error('You cannot delete Demo account.')
 
 		const isPictureFromUploadthing = user.image?.includes('utfs.io/f/')
 

@@ -114,3 +114,5 @@ export const notificationTypes = [
 	'NEW_FOLLOWER',
 	'NEW_FOLLOW_REQUEST'
 ]
+
+export const DEMO_ACCOUNT_ID = '6755f5416dd8c03882383a31'

@@ -92,6 +92,22 @@ export default function LoginForm() {
 				/>
 				Continue with Google
 			</Button>
+
+			<Button
+				type='button'
+				onClick={() =>
+					onSubmit({ email: 'demo@example.com', password: '_Demo123' })
+				}
+				variant='ghost'
+				className='text-center w-full mt-4'
+				disabled={isPending}
+			>
+				{isPending ? (
+					<Loader text='Please wait...' />
+				) : (
+					'✨ Continue with Demo account ✨'
+				)}
+			</Button>
 		</form>
 	)
 }

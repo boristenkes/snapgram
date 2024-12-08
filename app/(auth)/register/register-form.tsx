@@ -52,6 +52,21 @@ export default function RegisterForm() {
 		})
 	}
 
+	const signInWithDemoAcc = async () => {
+		const signInResponse = await signIn('credentials', {
+			email: 'demo@example.com',
+			password: '_Demo123',
+			redirect: false
+		})
+
+		if (signInResponse?.error) {
+			setError('root', { message: signInResponse?.error })
+			return
+		}
+
+		router.replace('/onboarding')
+	}
+
 	return (
 		<form
 			onSubmit={handleSubmit(onSubmit)}
@@ -109,6 +124,19 @@ export default function RegisterForm() {
 					height={18}
 				/>
 				Continue with Google
+			</Button>
+			<Button
+				type='button'
+				onClick={signInWithDemoAcc}
+				variant='ghost'
+				className='text-center w-full mt-4'
+				disabled={isPending}
+			>
+				{isPending ? (
+					<Loader text='Please wait...' />
+				) : (
+					'✨ Continue with Demo account ✨'
+				)}
 			</Button>
 		</form>
 	)
