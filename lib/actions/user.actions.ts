@@ -6,7 +6,9 @@ import { revalidatePath } from 'next/cache'
 import sharp from 'sharp'
 import { UTApi } from 'uploadthing/server'
 import auth from '../auth'
+import Chat from '../models/chat.model'
 import Comment from '../models/comment.model'
+import Message from '../models/message.model'
 import Notification from '../models/notification.model'
 import Post from '../models/post.model'
 import Story from '../models/story.model'
@@ -595,6 +597,14 @@ export async function deleteUser(filters: FilterQuery<UserType>) {
 			$or: [{ recipient: user._id }, { sender: user._id }]
 		})
 
+		const userChatsIds = await Chat.find({ participants: user._id }).then(
+			chats => chats.map(chat => chat._id)
+		)
+
+		const deleteChats = Chat.deleteMany({ participants: user._id })
+
+		const deleteMessages = Message.deleteMany({ _id: { $in: userChatsIds } })
+
 		const [userPosts, userStories, userComments] = await Promise.all([
 			Post.find({ author: user._id }),
 			Story.find({ author: user._id }),
@@ -607,6 +617,8 @@ export async function deleteUser(filters: FilterQuery<UserType>) {
 			removeFromLikes,
 			removeFromPostMentions,
 			deleteUserNotifications,
+			deleteChats,
+			deleteMessages,
 			...userPosts.map(post => deletePost(user._id, post._id)),
 			...userStories.map(story => deleteStory(story._id.toString())),
 			...userComments.map(comment => deleteComment(comment._id))
